@@ -8,6 +8,7 @@ use Validator;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use DB;
 class CustomerController extends Controller
 {
     /**
@@ -34,37 +35,74 @@ class CustomerController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return bool|\Illuminate\Http\Response|string
      */
-    public function store(Request $request)
-    {
+    public function sendOtpFunction($number,$otp){
+        $ch = curl_init();
+        $url            = "https://control.msg91.com/api/sendotp.php?authkey=302176AeEcfLaw5dc0355a&mobile=".$number."&message=TOP GEAR OTP%20".$otp."&sender=OWNWAY&country=91&otp=".$otp."&otp_length=6";
+
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+
+        curl_close ($ch);
+        return $result;
+    }
+    public function otp(Request $request){
         $input = $request->all();
         $validator = Validator::make($input, [
-            'customer_name' => 'required',
-            'phone_number' => 'required|numeric|digits_between:9,20|unique:customers,phone_number',
-            'email' => 'required|email|regex:/^[a-zA-Z]{1}/|unique:customers,email',
+            'phone_number' => 'required|numeric|digits_between:10,10',
+            'otp' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
             return $this->sendError($validator->errors());
         }
+        $customer = Customer::where('phone_number',$input['phone_number'])->first();
+        if ($customer->otp === $input['otp']){
+            $token = JWTAuth::fromUser($customer);
+            if (is_object($customer)) {
+                return response()->json([
+                    "result" => $customer,
+                    "token" => $token,
+                    "message" => 'Otp verified Successfully',
+                    "status" => 1
+                ]);
+            } else {
+                return response()->json([
+                    "message" => 'Sorry, something went wrong !',
+                    "status" => 0
+                ]);
+            }
+        }else{
+            return ['status' => 0,'message' => 'Wrong Otp','data' => []];
+        }
 
+    }
+    public function store(Request $request)
+    {
+        $input = $request->all();
+
+        $validator = Validator::make($input, [
+            'customer_name' => 'required',
+            'phone_number' => 'required|numeric|digits_between:10,10|unique:customers,phone_number',
+            'email' => 'required|email|regex:/^[a-zA-Z]{1}/|unique:customers,email',
+        ]);
+
+        if ($validator->fails()) {
+//            return $this->sendError();
+            return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
+        }
+        $input['otp'] = mt_rand(100000, 999999);
+        $customer = Customer::create($input);
         $input['status'] = 1;
 
-        $customer = Customer::create($input);
-        $token = JWTAuth::fromUser($customer);
-        if (is_object($customer)) {
-            return response()->json([
-                "result" => $customer,
-                "token" => $token,
-                "message" => 'Registered Successfully',
-                "status" => 1
-            ]);
-        } else {
-            return response()->json([
-                "message" => 'Sorry, something went wrong !',
-                "status" => 0
-            ]);
+        if($this->sendOtpFunction($input['phone_number'],$input['otp'])){
+            return ['status'=> 1,'message' => 'Verification otp sent on your phone','data' => []];
+        }else{
+            return ['status' => 0,'message' => 'Otp not sent','data' => []];
         }
 
     }
@@ -188,15 +226,14 @@ class CustomerController extends Controller
                 "status" => 0
             ]);
         }
+        $input['otp'] = mt_rand(100000, 999999);
         if($customer->status == 1){
-            $token = JWTAuth::fromUser($customer);
-            Customer::where('id',$customer->id)->update([ 'fcm_token' => $input['fcm_token']]);
-            return response()->json([
-                "result" => $customer,
-                "token" => $token,
-                "message" => 'Success',
-                "status" => 1
-            ]);
+            Customer::where('id',$customer->id)->update([ 'fcm_token' => $input['fcm_token'],'otp' =>  $input['otp']]);
+            if($this->sendOtpFunction($input['phone_number'],$input['otp'])){
+                return ['status'=> 1,'message' => 'Verification otp sent on your phone','data' => []];
+            }else{
+                return ['status' => 0,'message' => 'Otp not sent','data' => []];
+            }
         }else{
             return response()->json([
                 "message" => 'Your account has been blocked',
@@ -348,5 +385,6 @@ class CustomerController extends Controller
 
         return response()->json(compact('user'));
     }
+
 
 }

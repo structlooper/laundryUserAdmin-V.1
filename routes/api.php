@@ -27,10 +27,12 @@ Route::resource('customer', 'CustomerController');
  * at 31/03/21
  * */
 Route::post('customer/login', 'CustomerController@login');
-
+Route::post('customer/otp','CustomerController@otp');
 //secured apis using customer token
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('logged/customer', 'CustomerController@getAuthenticatedUser');
+
+
 });
 
 Route::post('customer/profile_picture', 'CustomerController@profile_picture');
