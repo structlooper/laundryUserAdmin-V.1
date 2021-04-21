@@ -16,22 +16,24 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::resource('service', 'ServiceController');
 Route::post('faq', 'FaqController@index');
-Route::resource('product', 'ProductController');
 Route::resource('customer', 'CustomerController');
 
 /*
  * Modified apis
- * by @structlooper
+ * by #structlooper
  * at 31/03/21
  * */
 Route::post('customer/login', 'CustomerController@login');
+Route::post('refreshToken', 'CustomerController@refreshToken');
 Route::post('customer/otp','CustomerController@otp');
 //secured apis using customer token
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('logged/customer', 'CustomerController@getAuthenticatedUser');
-
+    Route::get('servicesBanners', 'ServiceController@banners');
+    Route::resource('service', 'ServiceController');
+    Route::resource('category','CategoryController');
+    Route::resource('product', 'ProductController');
 
 });
 

@@ -81,6 +81,12 @@ class CustomerController extends Controller
         }
 
     }
+    public function refreshToken(Request $request){
+        $phone=$request->phone_number;
+        $customer = Customer::where('phone_number',$phone)->first();
+        $token = JWTAuth::fromUser($customer);
+        return ['token' => $token];
+    }
     public function store(Request $request)
     {
         $input = $request->all();
@@ -222,7 +228,7 @@ class CustomerController extends Controller
 
         if (!($customer)) {
             return response()->json([
-                "message" => 'Invalid email or password',
+                "message" => 'Your number is not registered, please register',
                 "status" => 0
             ]);
         }

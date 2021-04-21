@@ -27,4 +27,5 @@ Route::group([
     $router->resource('orders', OrderController::class);
     $router->resource('payment-methods', PaymentMethodController::class);
     $router->resource('banner-images', BannerImageController::class);
+    $router->resource('units', UnitController::class);
 });

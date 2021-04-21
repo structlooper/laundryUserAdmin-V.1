@@ -50,7 +50,7 @@ class ProductController extends Controller
                 "status" => "0",
             ], 422);
         }
-    
+
         $all_categories = Category::select('id','service_id')->where('status',1)->get();
         $find_ids = array();
         foreach ($all_categories as $key => $value) {
@@ -63,9 +63,9 @@ class ProductController extends Controller
         }else{
             $categories = Category::select('id','category_name_ar as category_name')->where('status',1)->whereIn('id',$find_ids)->get();
         }
-        
+
         foreach ($categories as $key => $value) {
-            
+
             if($input['lang'] == 'en'){
                 $categories[$key]['product'] = Product::where('status',1)->where('category_id',$value->id)->select('id','category_id','product_name','image','status')->get();
             }else{
@@ -94,6 +94,11 @@ class ProductController extends Controller
     public function show($id)
     {
         //
+        return DB::table('products')
+            ->select('products.*','units.unit_code as unit')
+            ->join('units','units.id','=','products.unit')
+            ->where('category_id',$id)
+            ->where('status',1)->get();
     }
 
     /**

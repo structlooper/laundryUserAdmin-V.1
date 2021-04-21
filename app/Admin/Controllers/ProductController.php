@@ -4,12 +4,13 @@ namespace App\Admin\Controllers;
 
 use App\Product;
 use App\Category;
+use App\Unit;
 use App\Status;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-
+use DB;
 class ProductController extends AdminController
 {
     /**
@@ -31,11 +32,16 @@ class ProductController extends AdminController
         $grid->column('id', __('Id'));
 
         $grid->column('product_name', __('Product'));
-        $grid->column('product_name_ar', __('Product Ar'));
+        $grid->column('price', __('price'));
+        $grid->column('unit', __('Unit'))->display(function($unit){
+            $unit_name = Unit::where('id',$unit)->value('unit_code');
+            return $unit_name;
+        });
         $grid->column('category_id', __('Category'))->display(function($category){
             $category_name = Category::where('id',$category)->value('category_name');
             return $category_name;
         });
+
         $grid->column('status', __('Status'))->display(function($status){
             $status_name = Status::where('id',$status)->value('status_name');
             if ($status == 1) {
@@ -90,21 +96,27 @@ class ProductController extends AdminController
         $form = new Form(new Product);
         $statuses = Status::pluck('status_name', 'id');
         $category = Category::pluck('category_name', 'id');
+        $units = Unit::pluck('unit_code','id');
+
         $form->select('category_id', __('Category'))->options($category)->rules(function ($form) {
             return 'required';
         });
         $form->text('product_name', __('Product name'))->rules(function ($form) {
             return 'required|max:100';
         });
-        $form->text('product_name_ar', __('Product name Ar'))->rules(function ($form) {
-            return 'required|max:100';
+
+        $form->text('price', __('price'))->rules(function ($form) {
+            return 'required|numeric';
+        });
+        $form->select('unit', __('unit'))->options($units)->rules(function ($form) {
+            return 'required';
         });
         $form->image('image', __('Image'))->rules('required')->uniqueName();
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
             return 'required';
         });
         $form->tools(function (Form\Tools $tools) {
-            $tools->disableDelete(); 
+            $tools->disableDelete();
             $tools->disableView();
         });
         $form->footer(function ($footer) {
@@ -112,7 +124,7 @@ class ProductController extends AdminController
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();
         });
- 
+
         return $form;
     }
 }

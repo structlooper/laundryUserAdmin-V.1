@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Service;
-use App\Order;
-use App\BannerImage;
 use DB;
 
-class ServiceController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,12 +14,8 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        return DB::table('services')->select('service_name as name','description','image','id')->where('status',1)->get();
-    }
-
-
-    public function banners(){
-        return DB::table('banner_images')->get()->toArray();
+        //
+        return DB::table('categories')->get();
     }
 
     /**
@@ -43,29 +36,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        if($input['lang'] == 'en'){
-            $data = Service::where('status',1)->select('id','service_name','description','image','status')->get();
-        }else{
-            $data = Service::where('status',1)->select('id','service_name_ar as service_name','description_ar as description','image','status')->get();
-        }
-        $banners = BannerImage::select('banner_image as url')->get();
-
-        foreach($banners as $key => $value){
-            $banners[$key]->url = env('APP_URL').'/public/uploads/'.$value->url;
-        }
-
-        $order['active'] = Order::where('customer_id',$input['customer_id'])->where('status','!=',7)->count();
-        $order['completed'] = Order::where('customer_id',$input['customer_id'])->where('status',7)->count();
-
-        return response()->json([
-            "result" => $data,
-            "banner_images" => $banners,
-            "order" => $order,
-            "count" => count($data),
-            "message" => 'Success',
-            "status" => 1
-        ]);
+        //
     }
 
     /**
@@ -77,6 +48,7 @@ class ServiceController extends Controller
     public function show($id)
     {
         //
+        return DB::table('categories')->where('service_id',$id)->get();
     }
 
     /**

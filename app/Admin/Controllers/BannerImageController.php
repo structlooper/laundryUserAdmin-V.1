@@ -38,7 +38,9 @@ class BannerImageController extends AdminController
                 return "<span class='label label-danger'>$status_name</span>";
             }
         });
-        
+        $grid->column('title', __('Banner Header'));
+        $grid->column('text', __('Aero link label'));
+
         $grid->disableExport();
         $grid->actions(function ($actions) {
             $actions->disableView();
@@ -47,7 +49,7 @@ class BannerImageController extends AdminController
              $statuses = Status::pluck('status_name', 'id');
 
             $filter->equal('status', 'Status')->select($statuses);
-        
+
         });
         return $grid;
     }
@@ -65,6 +67,8 @@ class BannerImageController extends AdminController
         $show->field('id', __('Id'));
         $show->field('banner_image', __('Banner image'));
         $show->field('service_id', __('Service id'));
+        $show->field('title', __('Banner Header'));
+        $show->field('text', __('Aero link label'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -86,12 +90,14 @@ class BannerImageController extends AdminController
         $form->select('service_id', __('Service'))->options($services)->rules(function ($form) {
             return 'required';
         });
+        $form->text('title', __('Banner Header'));
+        $form->text('text', __('Aero link label'));
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
             return 'required';
         });
 
         $form->tools(function (Form\Tools $tools) {
-            $tools->disableDelete(); 
+            $tools->disableDelete();
             $tools->disableView();
         });
         $form->footer(function ($footer) {
