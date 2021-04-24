@@ -64,6 +64,7 @@ class CustomerController extends Controller
         if ($customer->otp === $input['otp']){
             $token = JWTAuth::fromUser($customer);
             if (is_object($customer)) {
+                $customer->default_address = DB::table('addresses')->select('id','address','latitude','longitude')->where('id',$customer->default_address)->first();
                 return response()->json([
                     "result" => $customer,
                     "token" => $token,

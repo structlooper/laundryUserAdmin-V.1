@@ -34,7 +34,8 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::resource('service', 'ServiceController');
     Route::resource('category','CategoryController');
     Route::resource('product', 'ProductController');
-
+    Route::get('cart/{id}','CartController@index');
+    Route::post('cart','CartController@cart');
 });
 
 Route::post('customer/profile_picture', 'CustomerController@profile_picture');

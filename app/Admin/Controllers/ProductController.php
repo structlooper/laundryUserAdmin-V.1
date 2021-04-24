@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Product;
 use App\Category;
+use App\Service;
 use App\Unit;
 use App\Status;
 use Encore\Admin\Controllers\AdminController;
@@ -40,6 +41,10 @@ class ProductController extends AdminController
         $grid->column('category_id', __('Category'))->display(function($category){
             $category_name = Category::where('id',$category)->value('category_name');
             return $category_name;
+        });
+        $grid->column('service_id', __('Service'))->display(function($service){
+            $service_name = Service::where('id',$service)->value('service_name');
+            return $service_name;
         });
 
         $grid->column('status', __('Status'))->display(function($status){
@@ -96,8 +101,11 @@ class ProductController extends AdminController
         $form = new Form(new Product);
         $statuses = Status::pluck('status_name', 'id');
         $category = Category::pluck('category_name', 'id');
+        $service = Service::pluck('service_name', 'id');
         $units = Unit::pluck('unit_code','id');
-
+        $form->select('service_id', __('Service'))->options($service)->rules(function ($form) {
+            return 'required';
+        });
         $form->select('category_id', __('Category'))->options($category)->rules(function ($form) {
             return 'required';
         });

@@ -28,10 +28,11 @@ class ServiceController extends AdminController
         $grid = new Grid(new Service);
 
         $grid->column('id', __('Id'));
+        $grid->column('image', __('Image'))->image();
         $grid->column('service_name', __('Service Name'));
-        $grid->column('service_name_ar', __('Service Name Ar'));
+//        $grid->column('service_name_ar', __('Service Name Ar'));
         $grid->column('description', __('Description'));
-        $grid->column('description_ar', __('Description Ar'));
+//        $grid->column('description_ar', __('Description Ar'));
         $grid->column('status', __('Status'))->display(function($status){
             $status_name = Status::where('id',$status)->value('status_name');
             if ($status == 1) {
@@ -47,7 +48,7 @@ class ServiceController extends AdminController
         $grid->filter(function ($filter) {
             //Get All status
             $statuses = Status::pluck('status_name', 'id');
-            
+
             $filter->like('service_name', 'Service Name');
             $filter->like('service_name_ar', 'Service Name Ar');
             $filter->equal('status', 'Status')->select($statuses);
@@ -86,25 +87,23 @@ class ServiceController extends AdminController
     {
         $form = new Form(new Service);
         $statuses = Status::pluck('status_name', 'id');
+
         $form->text('service_name', __('Service Name'))->rules(function ($form) {
             return 'required|max:100';
         });
-        $form->text('service_name_ar', __('Service Name Ar'))->rules(function ($form) {
-            return 'required|max:100';
-        });
+//        $form->text('service_name_ar', __('Service Name Ar'))->rules(function ($form) {
+//            return 'required|max:100';
+//        });
         $form->textarea('description', __('Description'))->rules(function ($form) {
             return 'required|max:100';
         });
-        $form->textarea('description_ar', __('Description Ar'))->rules(function ($form) {
-            return 'required|max:100';
-        });
-        // $form->text('estimation_hours', __('Estimation hours'));
+
         $form->image('image', __('Image'))->rules('required')->uniqueName();
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
             return 'required';
         });
          $form->tools(function (Form\Tools $tools) {
-            $tools->disableDelete(); 
+            $tools->disableDelete();
             $tools->disableView();
         });
         $form->footer(function ($footer) {

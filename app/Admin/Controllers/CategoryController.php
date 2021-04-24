@@ -30,7 +30,7 @@ class CategoryController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('category_name', __('Category Name'));
-        $grid->column('category_name_ar', __('category Name Ar'));
+//        $grid->column('category_name_ar', __('category Name Ar'));
         $grid->column('status', __('Status'))->display(function($status){
             $status_name = Status::where('id',$status)->value('status_name');
             if ($status == 1) {
@@ -46,7 +46,7 @@ class CategoryController extends AdminController
         $grid->filter(function ($filter) {
             //Get All status
             $statuses = Status::pluck('status_name', 'id');
-            
+
             $filter->like('category_name', 'Category Name');
             $filter->like('category_name_ar', 'category Name Ar');
             $filter->equal('status', 'Status')->select($statuses);
@@ -90,14 +90,14 @@ class CategoryController extends AdminController
         $form->text('category_name', __('Category name'))->rules(function ($form) {
             return 'required|max:100';
         });
-        $form->text('category_name_ar', __('category Name Ar'))->rules(function ($form) {
-            return 'required|max:100';
-        });
+//        $form->text('category_name_ar', __('category Name Ar'))->rules(function ($form) {
+//            return 'required|max:100';
+//        });
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
             return 'required';
         });
         $form->tools(function (Form\Tools $tools) {
-            $tools->disableDelete(); 
+            $tools->disableDelete();
             $tools->disableView();
         });
         $form->footer(function ($footer) {
@@ -107,5 +107,5 @@ class CategoryController extends AdminController
         });
         return $form;
     }
-    
+
 }

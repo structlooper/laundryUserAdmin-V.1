@@ -43,12 +43,20 @@ class CategoryController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function show($id)
     {
         //
-        return DB::table('categories')->where('service_id',$id)->get();
+        $categories = DB::table('categories')->get();
+        $result = [];
+        foreach ($categories as $category){
+            $service_ids = explode(',',$category->service_id);
+            if (in_array($id,$service_ids)){
+                $result[] = $category;
+            }
+        }
+        return $result;
     }
 
     /**
