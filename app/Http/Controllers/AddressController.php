@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use App\Address;
 class AddressController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +16,7 @@ class AddressController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -34,7 +36,7 @@ class AddressController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $input = $request->all();
 
         $validator =  Validator::make($input,[
@@ -227,4 +229,9 @@ class AddressController extends Controller
         $response['status'] = "0";
         return response()->json($response, 200);
     }
+     public function get_address($user_id){
+        $address = DB::table('addresses')->select('id','door_no','address','latitude','longitude')->where('customer_id',$user_id)->get()->toArray();
+        return array_reverse($address);
+     }
+
 }

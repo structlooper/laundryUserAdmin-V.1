@@ -36,14 +36,20 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::resource('product', 'ProductController');
     Route::get('cart/{id}','CartController@index');
     Route::post('cart','CartController@cart');
+    Route::get('address/{id}', 'AddressController@get_address');
+    Route::post('address/add', 'UserAddressController@add_address');
+    Route::post('address/update','UserAddressController@update_address');
+    Route::get('address_id/{id}','UserAddressController@get_address_id');
+    Route::post('address/delete','UserAddressController@delete');
+    Route::get('time_slots','TimeSlotController@index');
+    Route::get('date_slots','TimeSlotController@date');
 });
 
 Route::post('customer/profile_picture', 'CustomerController@profile_picture');
 
-Route::resource('address', 'AddressController');
-Route::post('address/all', 'AddressController@all_addresses');
-Route::post('address/delete', 'AddressController@delete');
 Route::post('customer/forgot_password', 'CustomerController@forgot_password');
+
+
 Route::post('customer/reset_password', 'CustomerController@reset_password');
 Route::post('promo', 'PromoCodeController@index');
 Route::get('app_setting', 'AppSettingController@index');

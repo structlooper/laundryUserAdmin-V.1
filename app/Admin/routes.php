@@ -28,4 +28,5 @@ Route::group([
     $router->resource('payment-methods', PaymentMethodController::class);
     $router->resource('banner-images', BannerImageController::class);
     $router->resource('units', UnitController::class);
+    $router->resource('time-slots', TimeSlotController::class);
 });
