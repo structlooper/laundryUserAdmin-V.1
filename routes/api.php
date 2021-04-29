@@ -36,6 +36,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::resource('product', 'ProductController');
     Route::get('cart/{id}','CartController@index');
     Route::post('cart','CartController@cart');
+    Route::post('cart/checkout','CartController@checkout');
     Route::get('address/{id}', 'AddressController@get_address');
     Route::post('address/add', 'UserAddressController@add_address');
     Route::post('address/update','UserAddressController@update_address');
@@ -43,6 +44,9 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('address/delete','UserAddressController@delete');
     Route::get('time_slots','TimeSlotController@index');
     Route::get('date_slots','TimeSlotController@date');
+    Route::get('date_slots/{id}','TimeSlotController@date_drop');
+    Route::post('save_date_time','TimeSlotController@save_date_time');
+    Route::post('slots/clear','TimeSlotController@slots_clear');
 });
 
 Route::post('customer/profile_picture', 'CustomerController@profile_picture');

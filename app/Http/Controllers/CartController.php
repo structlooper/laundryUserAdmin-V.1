@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
@@ -52,7 +53,7 @@ class CartController extends Controller
             }else{
                 // insert product
                 if ($qty == 0 or $qty < 0){
-                    return ['status' => 0 , 'message' => 'product not found'];
+                    return ['status' => 0 , 'message' => 'product not present in cart'];
                 }
                 $data =['cart_id'=>$checkCart->id,'product_id' => $product_id , 'qty' => $qty,'price' => (float)$productDetails->price * $qty,'unit' => $productDetails->unit_code];
                 $this->insert_products($data);
@@ -77,5 +78,51 @@ class CartController extends Controller
         }
         DB::table('user_carts')->update(['subtotal' => $subtotal,'total_amt' => $subtotal,'updated_at' => date('Y-m-d ,H:i:s')]);
         return true;
+    }
+    public function checkout(Request $request){
+        $inputs = $request->all();
+        $cart = DB::table('user_carts')->where('id',$inputs['cart_id'])->where('cart_status','created')
+            ->where('user_id',$inputs['user_id'])->first();
+        if (empty($cart)){return ['status'=>0,'message' => 'cart not found'];}
+        $cart_products = DB::table('cart_products')->where('cart_id',$inputs['cart_id'])->get();
+        $user_details=DB::table('customers')->where('id',$inputs['user_id'])->first();
+        $order = [
+            'order_id' => 'ORD'.mt_rand(10000000, 99999999),
+            'customer_id' => $inputs['user_id'],
+            'address_id'=>$user_details->default_address,
+            'expected_pickup_date'=>$cart->pickup_date,
+            'expected_delivery_date'=>$cart->drop_date,
+            'pickup_time'=>$cart->pickup_time,
+            'drop_time'=>$cart->drop_time,
+            'total' =>$cart->total_amt,
+            'sub_total' =>$cart->subtotal,
+            'discount' =>$cart->discount,
+            'payment_mode'=>2,
+            'items'=>count($cart_products),
+            'created_at'=>date('Y-m-d H:i:s'),
+            'updated_at'=>date('Y-m-d H:i:s'),
+        ];
+        $order_get_id = DB::table('orders')->insertGetId($order);
+//        $order_get_id =2;
+        if ($order_get_id){
+            foreach ($cart_products as $cart_product){
+                $product_details = DB::table('products')->where('id',$cart_product->product_id)->first();
+                $order_products = [
+                    'order_id'=>$order_get_id,
+                    'product_id'=>$cart_product->product_id,
+                    'service_id'=>$product_details->service_id,
+                    'qty'=>$cart_product->qty,
+                    'price'=>$cart_product->price,
+                    'created_at'=>date('Y-m-d H:i:s'),
+                    'updated_at'=>date('Y-m-d H:i:s'),
+                ];
+                DB::table('order_items')->insert($order_products);
+            }
+            DB::table('user_carts')->where('id',$inputs['cart_id'])->where('cart_status','created')
+                ->where('user_id',$inputs['user_id'])->update(['cart_status'=>'ordered']);
+            return ['status' => 1,'message' => 'order placed!','data'=>['order_id' => $order_get_id]];
+        }
+        return ['status' => 0,'message' => 'Order not placed internal error'];
+
     }
 }

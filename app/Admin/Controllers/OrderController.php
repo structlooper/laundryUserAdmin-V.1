@@ -48,16 +48,21 @@ class OrderController extends AdminController
         $grid->column('customer_id', __('Customer id'))->display(function($customer_id){
             return Customer::where('id',$customer_id)->value('customer_name');
         });
-        $grid->column('expected_delivery_date', __('Expected delivery date'))->display(function($expected_delivery_date){
+        $grid->column('expected_pickup_date', __('Pickup date'))->display(function($expected_pickup_date){
+            return date('d M-Y',strtotime($expected_pickup_date));
+        });
+        $grid->column('pickup_time', __('Pickup Slot'));
+        $grid->column('expected_delivery_date', __('Delivery date'))->display(function($expected_delivery_date){
             return date('d M-Y',strtotime($expected_delivery_date));
         });
+        $grid->column('drop_time', __('Drop Slot'));
         $grid->column('delivered_by', __('Delivered by'))->display(function($delivered_by){
             if($delivered_by){
                 return DeliveryBoy::where('id',$delivered_by)->value('delivery_boy_name');
             }else{
                 return '---';
             }
-            
+
         });
         $grid->column('status', __('Status'))->display(function($status){
             $label_name = Label::where('id',$status)->value('label_name');
@@ -104,6 +109,7 @@ class OrderController extends AdminController
         $show->field('customer_id', __('Customer id'));
         $show->field('address_id', __('Address id'));
         $show->field('expected_delivery_date', __('Expected delivery date'));
+        $show->field('expected_pickup_date', __('Expected pickup date'));
         $show->field('actual_delivery_date', __('Actual delivery date'));
         $show->field('total', __('Total'));
         $show->field('discount', __('Discount'));
@@ -154,12 +160,12 @@ class OrderController extends AdminController
             $this->send_fcm($message->customer_title, $message->customer_description, $customer_token);
             if($form->model()->status == 2 || $form->model()->status == 5){
                $delivery_boy_token = DeliveryBoy::where('id',$form->model()->delivered_by)->value('fcm_token');
-                $this->send_fcm($message->delivery_title, $message->delivery_description, $delivery_boy_token); 
+                $this->send_fcm($message->delivery_title, $message->delivery_description, $delivery_boy_token);
             }
-            
+
         });
         $form->tools(function (Form\Tools $tools) {
-            $tools->disableDelete(); 
+            $tools->disableDelete();
             $tools->disableView();
         });
         $form->footer(function ($footer) {
@@ -178,7 +184,7 @@ class OrderController extends AdminController
             if($new_order->delivered_by){
                 $this->update_firebase(0,$new_order->delivered_by,$id);
             }
-            
+
         }else{
             $last_order_history = OrderHistory::where('order_id',$id)->orderBy('id', 'DESC')->first();
             OrderHistory::create([ 'order_id'=>$id, 'delivery_boy_id'=>$new_order->delivered_by,'status'=>$new_order->status ]);
@@ -234,7 +240,7 @@ class OrderController extends AdminController
         if($old_del_boy > 0 && $old_del_boy != $new_del_boy){
             $database->getReference('delivery_partners/'.$old_del_boy.'/orders/'.$id)->remove();
         }
-        
+
     }
 
     public function send_fcm($title,$description,$token){
@@ -244,16 +250,16 @@ class OrderController extends AdminController
         $notificationBuilder = new PayloadNotificationBuilder($title);
         $notificationBuilder->setBody($description)
                             ->setSound('default')->setBadge(1);
-        
+
         $dataBuilder = new PayloadDataBuilder();
         $dataBuilder->addData(['a_data' => 'my_data']);
-        
+
         $option = $optionBuilder->build();
         $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
-        
+
         $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-        
+
         return $downstreamResponse->numberSuccess();
     }
-} 
+}
