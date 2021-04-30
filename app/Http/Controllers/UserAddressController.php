@@ -73,4 +73,11 @@ class UserAddressController extends Controller
         }
         return ['status' => 0,'message' => 'Address not deleted'];
     }
+    public function select_address(Request $request){
+        $inputs = $request->all();
+        if(DB::table('customers')->where('id',$inputs['user_id'])->update(['default_address' => $inputs['address_id'],'updated_at' => date('Y-m-d H:i:s')])){
+            return ['status' => 1 , "message" => 'default address saved'];
+        }return ['status' => 0,'message' => 'address not saved'];
+
+    }
 }

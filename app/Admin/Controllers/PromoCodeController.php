@@ -31,9 +31,9 @@ class PromoCodeController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('promo_name', __('Promo Name'));
-        $grid->column('promo_name_ar', __('Promo Name Ar'));
+//        $grid->column('promo_name_ar', __('Promo Name Ar'));
         $grid->column('description', __('Description'));
-        $grid->column('description_ar', __('Description_Ar'));
+//        $grid->column('description_ar', __('Description_Ar'));
         $grid->column('promo_type', __('Promo type'))->display(function($promo_types){
             $type_name = PromoType::where('id',$promo_types)->value('type_name');
             if ($promo_types == 1) {
@@ -61,9 +61,9 @@ class PromoCodeController extends AdminController
             //Get All status
             $statuses = Status::pluck('status_name', 'id');
             $promo_types = PromoType::pluck('type_name', 'id');
-            
+
             $filter->like('promo_name', 'Promo Name');
-            $filter->like('promo_name_ar', 'Promo Name Ar');
+//            $filter->like('promo_name_ar', 'Promo Name Ar');
             $filter->equal('status', 'Status')->select($statuses);
             $filter->equal('promo_type', 'Promo Type')->select($promo_types);
         });
@@ -106,9 +106,9 @@ class PromoCodeController extends AdminController
         $form->text('promo_name', __('Promo name'))->rules(function ($form) {
             return 'required|max:100';
         });
-        $form->text('promo_name_ar', __('Promo name Ar'))->rules(function ($form) {
-            return 'required|max:100';
-        });
+//        $form->text('promo_name_ar', __('Promo name Ar'))->rules(function ($form) {
+//            return 'required|max:100';
+//        });
         $form->text('promo_code', __('Promo code'))->rules(function ($form) {
             if (!$id = $form->model()->id) {
                 return 'required|max:100|unique:promo_codes,promo_code';
@@ -119,9 +119,9 @@ class PromoCodeController extends AdminController
         $form->textarea('description', __('Description'))->rules(function ($form) {
             return 'required';
         });
-        $form->textarea('description_ar', __('Description Ar'))->rules(function ($form) {
-            return 'required';
-        });
+//        $form->textarea('description_ar', __('Description Ar'))->rules(function ($form) {
+//            return 'required';
+//        });
         $form->select('promo_type', __('Promo type'))->options($promo_types)->default(1)->rules(function ($form) {
             return 'required';
         });
@@ -132,7 +132,7 @@ class PromoCodeController extends AdminController
             return 'required';
         });
         $form->tools(function (Form\Tools $tools) {
-           $tools->disableDelete(); 
+           $tools->disableDelete();
            $tools->disableView();
        });
        $form->footer(function ($footer) {

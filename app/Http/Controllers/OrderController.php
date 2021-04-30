@@ -61,7 +61,7 @@ class OrderController extends Controller
         if($validator->fails()) {
             return $this->sendError($validator->errors());
         }
-        
+
         $payment_response = $input['payment_response'];
         unset($input['payment_response']);
         $items = json_decode($input['items'], true);
@@ -79,7 +79,7 @@ class OrderController extends Controller
             if($input['payment_mode'] != 1){
                 PaymentResponse::where('payment_response',$payment_response)->update(['order_id' => $order->id]);
             }
-            
+
             return response()->json([
                 "message" => 'Order Placed Successfully',
                 "status" => 1
@@ -136,6 +136,23 @@ class OrderController extends Controller
     {
         //
     }
+    public function getOrder(Request $request){
+        $order_id = $request->order_id;
+        $order = DB::table('orders')
+            ->select('orders.*','labels.label_name')
+            ->join('labels', 'labels.id', '=', 'orders.status')
+            ->where('orders.id',$order_id)->first();
+        if (empty($order)){return [];}
+        $order->address_details = DB::table('addresses')->select('address','door_no')->where('id',$order->address_id)->first();
+        unset($order->address_id);
+        $order->order_products = DB::table('order_items')
+            ->select('order_items.qty','order_items.price','products.product_name','services.service_name')
+            ->join('products','products.id','=','order_items.product_id')
+
+            ->join('services','services.id','=','order_items.service_id')
+            ->where('order_items.order_id',$order_id)->get();
+        return (array)$order;
+    }
 
     public function getOrders(Request $request)
     {
@@ -184,7 +201,7 @@ class OrderController extends Controller
                         ->get();
                 $orders[$key]->items = $item;
             }
-            
+
         }
         if ($orders) {
             return response()->json([
@@ -241,13 +258,13 @@ class OrderController extends Controller
                 $database->getReference('delivery_partners/'.$order->delivered_by.'/orders/'.$order->id.'/new_status_name')
                 ->set($new_label->label_for_delivery_boy);
             }
-            
+
             //fcm msg
             $order_status = Order::where('id',$input['order_id'])->value('status');
             $message = DB::table('fcm_notification_messages')->where('id',$order_status)->first();
             $customer_token = Customer::where('id',$order->customer_id)->value('fcm_token');
             $this->send_fcm($message->customer_title, $message->customer_description, $customer_token);
-            
+
             $response['message'] = "Success";
             $response['status'] = 1;
             return response()->json($response, 200);

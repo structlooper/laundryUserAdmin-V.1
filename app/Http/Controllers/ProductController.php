@@ -91,13 +91,23 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$service_id)
     {
         //
         return DB::table('products')
             ->select('products.*','units.unit_code as unit')
             ->join('units','units.id','=','products.unit')
-            ->where('category_id',$id)
+            ->where('products.category_id',$id)
+            ->where('products.service_id',$service_id)
+            ->where('status',1)->get();
+    }
+    public function show1($id)
+    {
+        //
+        return DB::table('products')
+            ->select('products.*','units.unit_code as unit')
+            ->join('units','units.id','=','products.unit')
+            ->where('products.category_id',$id)
             ->where('status',1)->get();
     }
 

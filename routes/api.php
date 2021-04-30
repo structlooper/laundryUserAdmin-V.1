@@ -33,7 +33,9 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('servicesBanners', 'ServiceController@banners');
     Route::resource('service', 'ServiceController');
     Route::resource('category','CategoryController');
-    Route::resource('product', 'ProductController');
+//    Route::resource('product', 'ProductController');
+    Route::get('product/{id}/{if}', 'ProductController@show');
+    Route::get('product/{id}', 'ProductController@show1');
     Route::get('cart/{id}','CartController@index');
     Route::post('cart','CartController@cart');
     Route::post('cart/checkout','CartController@checkout');
@@ -47,6 +49,12 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('date_slots/{id}','TimeSlotController@date_drop');
     Route::post('save_date_time','TimeSlotController@save_date_time');
     Route::post('slots/clear','TimeSlotController@slots_clear');
+    Route::post('get_orders', 'OrderController@getOrders');
+    Route::post('order', 'OrderController@getOrder');
+    Route::post('select/address','UserAddressController@select_address');
+    Route::post('promo', 'PromoCodeController@index');
+    Route::post('promo/select','PromoCodeController@select');
+
 });
 
 Route::post('customer/profile_picture', 'CustomerController@profile_picture');
@@ -55,11 +63,8 @@ Route::post('customer/forgot_password', 'CustomerController@forgot_password');
 
 
 Route::post('customer/reset_password', 'CustomerController@reset_password');
-Route::post('promo', 'PromoCodeController@index');
 Route::get('app_setting', 'AppSettingController@index');
 Route::post('privacy_policy', 'PrivacyPolicyController@index');
-Route::post('order', 'OrderController@store');
-Route::post('get_orders', 'OrderController@getOrders');
 Route::resource('delivery_partner', 'DeliveryBoyController');
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/login', 'DeliveryBoyController@login');
