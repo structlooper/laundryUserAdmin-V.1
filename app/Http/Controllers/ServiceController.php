@@ -22,7 +22,12 @@ class ServiceController extends Controller
 
 
     public function banners(){
-        return DB::table('banner_images')->get()->toArray();
+        $banner = DB::table('banner_images')
+            ->select('banner_images.*','services.service_name')
+            ->join('services','services.id','=','banner_images.service_id')
+            ->get()->toArray();
+        return $banner;
+
     }
 
     /**

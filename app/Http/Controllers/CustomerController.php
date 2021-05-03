@@ -165,42 +165,42 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'customer_name' => 'required',
-            'phone_number' => 'required|numeric|unique:customers,id,'.$id,
-            'email' => 'required|email|unique:customers,id,'.$id
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors());
-        }
-        if($request->password){
-            $options = [
-                'cost' => 12,
-            ];
-            $input['password'] = password_hash($input["password"], PASSWORD_DEFAULT, $options);
-            $input['status'] = 1;
-        }else{
-            unset($input['password']);
-        }
-
-        if (Customer::where('id',$id)->update($input)) {
-            return response()->json([
-                "result" => Customer::select('id', 'customer_name','phone_number','email','profile_picture','status')->where('id',$id)->first(),
-                "message" => 'Success',
-                "status" => 1
-            ]);
-        } else {
-            return response()->json([
-                "message" => 'Sorry, something went wrong...',
-                "status" => 0
-            ]);
-        }
-
-    }
+//    public function update(Request $request, $id)
+//    {
+//        $input = $request->all();
+//        $validator = Validator::make($input, [
+//            'customer_name' => 'required',
+//            'phone_number' => 'required|numeric|unique:customers,id,'.$id,
+//            'email' => 'required|email|unique:customers,id,'.$id
+//        ]);
+//
+//        if ($validator->fails()) {
+//            return $this->sendError($validator->errors());
+//        }
+//        if($request->password){
+//            $options = [
+//                'cost' => 12,
+//            ];
+//            $input['password'] = password_hash($input["password"], PASSWORD_DEFAULT, $options);
+//            $input['status'] = 1;
+//        }else{
+//            unset($input['password']);
+//        }
+//
+//        if (Customer::where('id',$id)->update($input)) {
+//            return response()->json([
+//                "result" => Customer::select('id', 'customer_name','phone_number','email','profile_picture','status')->where('id',$id)->first(),
+//                "message" => 'Success',
+//                "status" => 1
+//            ]);
+//        } else {
+//            return response()->json([
+//                "message" => 'Sorry, something went wrong...',
+//                "status" => 0
+//            ]);
+//        }
+//
+//    }
 
     /**
      * Remove the specified resource from storage.
@@ -391,6 +391,32 @@ class CustomerController extends Controller
         }
 
         return response()->json(compact('user'));
+    }
+    public function update_profile(Request $request){
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'customer_name' => 'required',
+            'email' => 'required|email|regex:/^[a-zA-Z]{1}/',
+//            'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
+        }
+        $user_id = $request->user_id;
+        $user['customer_name'] = $request->customer_name;
+        $user['email'] = $request->email;
+        if ($request->hasFile('profile_image')){
+            $image = $request->file('profile_image');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/images');
+            $image->move($destinationPath, $name);
+            $user['profile_picture'] = 'images/'.$name;
+        }
+        if (DB::table('customers')->where('id',$user_id)->update($user)){
+            $new_details = DB::table('customers')->where('id',$user_id)->first();
+            $new_details->default_address = DB::table('addresses')->where('id',$new_details->default_address)->first();
+            return ['status'=>1,'message' => 'Profile details updated!',"data" => $new_details];
+        }return ['status' => 0,'message' => 'Some internal error',];
     }
 
 

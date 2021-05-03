@@ -29,6 +29,7 @@ Route::post('refreshToken', 'CustomerController@refreshToken');
 Route::post('customer/otp','CustomerController@otp');
 //secured apis using customer token
 Route::group(['middleware' => ['jwt.verify']], function() {
+    Route::post('customer/update', 'CustomerController@update_profile');
     Route::get('logged/customer', 'CustomerController@getAuthenticatedUser');
     Route::get('servicesBanners', 'ServiceController@banners');
     Route::resource('service', 'ServiceController');
@@ -54,6 +55,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('select/address','UserAddressController@select_address');
     Route::post('promo', 'PromoCodeController@index');
     Route::post('promo/select','PromoCodeController@select');
+    Route::get('app_setting', 'AppSettingController@index');
 
 });
 
@@ -62,8 +64,7 @@ Route::post('customer/profile_picture', 'CustomerController@profile_picture');
 Route::post('customer/forgot_password', 'CustomerController@forgot_password');
 
 
-Route::post('customer/reset_password', 'CustomerController@reset_password');
-Route::get('app_setting', 'AppSettingController@index');
+//Route::post('customer/reset_password', 'CustomerController@reset_password');
 Route::post('privacy_policy', 'PrivacyPolicyController@index');
 Route::resource('delivery_partner', 'DeliveryBoyController');
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');

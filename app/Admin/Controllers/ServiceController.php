@@ -30,6 +30,7 @@ class ServiceController extends AdminController
         $grid->column('id', __('Id'));
         $grid->column('image', __('Image'))->image();
         $grid->column('service_name', __('Service Name'));
+        $grid->column('service_time', __('Service Time(hr)'));
 //        $grid->column('service_name_ar', __('Service Name Ar'));
         $grid->column('description', __('Description'));
 //        $grid->column('description_ar', __('Description Ar'));
@@ -68,6 +69,7 @@ class ServiceController extends AdminController
 
         $show->field('id', __('Id'));
         $show->field('service_name', __('Service name'));
+        $show->field('service_time', __('Service time'));
         $show->field('description', __('Description'));
         // $show->field('estimation_hours', __('Estimation hours'));
         $show->field('image', __('Image'));
@@ -90,6 +92,9 @@ class ServiceController extends AdminController
 
         $form->text('service_name', __('Service Name'))->rules(function ($form) {
             return 'required|max:100';
+        });
+        $form->text('service_time', __('Service Time(in hr)'))->rules(function ($form) {
+            return 'required|max:100|numeric';
         });
 //        $form->text('service_name_ar', __('Service Name Ar'))->rules(function ($form) {
 //            return 'required|max:100';

@@ -30,6 +30,7 @@ class AppSettingController extends AdminController
         $grid->column('application_name', __('Application name'));
         $grid->column('logo', __('Logo'));
         $grid->column('contact_number', __('Contact number'));
+        $grid->column('whatsapp_number', __('Whatsapp number'));
         $grid->column('email', __('Email'));
         $grid->column('country', __('Country'));
         $grid->column('default_currency', __('Default currency'));
@@ -57,6 +58,7 @@ class AppSettingController extends AdminController
         $show->field('application_name', __('Application name'));
         $show->field('logo', __('Logo'));
         $show->field('contact_number', __('Contact number'));
+        $show->field('whatsapp_number', __('Whatsapp number'));
         $show->field('email', __('Email'));
         $show->field('default_currency', __('Default currency'));
         $show->field('created_at', __('Created at'));
@@ -85,6 +87,13 @@ class AppSettingController extends AdminController
                 return 'numeric|digits_between:1,15|required||unique:app_settings,contact_number,'.$form->model()->id;
             }
         });
+        $form->text('whatsapp_number', __('Whatsapp number'))->rules(function ($form) {
+            if (!$id = $form->model()->id) {
+                return 'numeric|digits_between:1,15|required||unique:app_settings,contact_number';
+            } else {
+                return 'numeric|digits_between:1,15|required||unique:app_settings,contact_number,'.$form->model()->id;
+            }
+        });
         $form->email('email', __('Email'))->rules(function ($form) {
             if (!$id = $form->model()->id) {
                 return 'required|max:100|unique:app_settings,email';
@@ -102,7 +111,7 @@ class AppSettingController extends AdminController
             return 'required';
         });
         $form->tools(function (Form\Tools $tools) {
-            $tools->disableDelete(); 
+            $tools->disableDelete();
             $tools->disableView();
         });
         $form->footer(function ($footer) {
