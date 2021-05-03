@@ -165,14 +165,28 @@ class OrderController extends Controller
             return $this->sendError($validator->errors());
         }
         if($input['lang'] == 'en'){
-            $orders = DB::table('orders')
+            $DB_orders = DB::table('orders')
             ->join('addresses', 'addresses.id', '=', 'orders.address_id')
             ->join('labels', 'labels.id', '=', 'orders.status')
             ->join('payment_methods', 'orders.payment_mode', '=', 'payment_methods.id')
-            ->select('orders.id','orders.order_id','payment_methods.payment_mode','addresses.address','addresses.door_no','orders.expected_delivery_date','orders.total','orders.discount','orders.sub_total','orders.status','orders.items','labels.label_name','orders.created_at','orders.updated_at')
+            ->select('orders.id','orders.order_id','payment_methods.payment_mode','addresses.address','addresses.door_no','orders.expected_delivery_date','orders.drop_time','orders.total','orders.discount','orders.sub_total','orders.status','orders.items','labels.label_name','orders.created_at','orders.updated_at')
             ->where('orders.customer_id',$input['customer_id'])
             ->orderBy('orders.created_at', 'desc')
             ->get();
+            $orders = [];
+            foreach ($DB_orders as $order){
+                $time = str_replace(' ',':00 ',explode('to ',$order->drop_time)[1]);
+                $order->expected_delivery_date = date('m/d/y H:i:s',strtotime(str_replace('00:00:00',$time,$order->expected_delivery_date)));
+                $diff_in_hours = 0;
+                if ($order->expected_delivery_date > date('m/d/y H:i:s')){
+                    $from = \Carbon\Carbon::createFromFormat('m/d/y H:i:s', $order->expected_delivery_date);
+                    $to = \Carbon\Carbon::now();
+                    $diff_in_hours = $to->diffInSeconds($from);
+                }
+                $order->drop_duration =  $diff_in_hours ;
+                $order->drop_time = $time;
+                $orders[] = $order;
+            }
         }else{
             $orders = DB::table('orders')
             ->join('addresses', 'addresses.id', '=', 'orders.address_id')
