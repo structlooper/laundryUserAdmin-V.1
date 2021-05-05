@@ -29,9 +29,9 @@ class FaqController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('question', __('Question'));
-        $grid->column('question_ar', __('Question Ar'));
+//        $grid->column('question_ar', __('Question Ar'));
         $grid->column('answer', __('Answer'));
-         $grid->column('answer_ar', __('Answer Ar'));
+//         $grid->column('answer_ar', __('Answer Ar'));
         $grid->column('status', __('Status'))->display(function($status){
             $status_name = Status::where('id',$status)->value('status_name');
             if ($status == 1) {
@@ -47,7 +47,7 @@ class FaqController extends AdminController
         $grid->filter(function ($filter) {
             //Get All status
             $statuses = Status::pluck('status_name', 'id');
-            
+
             $filter->like('question', 'Question');
             $filter->equal('status', 'Status')->select($statuses);
         });
@@ -86,20 +86,20 @@ class FaqController extends AdminController
         $form->text('question', __('Question'))->rules(function ($form) {
             return 'required';
         });
-        $form->text('question_ar', __('Question Ar'))->rules(function ($form) {
-            return 'required';
-        });
+//        $form->text('question_ar', __('Question Ar'))->rules(function ($form) {
+//            return 'required';
+//        });
         $form->textarea('answer', __('Answer'))->rules(function ($form) {
             return 'required';
         });
-         $form->textarea('answer_ar', __('Answer_Ar'))->rules(function ($form) {
-            return 'required';
-        });
+//         $form->textarea('answer_ar', __('Answer_Ar'))->rules(function ($form) {
+//            return 'required';
+//        });
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
             return 'required';
         });
         $form->tools(function (Form\Tools $tools) {
-           $tools->disableDelete(); 
+           $tools->disableDelete();
            $tools->disableView();
        });
        $form->footer(function ($footer) {

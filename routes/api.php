@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('faq', 'FaqController@index');
 Route::resource('customer', 'CustomerController');
 
 /*
@@ -56,8 +55,11 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('promo', 'PromoCodeController@index');
     Route::post('promo/select','PromoCodeController@select');
     Route::get('app_setting', 'AppSettingController@index');
-
+    Route::post('privacy_policy', 'PrivacyPolicyController@index');
+    Route::post('faq', 'FaqController@index');
+    Route::post('notifications','CustomerController@notifications');
 });
+
 
 Route::post('customer/profile_picture', 'CustomerController@profile_picture');
 
@@ -65,7 +67,6 @@ Route::post('customer/forgot_password', 'CustomerController@forgot_password');
 
 
 //Route::post('customer/reset_password', 'CustomerController@reset_password');
-Route::post('privacy_policy', 'PrivacyPolicyController@index');
 Route::resource('delivery_partner', 'DeliveryBoyController');
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/login', 'DeliveryBoyController@login');

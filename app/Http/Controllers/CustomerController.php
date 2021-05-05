@@ -38,6 +38,7 @@ class CustomerController extends Controller
      * @return bool|\Illuminate\Http\Response|string
      */
     public function sendOtpFunction($number,$otp){
+
         $ch = curl_init();
         $url            = "https://control.msg91.com/api/sendotp.php?authkey=302176AeEcfLaw5dc0355a&mobile=".$number."&message=TOP GEAR OTP%20".$otp."&sender=OWNWAY&country=91&otp=".$otp."&otp_length=6";
 
@@ -103,14 +104,14 @@ class CustomerController extends Controller
             return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
         }
         $input['otp'] = mt_rand(100000, 999999);
-        $customer = Customer::create($input);
         $input['status'] = 1;
-
+        $customer = Customer::create($input);
         if($this->sendOtpFunction($input['phone_number'],$input['otp'])){
             return ['status'=> 1,'message' => 'Verification otp sent on your phone','data' => []];
         }else{
             return ['status' => 0,'message' => 'Otp not sent','data' => []];
         }
+
 
     }
 
@@ -418,6 +419,22 @@ class CustomerController extends Controller
             return ['status'=>1,'message' => 'Profile details updated!',"data" => $new_details];
         }return ['status' => 0,'message' => 'Some internal error',];
     }
+    public function notifications(Request $request){
+       $user_id = $request->user_id;
+       $notifications_db = DB::table('user_notifications')
+           ->select('user_notifications.order_id','f_msg.status_image','f_msg.customer_title as title','f_msg.customer_description as desc','user_notifications.created_at')
+           ->join('fcm_notification_messages as f_msg','f_msg.id','=','user_notifications.fcm_msg_id')
+           ->where('user_id',$user_id)->get();
+       if (sizeof($notifications_db) > 0){
+           $notifications= [];
+           foreach ($notifications_db as $item){
+               $item->created_at = date('H:i',strtotime($item->created_at));
+               $notifications[] = $item;
+           }
 
+           return ['status' => 1 ,"data" => array_reverse($notifications)];
+       }
+       return ['status' => 0,'data' => []];
+    }
 
 }

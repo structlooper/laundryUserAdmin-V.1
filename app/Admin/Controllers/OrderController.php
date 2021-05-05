@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Helper\NotiHelper;
 use App\Order;
 use App\Customer;
 use App\DeliveryBoy;
@@ -154,10 +155,13 @@ class OrderController extends AdminController
            }
         });
         $form->saved(function (Form $form) {
-            $this->update_history($form->model()->id);
+//            $this->update_history($form->model()->id);
             $message = DB::table('fcm_notification_messages')->where('id',$form->model()->status)->first();
+            $order_id = $form->model()->order_id;
             $customer_token = Customer::where('id',$form->model()->customer_id)->value('fcm_token');
-            $this->send_fcm($message->customer_title, $message->customer_description, $customer_token);
+            $this->send_fcm($message->customer_title.'('.$order_id.')', $message->customer_description, $customer_token);
+            $noti_details = ['order_id' => $order_id,'fcm_msg_id' => $message->id,'user_id' =>$form->model()->customer_id,'created_at' => date('y-m-d H:i:s') ];
+            DB::table('user_notifications')->insert($noti_details);
             if($form->model()->status == 2 || $form->model()->status == 5){
                $delivery_boy_token = DeliveryBoy::where('id',$form->model()->delivered_by)->value('fcm_token');
                 $this->send_fcm($message->delivery_title, $message->delivery_description, $delivery_boy_token);
@@ -244,22 +248,24 @@ class OrderController extends AdminController
     }
 
     public function send_fcm($title,$description,$token){
-        $optionBuilder = new OptionsBuilder();
-        $optionBuilder->setTimeToLive(60*20);
-        $optionBuilder->setPriority("high");
-        $notificationBuilder = new PayloadNotificationBuilder($title);
-        $notificationBuilder->setBody($description)
-                            ->setSound('default')->setBadge(1);
-
-        $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData(['a_data' => 'my_data']);
-
-        $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
-        $data = $dataBuilder->build();
-
-        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-
-        return $downstreamResponse->numberSuccess();
+        NotiHelper::notiSingleUSer($token,$title,$description);
+        return true;
+//        $optionBuilder = new OptionsBuilder();
+//        $optionBuilder->setTimeToLive(60*20);
+//        $optionBuilder->setPriority("high");
+//        $notificationBuilder = new PayloadNotificationBuilder($title);
+//        $notificationBuilder->setBody($description)
+//                            ->setSound('default')->setBadge(1);
+//
+//        $dataBuilder = new PayloadDataBuilder();
+//        $dataBuilder->addData(['a_data' => 'my_data']);
+//
+//        $option = $optionBuilder->build();
+//        $notification = $notificationBuilder->build();
+//        $data = $dataBuilder->build();
+//
+//        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+//
+//        return $downstreamResponse->numberSuccess();
     }
 }

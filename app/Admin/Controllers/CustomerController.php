@@ -46,7 +46,7 @@ class CustomerController extends AdminController
         $grid->filter(function ($filter) {
             //Get All status
             $statuses = Status::pluck('status_name', 'id');
-            
+
             $filter->like('customer_name', 'Customer Name');
             $filter->like('phone_number', 'Phone Name');
             $filter->like('email', 'Email');
@@ -69,7 +69,7 @@ class CustomerController extends AdminController
         $show->field('customer_name', __('Customer name'));
         $show->field('phone_number', __('Phone number'));
         $show->field('email', __('Email'));
-        $show->field('password', __('Password'));
+//        $show->field('password', __('Password'));
         $show->field('profile_picture', __('Profile picture'));
         $show->field('status', __('Status'));
         $show->field('created_at', __('Created at'));
@@ -105,9 +105,9 @@ class CustomerController extends AdminController
                 return 'required|max:100|unique:delivery_boys,email|unique:customers,email,'.$form->model()->id;
             }
         });
-        $form->password('password', __('Password'))->rules(function ($form) {
-            return 'required';
-        });
+//        $form->password('password', __('Password'))->rules(function ($form) {
+//            return 'required';
+//        });
         $form->image('profile_picture', __('Profile picture'))->uniqueName();
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
             return 'required';
@@ -119,7 +119,7 @@ class CustomerController extends AdminController
             }
         });
         $form->tools(function (Form\Tools $tools) {
-           $tools->disableDelete(); 
+           $tools->disableDelete();
            $tools->disableView();
        });
        $form->footer(function ($footer) {

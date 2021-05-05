@@ -29,8 +29,8 @@ class PrivacyPolicyController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('title', __('Title'));
-        $grid->column('title_ar', __('Title Ar'));
-        $grid->column('description_ar', __('Description Ar'));
+//        $grid->column('title_ar', __('Title Ar'));
+//        $grid->column('description_ar', __('Description Ar'));
         $grid->column('description', __('Description'));
         $grid->column('status', __('Status'))->display(function($status){
             $status_name = Status::where('id',$status)->value('status_name');
@@ -86,20 +86,20 @@ class PrivacyPolicyController extends AdminController
         $form->text('title', __('Title'))->rules(function ($form) {
             return 'required|max:100';
         });
-        $form->text('title_ar', __('Title Ar'))->rules(function ($form) {
-            return 'required|max:100';
-        });
+//        $form->text('title_ar', __('Title Ar'))->rules(function ($form) {
+//            return 'required|max:100';
+//        });
         $form->textarea('description', __('Description'))->rules(function ($form) {
             return 'required';
         });
-        $form->textarea('description_ar', __('Description Ar'))->rules(function ($form) {
-            return 'required';
-        });
+//        $form->textarea('description_ar', __('Description Ar'))->rules(function ($form) {
+//            return 'required';
+//        });
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
             return 'required';
         });
         $form->tools(function (Form\Tools $tools) {
-           $tools->disableDelete(); 
+           $tools->disableDelete();
            $tools->disableView();
        });
        $form->footer(function ($footer) {
