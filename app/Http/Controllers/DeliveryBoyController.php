@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\NotiHelper;
 use Illuminate\Http\Request;
 use App\DeliveryBoy;
 use App\Order;
@@ -39,6 +40,35 @@ class DeliveryBoyController extends Controller
     {
         //
     }
+    public function otp(Request $request){
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'phone_number' => 'required|numeric|digits_between:10,10',
+            'otp' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
+        }
+        $driver = DeliveryBoy::where('phone_number',$input['phone_number'])->first();
+        if ($driver->otp === $input['otp']){
+            if (is_object($driver)) {
+                return [
+                    "result" => $driver,
+                    "message" => 'Otp verified Successfully',
+                    "status" => 1
+                ];
+            } else {
+                return [
+                    "message" => 'Sorry, something went wrong !',
+                    "status" => 0
+                ];
+            }
+        }else{
+            return ['status' => 0,'message' => 'Wrong Otp','data' => []];
+        }
+
+    }
 
      public function store(Request $request)
     {
@@ -47,32 +77,26 @@ class DeliveryBoyController extends Controller
             'delivery_boy_name' => 'required',
             'phone_number' => 'required|numeric|digits_between:9,20|unique:delivery_boys,phone_number',
             'email' => 'required|email|regex:/^[a-zA-Z]{1}/|unique:delivery_boys,email',
-            'password' => 'required'
+            'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError($validator->errors());
+            return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
         }
-
-        $options = [
-            'cost' => 12,
-        ];
-        $input['password'] = password_hash($input["password"], PASSWORD_DEFAULT, $options);
+        if ($request->hasFile('profile_image')){
+            $image = $request->file('profile_image');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/images');
+            $image->move($destinationPath, $name);
+            $input['profile_picture'] = 'images/'.$name;
+        }
         $input['status'] = 1;
-
-        $delivery_boy = DeliveryBoy::create($input);
-
-        if (is_object($delivery_boy)) {
-            return response()->json([
-                "result" => $delivery_boy,
-                "message" => 'Updated Successfully',
-                "status" => 1
-            ]);
-        } else {
-            return response()->json([
-                "message" => 'Sorry, something went wrong !',
-                "status" => 0
-            ]);
+        $input['otp'] = mt_rand(100000, 999999);
+        DeliveryBoy::create($input);
+        if(NotiHelper::sendOtpFunction($input['phone_number'],$input['otp'])){
+            return ['status'=> 1,'message' => 'Verification otp sent on your phone','data' => []];
+        }else{
+            return ['status' => 0,'message' => 'Otp not sent','data' => []];
         }
 
     }
@@ -87,7 +111,7 @@ class DeliveryBoyController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError($validator->errors());
+            return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
         }
         if($request->password){
             $options = [
@@ -111,6 +135,43 @@ class DeliveryBoyController extends Controller
                 "status" => 0
             ]);
         }
+
+    }
+    public function login(Request $request){
+
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'phone_number' => 'required|numeric|digits_between:9,20',
+        ]);
+
+        if ($validator->fails()) {
+            return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
+        }
+
+        $credentials = request(['phone_number']);
+        $driver = DeliveryBoy::where('phone_number',$credentials['phone_number'])->first();
+
+        if (!($driver)) {
+            return response()->json([
+                "message" => 'Your number is not registered, please register',
+                "status" => 0
+            ]);
+        }
+        $input['otp'] = mt_rand(100000, 999999);
+        if($driver->status == 1){
+            DeliveryBoy::where('id',$driver->id)->update([ 'fcm_token' => $input['fcm_token'],'otp' =>  $input['otp']]);
+            if(NotiHelper::sendOtpFunction($input['phone_number'],$input['otp'])){
+                return ['status'=> 1,'message' => 'Verification otp sent on your phone','data' => []];
+            }else{
+                return ['status' => 0,'message' => 'Otp not sent','data' => []];
+            }
+        }else{
+            return response()->json([
+                "message" => 'Your account has been blocked',
+                "status" => 0
+            ]);
+        }
+
 
     }
 
@@ -152,50 +213,6 @@ class DeliveryBoyController extends Controller
         //
     }
 
-    public function login(Request $request){
-
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'email' => 'required',
-            'password' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError($validator->errors());
-        }
-
-        $credentials = request(['email', 'password']);
-        $delivery_boy = DeliveryBoy::where('email',$credentials['email'])->first();
-
-        if (!($delivery_boy)) {
-            return response()->json([
-                "message" => 'Invalid email or password',
-                "status" => 0
-            ]);
-        }
-        
-        if (Hash::check($credentials['password'], $delivery_boy->password)) {
-            if($delivery_boy->status == 1){
-                DeliveryBoy::where('id',$delivery_boy->id)->update([ 'fcm_token' => $input['fcm_token']]);
-                return response()->json([
-                    "result" => $delivery_boy,
-                    "message" => 'Success',
-                    "status" => 1
-                ]);   
-            }else{
-                return response()->json([
-                    "message" => 'Your account has been blocked',
-                    "status" => 0
-                ]);
-            }
-        }else{
-            return response()->json([
-                "message" => 'Invalid email or password',
-                "status" => 0
-            ]);
-        }
-
-    }
 
 
     public function profile_picture(Request $request){
@@ -259,7 +276,7 @@ class DeliveryBoyController extends Controller
                 "status" => 0
             ]);
         }
-        
+
     }
 
     public function reset_password(Request $request){
@@ -298,10 +315,10 @@ class DeliveryBoyController extends Controller
         $response['message'] = implode('',$message);
         $response['status'] = "0";
         return response()->json($response, 200);
-    } 
+    }
 
     public function dashboard(Request $request){
-        
+
         $input = $request->all();
         $validator = Validator::make($input, [
             'id' => 'required'
@@ -309,7 +326,7 @@ class DeliveryBoyController extends Controller
         if ($validator->fails()) {
             return $this->sendError($validator->errors());
         }
-        
+
         $result['total_bookings'] = Order::where('delivered_by',$input['id'])->count();
         $result['completed_bookings'] = Order::where('delivered_by',$input['id'])->where('status',7)->count();
         $result['today_bookings'] = Order::where('delivered_by',$input['id'])->whereDay('created_at', date('d'))->count();

@@ -61,13 +61,13 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 });
 
 
-Route::post('customer/profile_picture', 'CustomerController@profile_picture');
-
-Route::post('customer/forgot_password', 'CustomerController@forgot_password');
-
-
+//Route::post('customer/profile_picture', 'CustomerController@profile_picture');
+//Route::post('customer/forgot_password', 'CustomerController@forgot_password');
 //Route::post('customer/reset_password', 'CustomerController@reset_password');
 Route::resource('delivery_partner', 'DeliveryBoyController');
+Route::post('delivery_partner/otp','DeliveryBoyController@otp');
+Route::post('delivery_partner/login', 'DeliveryBoyController@login');
+
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/login', 'DeliveryBoyController@login');
 Route::post('delivery_partner/forgot_password', 'DeliveryBoyController@forgot_password');

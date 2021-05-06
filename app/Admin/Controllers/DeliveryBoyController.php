@@ -50,7 +50,7 @@ class DeliveryBoyController extends AdminController
         $grid->filter(function ($filter) {
             //Get All status
             $statuses = Status::pluck('status_name', 'id');
-            
+
             $filter->like('delivery_boy_name', 'Delivery Boy Name');
             $filter->like('phone_number', 'Phone Number');
             $filter->like('email', 'Email');
@@ -73,7 +73,7 @@ class DeliveryBoyController extends AdminController
         $show->field('delivery_boy_name', __('Delivery boy name'));
         $show->field('phone_number', __('Phone number'));
         $show->field('email', __('Email'));
-        $show->field('password', __('Password'));
+//        $show->field('password', __('Password'));
         $show->field('profile_picture', __('Profile picture'));
         $show->field('status', __('Status'));
         $show->field('created_at', __('Created at'));
@@ -108,9 +108,9 @@ class DeliveryBoyController extends AdminController
                 return 'required|max:100|unique:customers,email|unique:delivery_boys,email,'.$form->model()->id;
             }
         });
-        $form->password('password', __('Password'))->rules(function ($form) {
-            return 'required';
-        });
+//        $form->password('password', __('Password'))->rules(function ($form) {
+//            return 'required';
+//        });
         $form->image('profile_picture', __('Profile picture'))->uniqueName()->rules('required');
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
             return 'required';
@@ -125,7 +125,7 @@ class DeliveryBoyController extends AdminController
             $this->update_status($form->model()->id,$form->model()->status);
         });
         $form->tools(function (Form\Tools $tools) {
-           $tools->disableDelete(); 
+           $tools->disableDelete();
            $tools->disableView();
        });
        $form->footer(function ($footer) {
