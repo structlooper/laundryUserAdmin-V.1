@@ -161,10 +161,23 @@ class OrderController extends AdminController
             $customer_token = Customer::where('id',$form->model()->customer_id)->value('fcm_token');
             $this->send_fcm($message->customer_title.'('.$order_id.')', $message->customer_description, $customer_token);
             $noti_details = ['order_id' => $order_id,'fcm_msg_id' => $message->id,'user_id' =>$form->model()->customer_id,'created_at' => date('y-m-d H:i:s') ];
+
+            $past_user_noti = DB::table('user_notifications')->where('order_id',$order_id)->where('fcm_msg_id',$message->id)->where('user_id',$form->model()->customer_id)->get();
+            if (sizeof($past_user_noti) > 0){
+                DB::table('user_notifications')->where('order_id',$order_id)->where('fcm_msg_id',$message->id)->where('user_id',$form->model()->customer_id)->delete();
+            }
+
             DB::table('user_notifications')->insert($noti_details);
             if($form->model()->status == 2 || $form->model()->status == 5){
                $delivery_boy_token = DeliveryBoy::where('id',$form->model()->delivered_by)->value('fcm_token');
-                $this->send_fcm($message->delivery_title, $message->delivery_description, $delivery_boy_token);
+                $this->send_fcm($message->delivery_title.'('.$order_id.')', $message->delivery_description, $delivery_boy_token);
+                $noti_details = ['order_id' => $order_id,'fcm_msg_id' => $message->id,'driver_id' =>$form->model()->delivered_by,'created_at' => date('y-m-d H:i:s') ];
+
+                $past_driver_noti = DB::table('driver_notifications')->where('order_id',$order_id)->where('fcm_msg_id',$message->id)->where('driver_id',$form->model()->delivered_by)->get();
+                if (sizeof($past_driver_noti) > 0){
+                    DB::table('driver_notifications')->where('order_id',$order_id)->where('fcm_msg_id',$message->id)->where('driver_id' ,$form->model()->delivered_by)->delete();
+                }
+                DB::table('driver_notifications')->insert($noti_details);
             }
 
         });

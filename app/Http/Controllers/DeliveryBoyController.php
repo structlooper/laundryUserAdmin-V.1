@@ -425,10 +425,31 @@ class DeliveryBoyController extends Controller
             $order_id = $order->order_id;
             $customer_token = Customer::where('id',$order->customer_id)->value('fcm_token');
             NotiHelper::notiSingleUSer($customer_token,$message->customer_title.'('.$order_id.')',$message->customer_description);
+            $past_user_noti = DB::table('user_notifications')->where('order_id',$order_id)->where('fcm_msg_id',$message->id)->where('user_id' ,$order->customer_id)->get();
+            if (sizeof($past_user_noti) > 0){
+                DB::table('user_notifications')->where('order_id',$order_id)->where('fcm_msg_id',$message->id)->where('user_id' ,$order->customer_id)->delete();
+            }
             $noti_details = ['order_id' => $order_id,'fcm_msg_id' => $message->id,'user_id' =>$order->customer_id,'created_at' => date('y-m-d H:i:s') ];
             DB::table('user_notifications')->insert($noti_details);
+
             return ['status' => 1,'message' => 'order status updated'];
         }return ['status' => 0,'message' => 'something went wrong'];
+    }
+    public function notifications(Request $request){
+        $driver_id = $request->driver_id;
+        $notifications_db = DB::table('driver_notifications')
+            ->select('driver_notifications.order_id','f_msg.status_image','f_msg.customer_title as title','f_msg.customer_description as desc','driver_notifications.created_at')
+            ->join('fcm_notification_messages as f_msg','f_msg.id','=','driver_notifications.fcm_msg_id')
+            ->where('driver_id',$driver_id)->get();
+        if (sizeof($notifications_db) > 0){
+            $notifications= [];
+            foreach ($notifications_db as $item){
+                $item->created_at = date('H:i',strtotime($item->created_at));
+                $notifications[] = $item;
+            }
+            return ['status' => 1 ,"data" => array_reverse($notifications)];
+        }
+        return ['status' => 0,'data' => []];
     }
 
 }
