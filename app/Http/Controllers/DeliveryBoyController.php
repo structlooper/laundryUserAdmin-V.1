@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
 use App\Helper\NotiHelper;
 use Illuminate\Http\Request;
 use App\DeliveryBoy;
@@ -398,6 +399,36 @@ class DeliveryBoyController extends Controller
                 ->get();
         }
         return (array)$orders;
+    }
+    public function status(Request $request){
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'driver_id' => 'required|numeric',
+            'order_id' => 'required|numeric',
+            'status' => 'required|numeric|in:0,3,4,7'
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 0,'message' => $validator->errors()->first()];
+        }
+        $driver = DB::table('delivery_boys')->where('id',$input['driver_id'])->first();
+        if (!is_object($driver)){return ['status' => 0 , 'message' => 'not a valid driver'];}
+        $order = DB::table('orders')->where('id',$input['order_id'])->first();
+        if (!is_object($order)){return ['status' => 0 , 'message' => 'not a valid orders'];}
+        elseif ($order->status === 7){return ['status' => 0 , 'message' => 'Order already delivered'];}
+        if ($input['status'] == 0) {
+            $order_status = ['status' => 1, 'delivered_by' => null, 'updated_at' => date('Y-m-d H:i:s')];
+        }else{
+            $order_status = ['status' => $input['status'],'updated_at' => date('Y-m-d H:i:s')];
+        }
+        if (DB::table('orders')->where('id',$input['order_id'])->update($order_status)){
+            $message = DB::table('fcm_notification_messages')->where('id',$input['status'])->first();
+            $order_id = $order->order_id;
+            $customer_token = Customer::where('id',$order->customer_id)->value('fcm_token');
+            NotiHelper::notiSingleUSer($customer_token,$message->customer_title.'('.$order_id.')',$message->customer_description);
+            $noti_details = ['order_id' => $order_id,'fcm_msg_id' => $message->id,'user_id' =>$order->customer_id,'created_at' => date('y-m-d H:i:s') ];
+            DB::table('user_notifications')->insert($noti_details);
+            return ['status' => 1,'message' => 'order status updated'];
+        }return ['status' => 0,'message' => 'something went wrong'];
     }
 
 }
