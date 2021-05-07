@@ -64,10 +64,15 @@ Route::group(['middleware' => ['jwt.verify']], function() {
 //Route::post('customer/profile_picture', 'CustomerController@profile_picture');
 //Route::post('customer/forgot_password', 'CustomerController@forgot_password');
 //Route::post('customer/reset_password', 'CustomerController@reset_password');
-Route::resource('delivery_partner', 'DeliveryBoyController');
-Route::post('delivery_partner/otp','DeliveryBoyController@otp');
-Route::post('delivery_partner/login', 'DeliveryBoyController@login');
 
+Route::group(['prefix' => 'delivery_partner'],function (){
+    Route::resource('/', 'DeliveryBoyController');
+    Route::post('otp','DeliveryBoyController@otp');
+    Route::post('login', 'DeliveryBoyController@login');
+    Route::post('orders','DeliveryBoyController@orders');
+    Route::post('orders/completed','DeliveryBoyController@completed');
+    Route::post('orders/details','DeliveryBoyController@details');
+});
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/login', 'DeliveryBoyController@login');
 Route::post('delivery_partner/forgot_password', 'DeliveryBoyController@forgot_password');

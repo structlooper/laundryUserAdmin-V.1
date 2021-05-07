@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\DeliveryBoy;
 use App\Order;
 use Validator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 class DeliveryBoyController extends Controller
 {
@@ -346,6 +347,57 @@ class DeliveryBoyController extends Controller
             ]);
         }
 
+    }
+    public function orders(Request $req){
+        $driver_id = $req->driver_id;
+    $orders =  DB::table('orders')
+        ->select('orders.id','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
+        ,'orders.drop_time','orders.total','orders.status','addresses.door_no','labels.label_for_delivery_boy','labels.label_image'
+        )
+        ->join('addresses','addresses.id','=','orders.address_id')
+        ->join('labels','labels.id','=','orders.status')
+        ->where('orders.delivered_by',$driver_id)
+        ->where('orders.status','!=',7)->get()->toArray();
+    return array_reverse($orders);
+    }
+     public function completed(Request $req){
+            $driver_id = $req->driver_id;
+        $orders =  DB::table('orders')
+            ->select('orders.id','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
+            ,'orders.drop_time','orders.total','orders.status','addresses.door_no','labels.label_for_delivery_boy','labels.label_image'
+            )
+            ->join('addresses','addresses.id','=','orders.address_id')
+            ->join('labels','labels.id','=','orders.status')
+            ->where('orders.delivered_by',$driver_id)
+            ->where('orders.status',7)->get()->toArray();
+        return array_reverse($orders);
+        }
+    public function details(Request $req){
+        $driver_id = $req->driver_id;
+        $orders =  DB::table('orders')
+            ->select('orders.id','orders.customer_id','orders.address_id','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
+            ,'orders.drop_time','orders.discount','orders.sub_total','orders.total','orders.status','labels.label_for_delivery_boy','labels.label_image'
+            )
+
+            ->join('labels','labels.id','=','orders.status')
+            ->where('orders.delivered_by',$driver_id)
+            ->where('orders.id',$req->order_id)
+            ->first();
+        if (is_object($orders)) {
+            $orders->customer_id = DB::table('customers')
+                ->select('customer_name', 'phone_number')
+                ->where('id', $orders->customer_id)->first();
+            $orders->address_id = DB::table('addresses')
+                ->select('address', 'door_no', 'latitude', 'longitude')
+                ->where('id', $orders->address_id)->first();
+            $orders->products = DB::table('order_items')
+                ->select('products.product_name','services.service_name','order_items.qty','order_items.price')
+                ->join('products','products.id','=','order_items.product_id')
+                ->join('services','services.id','=','order_items.service_id')
+                ->where('order_items.order_id',$orders->id)
+                ->get();
+        }
+        return (array)$orders;
     }
 
 }
