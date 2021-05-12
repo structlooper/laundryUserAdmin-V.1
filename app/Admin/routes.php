@@ -29,4 +29,6 @@ Route::group([
     $router->resource('banner-images', BannerImageController::class);
     $router->resource('units', UnitController::class);
     $router->resource('time-slots', TimeSlotController::class);
+    $router->resource('memberships', MembershipController::class);
+
 });

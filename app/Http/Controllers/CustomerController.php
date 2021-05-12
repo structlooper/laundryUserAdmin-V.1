@@ -53,6 +53,7 @@ class CustomerController extends Controller
         if ($customer->otp === $input['otp']){
             $token = JWTAuth::fromUser($customer);
             if (is_object($customer)) {
+                $customer->membership = DB::table('memberships')->select('title')->where('id',$customer->membership)->first();
                 $customer->default_address = DB::table('addresses')->select('id','address','latitude','longitude')->where('id',$customer->default_address)->first();
                 return [
                     "result" => $customer,
@@ -74,8 +75,11 @@ class CustomerController extends Controller
     public function refreshToken(Request $request){
         $phone=$request->phone_number;
         $customer = Customer::where('phone_number',$phone)->first();
+        $customer->membership = DB::table('memberships')->select('title')->where('id',$customer->membership)->first();
+        $customer->default_address = DB::table('addresses')->select('id','address','latitude','longitude')->where('id',$customer->default_address)->first();
+
         $token = JWTAuth::fromUser($customer);
-        return ['token' => $token];
+        return ['token' => $token , 'user' => $customer];
     }
     public function store(Request $request)
     {

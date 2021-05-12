@@ -451,5 +451,29 @@ class DeliveryBoyController extends Controller
         }
         return ['status' => 0,'data' => []];
     }
-
+    public function update_profile(Request $request){
+        $validator = Validator::make($request->all(), [
+            'driver_id' => 'required',
+            'delivery_boy_name' => 'required',
+            'email' => 'required|email|regex:/^[a-zA-Z]{1}/',
+            'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
+        }
+        $driver_id = $request->driver_id;
+        $user['delivery_boy_name'] = $request->delivery_boy_name;
+        $user['email'] = $request->email;
+        if ($request->hasFile('profile_image')){
+            $image = $request->file('profile_image');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/images');
+            $image->move($destinationPath, $name);
+            $user['profile_picture'] = 'images/'.$name;
+        }
+        if (DB::table('delivery_boys')->where('id',$driver_id)->update($user)){
+            $new_details = DB::table('delivery_boys')->where('id',$driver_id)->first();
+            return ['status'=>1,'message' => 'Profile details updated!',"data" => $new_details];
+        }return ['status' => 0,'message' => 'Some internal error',];
+    }
 }

@@ -14,5 +14,5 @@
 
     </div>
     <!-- Default to the left -->
-    <strong>Powered by <a href="https://github.com/z-song/laravel-admin" target="_blank">laravel-admin</a></strong>
+    <strong>Made with ❤ by <a href="https://softonicsolution.com/" target="_blank">Softonic Solutions</a></strong>
 </footer>

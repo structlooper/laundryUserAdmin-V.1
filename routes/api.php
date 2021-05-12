@@ -26,12 +26,15 @@ Route::resource('customer', 'CustomerController');
 Route::post('customer/login', 'CustomerController@login');
 Route::post('refreshToken', 'CustomerController@refreshToken');
 Route::post('customer/otp','CustomerController@otp');
+Route::get('app_setting', 'AppSettingController@index');
+Route::post('privacy_policy', 'PrivacyPolicyController@index');
+Route::post('faq', 'FaqController@index');
+Route::resource('service', 'ServiceController');
 //secured apis using customer token
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('customer/update', 'CustomerController@update_profile');
     Route::get('logged/customer', 'CustomerController@getAuthenticatedUser');
     Route::get('servicesBanners', 'ServiceController@banners');
-    Route::resource('service', 'ServiceController');
     Route::resource('category','CategoryController');
 //    Route::resource('product', 'ProductController');
     Route::get('product/{id}/{if}', 'ProductController@show');
@@ -54,10 +57,10 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('select/address','UserAddressController@select_address');
     Route::post('promo', 'PromoCodeController@index');
     Route::post('promo/select','PromoCodeController@select');
-    Route::get('app_setting', 'AppSettingController@index');
-    Route::post('privacy_policy', 'PrivacyPolicyController@index');
-    Route::post('faq', 'FaqController@index');
     Route::post('notifications','CustomerController@notifications');
+    Route::get('membership','MembershipController@index');
+    Route::post('membership/save','MembershipController@save');
+
 });
 
 
@@ -74,6 +77,7 @@ Route::group(['prefix' => 'delivery_partner'],function (){
     Route::post('orders/details','DeliveryBoyController@details');
     Route::post('orders/status','DeliveryBoyController@status');
     Route::post('notifications','DeliveryBoyController@notifications');
+    Route::post('update', 'DeliveryBoyController@update_profile');
 });
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/login', 'DeliveryBoyController@login');

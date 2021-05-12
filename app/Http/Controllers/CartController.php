@@ -12,7 +12,7 @@ class CartController extends Controller
     public function index($id){
         $cart = DB::table('user_carts')->where('user_id',$id)->where('cart_status','created')->first();
         if (!empty($cart)){
-            $cart->cart_products = DB::table('cart_products')->select('cart_products.product_id','products.product_name','products.price','cart_products.unit','cart_products.qty','services.service_name')->join('products','products.id','=','cart_products.product_id')->join('services','services.id','=','products.service_id')->where('cart_id',$cart->id)->get();
+            $cart->cart_products = DB::table('cart_products')->select('cart_products.product_id','products.product_name','products.price','cart_products.unit','cart_products.mem_dis','cart_products.final_price','cart_products.qty','services.service_name')->join('products','products.id','=','cart_products.product_id')->join('services','services.id','=','products.service_id')->where('cart_id',$cart->id)->get();
         }
         return (array)$cart;
     }
@@ -20,6 +20,8 @@ class CartController extends Controller
         $product_id = $request->product_id;
         $qty = $request->qty;
         $user_id = $request->user_id;
+        $user_details = DB::table('customers')->where('id',$user_id)->first();
+        $membership = DB::table('memberships')->where('id',$user_details->membership)->first();
         $productDetails = DB::table('products')->join('units','units.id','=' , 'products.unit')->where('products.id',$product_id)->first();
         $checkCart = DB::table('user_carts')->where('user_id',$user_id)->where('cart_status','=','created')->first();
         if($checkCart){
@@ -29,41 +31,112 @@ class CartController extends Controller
                 // update product
                 if ($qty == 0 or ($checkProduct->qty == 1 and $qty == -1)) {
                     // clear product at 0
-                    DB::table('cart_products')->where('cart_id', $checkCart->id)->where('product_id', $product_id)->delete();
+                    DB::table('cart_products')
+                        ->where('cart_id', $checkCart->id)
+                        ->where('product_id', $product_id)->delete();
                     $subtotal = (float)$checkCart->subtotal - (float)$checkProduct->price;
+                    $mem_total_discount = (float)$checkCart->mem_total_discount - (float)$checkProduct->mem_dis;
 
-                    DB::table('user_carts')->update(['subtotal' => $subtotal, 'total_amt' => $subtotal, 'updated_at' => date('Y-m-d ,H:i:s')]);
+                    DB::table('user_carts')->update([
+                        'subtotal' => $subtotal,
+                        'total_amt' => $subtotal,
+                        'mem_total_discount' => $mem_total_discount,
+                        'updated_at' => date('Y-m-d ,H:i:s')]);
                     return ['status' => 1, 'message' => 'product removed from cart'];
 
-                } else{
+                } else {
                     if ($qty == -1) {
                         $new_qty = (int)$checkProduct->qty - 1;
-                    }else {
+                    } else {
                         $new_qty = (int)$checkProduct->qty + 1;
                     }
-                    DB::table('cart_products')->where('cart_id', $checkCart->id)->where('product_id', $product_id)->update(['qty' => $new_qty, 'price' => (float)$productDetails->price * $new_qty]);
+                    $mem_dis = 0;
+                    if ($membership){
+                        $mem_service_array = explode(',',$membership->service_id);
+                        if(in_array($productDetails->service_id,$mem_service_array)) {
+                            $mem_dis = ((float)$productDetails->price * $membership->discount) / 100;
+                        }
+                    }
+                    $cal_price = (float)$productDetails->price - $mem_dis;
+                    DB::table('cart_products')
+                        ->where('cart_id', $checkCart->id)
+                        ->where('product_id', $product_id)
+                        ->update(['qty' => $new_qty,
+                            'price' => (float)$productDetails->price * $new_qty,
+                            'final_price' => $cal_price * $new_qty ,
+                            'mem_dis' => $mem_dis * $new_qty
+                        ]);
                     $allProducts = DB::table('cart_products')->where('cart_id', $checkCart->id)->get();
                     $subtotal = 0.0;
+                    $total = 0.0;
+                    $mem_total_discount = 0;
                     foreach ($allProducts as $allProduct) {
                         $subtotal += (float)$allProduct->price;
+                        $total += (float)$allProduct->final_price;
+                        $mem_total_discount += (float)$allProduct->mem_dis;
                     }
-                    DB::table('user_carts')->update(['subtotal' => $subtotal, 'total_amt' => $subtotal, 'updated_at' => date('Y-m-d ,H:i:s')]);
+                    DB::table('user_carts')
+                        ->where('id',$checkCart->id)
+                        ->update([
+                        'subtotal' => $subtotal,
+                        'total_amt' => $total,
+                        'mem_total_discount' => $mem_total_discount,
+                        'updated_at' => date('Y-m-d ,H:i:s')]);
                     return ['status' => 1, 'message' => 'count changed'];
-            }
+                }
             }else{
                 // insert product
                 if ($qty == 0 or $qty < 0){
                     return ['status' => 0 , 'message' => 'product not present in cart'];
                 }
-                $data =['cart_id'=>$checkCart->id,'product_id' => $product_id , 'qty' => $qty,'price' => (float)$productDetails->price * $qty,'unit' => $productDetails->unit_code];
+                $mem_dis = 0;
+                if ($membership){
+                    $mem_service_array = explode(',',$membership->service_id);
+                    if(in_array($productDetails->service_id,$mem_service_array)) {
+                        $mem_dis = ((float)$productDetails->price * $membership->discount) / 100;
+                    }
+                }
+                $cal_price = (float)$productDetails->price - $mem_dis;
+                $data =[
+                    'cart_id'=>$checkCart->id,
+                    'product_id' => $product_id ,
+                    'mem_dis' => $mem_dis ,
+                    'qty' => $qty,
+                    'price' => $productDetails->price,
+                    'final_price' => $cal_price * $qty,
+                    'unit' => $productDetails->unit_code
+                ];
                 $this->insert_products($data);
                 return ['status' => 1 , 'message' => 'product added in cart'];
             }
         }else{
             //new cart
-            $subtotal = (float)$productDetails->price * (int)$qty;
-            $cart_id = DB::table('user_carts')->insertGetId(['user_id' => $user_id, 'cart_status' => 'created','subtotal' => $subtotal,'total_amt' => $subtotal,'created_at' => date('Y-m-d H:i:s')]);
-            $data =['cart_id'=>$cart_id,'product_id' => $product_id , 'qty' => $qty,'price' => $subtotal,'unit' => $productDetails->unit_code];
+            $mem_dis = 0;
+            if ($membership){
+                $mem_service_array = explode(',',$membership->service_id);
+                if(in_array($productDetails->service_id,$mem_service_array)) {
+                    $mem_dis = ((float)$productDetails->price * $membership->discount) / 100;
+                }
+            }
+            $subtotal = ((float)$productDetails->price - $mem_dis) * (int)$qty;
+            $cart_id = DB::table('user_carts')->insertGetId([
+                'user_id' => $user_id,
+                'cart_status' => 'created',
+                'mem_total_discount' => $mem_dis,
+                'subtotal' => $subtotal,
+                'total_amt' => $subtotal,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+            $cal_price = (float)$productDetails->price - $mem_dis;
+            $data =[
+                'cart_id'=>$cart_id,
+                'product_id' => $product_id ,
+                'mem_dis' => $mem_dis ,
+                'qty' => $qty,
+                'price' => $productDetails->price * $qty,
+                'final_price' => $cal_price * $qty,
+                'unit' => $productDetails->unit_code
+            ];
             $this->insert_products($data);
             return ['status' => 1 , 'message' => 'product added in cart'];
         }
@@ -73,10 +146,19 @@ class CartController extends Controller
         DB::table('cart_products')->insert($data);
         $allProducts = DB::table('cart_products')->where('cart_id',$data['cart_id'])->get();
         $subtotal = 0.0;
-        foreach ($allProducts as $allProduct){
+        $total = 0.0;
+        $mem_total_discount = 0;
+        foreach ($allProducts as $allProduct) {
             $subtotal += (float)$allProduct->price;
+            $total += (float)$allProduct->final_price;
+            $mem_total_discount += (float)$allProduct->mem_dis;
         }
-        DB::table('user_carts')->update(['subtotal' => $subtotal,'total_amt' => $subtotal,'updated_at' => date('Y-m-d ,H:i:s')]);
+        DB::table('user_carts')->where('id',$data['cart_id'])->update([
+            'subtotal' => $subtotal,
+            'total_amt' => $total,
+            'mem_total_discount' => $mem_total_discount,
+            'updated_at' => date('Y-m-d ,H:i:s')
+        ]);
         return true;
     }
     public function checkout(Request $request){
