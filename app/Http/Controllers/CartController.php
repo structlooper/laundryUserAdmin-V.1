@@ -141,6 +141,10 @@ class CartController extends Controller
             return ['status' => 1 , 'message' => 'product added in cart'];
         }
     }
+
+    /**
+     * @return bool type
+     **/
     public function insert_products($data)
     {
         DB::table('cart_products')->insert($data);
@@ -179,6 +183,7 @@ class CartController extends Controller
             'total' =>$cart->total_amt,
             'sub_total' =>$cart->subtotal,
             'discount' =>$cart->discount,
+            'mem_total_discount' =>$cart->mem_total_discount,
             'payment_mode'=>2,
             'items'=>count($cart_products),
             'created_at'=>date('Y-m-d H:i:s'),
@@ -195,6 +200,7 @@ class CartController extends Controller
                     'service_id'=>$product_details->service_id,
                     'qty'=>$cart_product->qty,
                     'price'=>$cart_product->price,
+                    'mem_dis'=>$cart_product->mem_dis,
                     'created_at'=>date('Y-m-d H:i:s'),
                     'updated_at'=>date('Y-m-d H:i:s'),
                 ];

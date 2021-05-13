@@ -99,10 +99,10 @@ class MembershipController extends AdminController
         $form->text('title', __('Title'))->rules(function ($form) {
             return 'required';
         });
-        $form->number('price', __('Price').' ₹')->rules(function ($form) {
+        $form->decimal('price', __('Price').' ₹')->rules(function ($form) {
             return 'required|numeric';
         });
-        $form->number('discount', __('Discount').' %')->rules(function ($form) {
+        $form->decimal('discount', __('Discount').' %')->rules(function ($form) {
             return 'required|numeric';
         });
 //        print_r($duration);exit;

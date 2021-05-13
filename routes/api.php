@@ -60,7 +60,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('notifications','CustomerController@notifications');
     Route::get('membership','MembershipController@index');
     Route::post('membership/save','MembershipController@save');
-
+    Route::resource('service-area','ServiceAreaController');
 });
 
 

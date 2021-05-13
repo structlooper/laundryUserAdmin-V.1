@@ -30,5 +30,6 @@ Route::group([
     $router->resource('units', UnitController::class);
     $router->resource('time-slots', TimeSlotController::class);
     $router->resource('memberships', MembershipController::class);
+    $router->resource('service-areas', ServiceAreaController::class);
 
 });
