@@ -61,6 +61,9 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('membership','MembershipController@index');
     Route::post('membership/save','MembershipController@save');
     Route::resource('service-area','ServiceAreaController');
+    Route::get('checkAddress/{id}','UserAddressController@checkAddress');
+    Route::post('payment', 'PaymentMethodController@payment');
+
 });
 
 
@@ -85,5 +88,4 @@ Route::post('delivery_partner/forgot_password', 'DeliveryBoyController@forgot_pa
 Route::post('delivery_partner/reset_password', 'DeliveryBoyController@reset_password');
 Route::post('order_status_change', 'OrderController@order_status_change');
 Route::post('dashboard', 'DeliveryBoyController@dashboard');
-Route::post('payment', 'PaymentMethodController@payment');
 Route::post('stripe_payment', 'PaymentMethodController@stripe_payment');

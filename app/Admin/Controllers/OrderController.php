@@ -16,6 +16,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Facades\Admin;
+use Illuminate\Database\Eloquent\Model;
 use Kreait\Firebase;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
@@ -42,8 +43,9 @@ class OrderController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Order);
+        $instance = new Order;
 
+        $grid = new Grid($instance);
         $grid->column('id', __('Id'));
         $grid->column('order_id', __('Order id'));
         $grid->column('customer_id', __('Customer id'))->display(function($customer_id){
@@ -87,7 +89,7 @@ class OrderController extends AdminController
             $customers = Customer::pluck('customer_name', 'id');
             $delivery_boys = DeliveryBoy::pluck('delivery_boy_name', 'id');
             $filter->equal('customer_id', 'Customer')->select($customers);
-            $filter->equal('collected_by', 'Collected By')->select($delivery_boys);
+//            $filter->equal('collected_by', 'Collected By')->select($delivery_boys);
             $filter->equal('delivered_by', 'Delivered By')->select($delivery_boys);
             $filter->equal('status', 'Status')->select($labels);
             $filter->date('expected_delivery_date', 'Expected Delivery Date');

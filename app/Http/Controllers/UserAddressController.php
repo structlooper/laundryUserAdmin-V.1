@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
+use App\Customer;
+use App\ServiceArea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Validator;
@@ -17,6 +20,7 @@ class UserAddressController extends Controller
             'address' => 'required',
             'lat' => 'required',
             'lng' => 'required',
+            'pincode' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return ['status' => 0,'message' => $validator->errors()->first()];
@@ -27,6 +31,7 @@ class UserAddressController extends Controller
             'door_no' => $input['door_no'],
             'latitude' => $input['lat'],
             'longitude' => $input['lng'],
+            'pincode' => $input['pincode'],
             'created_at' => date('Y-m-d H:i:s')
         ];
         if(DB::table('addresses')->insert($data)){
@@ -43,6 +48,7 @@ class UserAddressController extends Controller
             'door_no' => $input['door_no'],
             'latitude' => $input['lat'],
             'longitude' => $input['lng'],
+            'pincode' => $input['pincode'],
             'updated_at' => date('Y-m-d H:i:s')
         ];
         if(DB::table('addresses')
@@ -75,9 +81,44 @@ class UserAddressController extends Controller
     }
     public function select_address(Request $request){
         $inputs = $request->all();
-        if(DB::table('customers')->where('id',$inputs['user_id'])->update(['default_address' => $inputs['address_id'],'updated_at' => date('Y-m-d H:i:s')])){
+        $selected_pin_code = Address::where('id',$inputs['address_id'])->value('pincode');
+        $service_pin_codes = ServiceArea::select('delivery_changes','pincode')->get()->toArray();
+        $delivery_charges = 0;
+        foreach ($service_pin_codes as $key => $service_pin_code){
+            if ((string)$selected_pin_code === $service_pin_code['pincode']){
+                $delivery_charges = (float)$service_pin_code['delivery_changes'];
+            }
+        }
+        $dateTimeIn = date('Y-m-d H:i:s');
+        $total_amt = (DB::table('user_carts')
+            ->select('total_amt')
+            ->where('user_id',$inputs['user_id'])
+            ->where('cart_status','created')
+            ->first())->total_amt;
+        if(DB::table('customers')
+            ->where('id',$inputs['user_id'])
+            ->update([
+                'default_address' => $inputs['address_id'],
+                'updated_at' => $dateTimeIn
+            ]) && DB::table('user_carts')
+                ->where('user_id',$inputs['user_id'])
+                ->where('cart_status','created')
+                ->update([
+                    'delivery_changes' => $delivery_charges,
+                    'total_amt' => (float)$total_amt + $delivery_charges,
+                    'updated_at' => $dateTimeIn
+                ])){
             return ['status' => 1 , "message" => 'default address saved'];
         }return ['status' => 0,'message' => 'address not saved'];
 
+    }
+    public function checkAddress($user_id){
+        $default_address = Customer::where('id',$user_id)->value('default_address');
+        $address_pin = Address::where('id',$default_address)->value('pincode');
+        $getPinCodes = ServiceArea::pluck('pincode')->toArray();
+        if (in_array((string)$address_pin,$getPinCodes)){
+            return ['status' => 1,'message' => 'Matched'];
+        }
+        return ['status' => 0,'message' => 'Sorry our service is not available in selected address pincode'];
     }
 }

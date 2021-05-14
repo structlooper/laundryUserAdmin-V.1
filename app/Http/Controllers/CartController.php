@@ -39,7 +39,7 @@ class CartController extends Controller
 
                     DB::table('user_carts')->update([
                         'subtotal' => $subtotal,
-                        'total_amt' => $subtotal,
+                        'total_amt' => $subtotal+$checkCart->delivery_changes,
                         'mem_total_discount' => $mem_total_discount,
                         'updated_at' => date('Y-m-d ,H:i:s')]);
                     return ['status' => 1, 'message' => 'product removed from cart'];
@@ -68,7 +68,7 @@ class CartController extends Controller
                         ]);
                     $allProducts = DB::table('cart_products')->where('cart_id', $checkCart->id)->get();
                     $subtotal = 0.0;
-                    $total = 0.0;
+                    $total = $checkCart->delivery_changes+$checkCart->additional_charges;
                     $mem_total_discount = 0;
                     foreach ($allProducts as $allProduct) {
                         $subtotal += (float)$allProduct->price;
@@ -149,8 +149,9 @@ class CartController extends Controller
     {
         DB::table('cart_products')->insert($data);
         $allProducts = DB::table('cart_products')->where('cart_id',$data['cart_id'])->get();
+        $user_carts = DB::table('user_carts')->where('id',$data['cart_id'])->first();
         $subtotal = 0.0;
-        $total = 0.0;
+        $total = $user_carts->delivery_changes + $user_carts->additional_charges;
         $mem_total_discount = 0;
         foreach ($allProducts as $allProduct) {
             $subtotal += (float)$allProduct->price;
@@ -181,6 +182,7 @@ class CartController extends Controller
             'pickup_time'=>$cart->pickup_time,
             'drop_time'=>$cart->drop_time,
             'total' =>$cart->total_amt,
+            'delivery_changes' => $cart->delivery_changes,
             'sub_total' =>$cart->subtotal,
             'discount' =>$cart->discount,
             'mem_total_discount' =>$cart->mem_total_discount,
