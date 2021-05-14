@@ -29,7 +29,7 @@ class PaymentMethodController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('payment_mode', __('Payment mode'));
-        $grid->column('payment_mode_ar', __('Payment Mode Ar'));
+//        $grid->column('payment_mode_ar', __('Payment Mode Ar'));
         $grid->column('icon', __('Icon'))->image();
         $grid->column('status', __('Status'))->display(function($status){
             $status_name = Status::where('id',$status)->value('status_name');
@@ -46,7 +46,7 @@ class PaymentMethodController extends AdminController
         $grid->filter(function ($filter) {
             //Get All status
             $statuses = Status::pluck('status_name', 'id');
-            
+
             $filter->like('payment_mode', 'Payment Mode');
             $filter->equal('status', 'Status')->select($statuses);
         });
@@ -87,9 +87,9 @@ class PaymentMethodController extends AdminController
         $form->text('payment_mode', __('Payment Mode'))->rules(function ($form) {
             return 'required';
         });
-        $form->text('payment_mode_ar', __('Payment Mode Ar'))->rules(function ($form) {
-            return 'required';
-        });
+//        $form->text('payment_mode_ar', __('Payment Mode Ar'))->rules(function ($form) {
+//            return 'required';
+//        });
         $form->image('icon', __('Icon'))->uniqueName()->rules(function ($form) {
             return 'required';
         });
@@ -97,7 +97,7 @@ class PaymentMethodController extends AdminController
             return 'required';
         });
         $form->tools(function (Form\Tools $tools) {
-           $tools->disableDelete(); 
+           $tools->disableDelete();
            $tools->disableView();
         });
         $form->footer(function ($footer) {
