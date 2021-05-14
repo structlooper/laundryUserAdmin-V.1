@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
+use App\ServiceArea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -9,18 +11,22 @@ use Illuminate\Support\Str;
 class CartController extends Controller
 {
     //
-    public function index($id){
+    public function index($id): array
+    {
         $cart = DB::table('user_carts')->where('user_id',$id)->where('cart_status','created')->first();
         if (!empty($cart)){
             $cart->cart_products = DB::table('cart_products')->select('cart_products.product_id','products.product_name','products.price','cart_products.unit','cart_products.mem_dis','cart_products.final_price','cart_products.qty','services.service_name')->join('products','products.id','=','cart_products.product_id')->join('services','services.id','=','products.service_id')->where('cart_id',$cart->id)->get();
         }
         return (array)$cart;
     }
-    public function cart(Request $request){
+    public function cart(Request $request): array
+    {
         $product_id = $request->product_id;
         $qty = $request->qty;
         $user_id = $request->user_id;
         $user_details = DB::table('customers')->where('id',$user_id)->first();
+        $pin_code = Address::where('id',$user_details->default_address)->value('pincode');
+        $delivery_charge = ServiceArea::where('pincode',$pin_code)->value('delivery_changes') ?? 0;
         $membership = DB::table('memberships')->where('id',$user_details->membership)->first();
         $productDetails = DB::table('products')->join('units','units.id','=' , 'products.unit')->where('products.id',$product_id)->first();
         $checkCart = DB::table('user_carts')->where('user_id',$user_id)->where('cart_status','=','created')->first();
@@ -68,7 +74,7 @@ class CartController extends Controller
                         ]);
                     $allProducts = DB::table('cart_products')->where('cart_id', $checkCart->id)->get();
                     $subtotal = 0.0;
-                    $total = $checkCart->delivery_changes+$checkCart->additional_charges;
+                    $total = $delivery_charge+$checkCart->additional_charges;
                     $mem_total_discount = 0;
                     foreach ($allProducts as $allProduct) {
                         $subtotal += (float)$allProduct->price;
@@ -80,6 +86,7 @@ class CartController extends Controller
                         ->update([
                         'subtotal' => $subtotal,
                         'total_amt' => $total,
+                        'delivery_changes' => $delivery_charge,
                         'mem_total_discount' => $mem_total_discount,
                         'updated_at' => date('Y-m-d ,H:i:s')]);
                     return ['status' => 1, 'message' => 'count changed'];
@@ -106,7 +113,7 @@ class CartController extends Controller
                     'final_price' => $cal_price * $qty,
                     'unit' => $productDetails->unit_code
                 ];
-                $this->insert_products($data);
+                $this->insert_products($data,$delivery_charge);
                 return ['status' => 1 , 'message' => 'product added in cart'];
             }
         }else{
@@ -137,7 +144,7 @@ class CartController extends Controller
                 'final_price' => $cal_price * $qty,
                 'unit' => $productDetails->unit_code
             ];
-            $this->insert_products($data);
+            $this->insert_products($data,$delivery_charge);
             return ['status' => 1 , 'message' => 'product added in cart'];
         }
     }
@@ -145,13 +152,13 @@ class CartController extends Controller
     /**
      * @return bool type
      **/
-    public function insert_products($data)
+    public function insert_products($data,$delivery_charge): bool
     {
         DB::table('cart_products')->insert($data);
         $allProducts = DB::table('cart_products')->where('cart_id',$data['cart_id'])->get();
         $user_carts = DB::table('user_carts')->where('id',$data['cart_id'])->first();
         $subtotal = 0.0;
-        $total = $user_carts->delivery_changes + $user_carts->additional_charges;
+        $total = $delivery_charge + $user_carts->additional_charges;
         $mem_total_discount = 0;
         foreach ($allProducts as $allProduct) {
             $subtotal += (float)$allProduct->price;
@@ -161,18 +168,21 @@ class CartController extends Controller
         DB::table('user_carts')->where('id',$data['cart_id'])->update([
             'subtotal' => $subtotal,
             'total_amt' => $total,
+            'delivery_changes' => $delivery_charge,
             'mem_total_discount' => $mem_total_discount,
             'updated_at' => date('Y-m-d ,H:i:s')
         ]);
         return true;
     }
-    public function checkout(Request $request){
+    public function checkout(Request $request): array
+    {
         $inputs = $request->all();
         $cart = DB::table('user_carts')->where('id',$inputs['cart_id'])->where('cart_status','created')
             ->where('user_id',$inputs['user_id'])->first();
         if (empty($cart)){return ['status'=>0,'message' => 'cart not found'];}
         $cart_products = DB::table('cart_products')->where('cart_id',$inputs['cart_id'])->get();
         $user_details=DB::table('customers')->where('id',$inputs['user_id'])->first();
+        $dateTimeIns = date('Y-m-d H:i:s');
         $order = [
             'order_id' => 'ORD'.mt_rand(10000000, 99999999),
             'customer_id' => $inputs['user_id'],
@@ -186,10 +196,11 @@ class CartController extends Controller
             'sub_total' =>$cart->subtotal,
             'discount' =>$cart->discount,
             'mem_total_discount' =>$cart->mem_total_discount,
-            'payment_mode'=>2,
+            'payment_mode'=>$inputs['payment_method'],
+            'payment_status' =>($inputs['payment_method'] == 2)?2:1 ,
             'items'=>count($cart_products),
-            'created_at'=>date('Y-m-d H:i:s'),
-            'updated_at'=>date('Y-m-d H:i:s'),
+            'created_at'=>$dateTimeIns,
+            'updated_at'=>$dateTimeIns,
         ];
         $order_get_id = DB::table('orders')->insertGetId($order);
 //        $order_get_id =2;
@@ -203,8 +214,8 @@ class CartController extends Controller
                     'qty'=>$cart_product->qty,
                     'price'=>$cart_product->price,
                     'mem_dis'=>$cart_product->mem_dis,
-                    'created_at'=>date('Y-m-d H:i:s'),
-                    'updated_at'=>date('Y-m-d H:i:s'),
+                    'created_at'=>$dateTimeIns,
+                    'updated_at'=>$dateTimeIns,
                 ];
                 DB::table('order_items')->insert($order_products);
             }

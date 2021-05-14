@@ -8,6 +8,7 @@ use App\Customer;
 use App\DeliveryBoy;
 use App\Address;
 use App\PaymentMethod;
+use App\PaymentStatus;
 use App\Promo;
 use App\Label;
 use App\OrderHistory;
@@ -121,6 +122,7 @@ class OrderController extends AdminController
         $show->field('collected_by', __('Collected by'));
         $show->field('delivered_by', __('Delivered by'));
         $show->field('payment_mode', __('Payment mode'));
+        $show->field('payment_status', __('Payment status'));
         $show->field('items', __('Items'));
         $show->field('status', __('Status'));
         $show->field('created_at', __('Created at'));
@@ -138,12 +140,16 @@ class OrderController extends AdminController
     {
         $form = new Form(new Order);
         $statuses = Label::pluck('label_name', 'id');
+        $payment_status = PaymentStatus::pluck('title', 'id');
         $delivery_boys = DeliveryBoy::where('status',1)->pluck('delivery_boy_name', 'id');
         $form->text('order_id', __('Order id'))->readonly();
         $form->select('delivered_by', __('Delivered by'))->options($delivery_boys)->rules(function ($form) {
             return 'required';
         });
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
+            return 'required';
+        });
+        $form->select('payment_status', __('Payment Status'))->options($payment_status)->rules(function ($form) {
             return 'required';
         });
         $form->saving(function (Form $form) {

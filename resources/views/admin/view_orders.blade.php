@@ -3,7 +3,7 @@
         <a href='/admin/orders' class='btn btn-info pull-right' style='margin-right:20px;'>Back</a>
     </div>
     <div class="col-lg-6">
-        <div class="table-responsive">          
+        <div class="table-responsive">
           <table class="table">
             <tbody>
               <tr>
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="table-responsive">          
+        <div class="table-responsive">
           <table class="table">
             <tbody>
               <tr>
@@ -43,12 +43,24 @@
                 <td>{{$payment_mode}}</td>
               </tr>
               <tr>
+                <th>Payment Status</th>
+                <td>{{$payment_status}}</td>
+              </tr>
+              <tr>
                 <th>Sub Total</th>
                 <td>{{$sub_total}}</td>
               </tr>
               <tr>
                 <th>Discount</th>
                 <td>{{$discount}}</td>
+              </tr>
+              <tr>
+                <th>Membership Discount</th>
+                <td>{{$mem_discount}}</td>
+              </tr>
+              <tr>
+                <th>Delivery Charges</th>
+                <td>{{$delivery_changes}}</td>
               </tr>
               <tr>
                 <th>Total</th>

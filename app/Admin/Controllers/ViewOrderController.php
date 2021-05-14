@@ -11,6 +11,7 @@ use App\Label;
 use App\OrderItem;
 use App\PaymentMethod;
 use App\Http\Controllers\Controller;
+use App\PaymentStatus;
 use Encore\Admin\Controllers\Dashboard;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
@@ -35,8 +36,11 @@ class ViewOrderController extends Controller
             $data['collected_by'] = (DeliveryBoy::where('id',$order_details->collected_by)->value('delivery_boy_name') != '' ) ? DeliveryBoy::where('id',$order_details->collected_by)->value('delivery_boy_name') : "---" ;
             $data['delivered_by'] = (DeliveryBoy::where('id',$order_details->delivered_by)->value('delivery_boy_name') != '' ) ? DeliveryBoy::where('id',$order_details->delivered_by)->value('delivery_boy_name') : "---" ;
             $data['payment_mode'] = PaymentMethod::where('id',$order_details->payment_mode)->value('payment_mode');
+            $data['payment_status'] = PaymentStatus::where('id',$order_details->payment_status)->value('title');
             $data['sub_total'] = $app_setting->default_currency.$order_details->sub_total;
             $data['discount'] =  $app_setting->default_currency.$order_details->discount;
+            $data['mem_discount'] =  $app_setting->default_currency.$order_details->mem_total_discount;
+            $data['delivery_changes'] =  $app_setting->default_currency.$order_details->delivery_changes;
             $data['total'] =  $app_setting->default_currency.$order_details->total;
             $data['status'] =  Label::where('id',$order_details->status)->value('label_name');
             $order_items = DB::table('order_items')

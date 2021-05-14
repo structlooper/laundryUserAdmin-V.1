@@ -40,17 +40,14 @@ class PaymentMethodController extends AdminController
             }
         });
         $grid->disableExport();
-        $grid->actions(function ($actions) {
-            $actions->disableView();
-        });
-        $grid->filter(function ($filter) {
-            //Get All status
-            $statuses = Status::pluck('status_name', 'id');
-
-            $filter->like('payment_mode', 'Payment Mode');
-            $filter->equal('status', 'Status')->select($statuses);
-        });
-
+        $grid->disableCreation();
+        $grid->disableFilter();
+        $grid->disableBatchActions();
+        $grid->disableActions();
+//        $grid->actions(function ($actions) {
+//            $actions->disableView();
+//            $actions->disableDelete();
+//        });
         return $grid;
     }
 

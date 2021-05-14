@@ -139,7 +139,9 @@ class OrderController extends Controller
     public function getOrder(Request $request){
         $order_id = $request->order_id;
         $order = DB::table('orders')
-            ->select('orders.*','labels.label_name')
+            ->select('orders.*','labels.label_name','payment_methods.payment_mode as payment_mode','payment_status.title as payment_status')
+            ->join('payment_methods','payment_methods.id','=','orders.payment_mode')
+            ->join('payment_status','payment_status.id','=','orders.payment_status')
             ->join('labels', 'labels.id', '=', 'orders.status')
             ->where('orders.id',$order_id)->first();
         if (empty($order)){return [];}
