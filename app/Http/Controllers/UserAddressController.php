@@ -90,11 +90,11 @@ class UserAddressController extends Controller
             }
         }
         $dateTimeIn = date('Y-m-d H:i:s');
-        $total_amt = (DB::table('user_carts')
-            ->select('total_amt')
+        $subtotal = (DB::table('user_carts')
+            ->select('subtotal')
             ->where('user_id',$inputs['user_id'])
             ->where('cart_status','created')
-            ->first())->total_amt;
+            ->first())->subtotal;
         if(DB::table('customers')
             ->where('id',$inputs['user_id'])
             ->update([
@@ -105,7 +105,7 @@ class UserAddressController extends Controller
                 ->where('cart_status','created')
                 ->update([
                     'delivery_changes' => $delivery_charges,
-                    'total_amt' => (float)$total_amt + $delivery_charges,
+                    'total_amt' => (float)$subtotal + $delivery_charges,
                     'updated_at' => $dateTimeIn
                 ])){
             return ['status' => 1 , "message" => 'default address saved'];

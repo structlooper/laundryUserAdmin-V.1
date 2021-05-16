@@ -402,10 +402,11 @@ class DeliveryBoyController extends Controller
     }
     public function status(Request $request){
         $input = $request->all();
+
         $validator = Validator::make($input, [
             'driver_id' => 'required|numeric',
             'order_id' => 'required|numeric',
-            'status' => 'required|numeric|in:0,3,4,7'
+            'status' => 'required|numeric|in:0,3,4,6,7'
         ]);
         if ($validator->fails()) {
             return ['status' => 0,'message' => $validator->errors()->first()];
@@ -415,6 +416,7 @@ class DeliveryBoyController extends Controller
         $order = DB::table('orders')->where('id',$input['order_id'])->first();
         if (!is_object($order)){return ['status' => 0 , 'message' => 'not a valid orders'];}
         elseif ($order->status === 7){return ['status' => 0 , 'message' => 'Order already delivered'];}
+
         if ($input['status'] == 0) {
             $order_status = ['status' => 1, 'delivered_by' => null, 'updated_at' => date('Y-m-d H:i:s')];
         }else{
@@ -423,6 +425,30 @@ class DeliveryBoyController extends Controller
         if (DB::table('orders')->where('id',$input['order_id'])->update($order_status)){
             $message = DB::table('fcm_notification_messages')->where('id',$input['status'])->first();
             $order_id = $order->order_id;
+            $drive_type = DeliveryBoy::where('id',$input['driver_id'])->select('delivery_boy_type','commission')->first();
+            if($input['status'] == 7 && $drive_type->delivery_boy_type === 1){
+                ///Adding earning
+                $check = DB::table('earning_status')->where('order_id',$order->order_id)->first();
+                if (is_object($check)){$response = ['status' => 1,'message' => 'earning is already added in wallet'];}else {
+                    $earn = (($order->total * $drive_type->commission) / 100);
+                    if (DB::table('earning_status')->insert([
+                        'driver_id' => $driver->id,
+                        'order_id' => $order->order_id,
+                        'total_amt' => $order->total,
+                        'earn_amt' => $earn,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ])) {
+                        DeliveryBoy::where('id', $input['driver_id'])->update([
+                            'wallet' => $driver->wallet + $earn,
+                            'updated_at' => date('Y-m-d H:i:s')
+                        ]);
+                        $response = ['status' => 1, 'message' => 'order delivered successfully'];
+                    }
+                }
+            }else{
+                $response = ['status' => 1,'message' => 'order status updated'];
+            }
+
             $customer_token = Customer::where('id',$order->customer_id)->value('fcm_token');
             NotiHelper::notiSingleUSer($customer_token,$message->customer_title.'('.$order_id.')',$message->customer_description);
             $past_user_noti = DB::table('user_notifications')->where('order_id',$order_id)->where('fcm_msg_id',$message->id)->where('user_id' ,$order->customer_id)->get();
@@ -432,7 +458,7 @@ class DeliveryBoyController extends Controller
             $noti_details = ['order_id' => $order_id,'fcm_msg_id' => $message->id,'user_id' =>$order->customer_id,'created_at' => date('y-m-d H:i:s') ];
             DB::table('user_notifications')->insert($noti_details);
 
-            return ['status' => 1,'message' => 'order status updated'];
+            return $response;
         }return ['status' => 0,'message' => 'something went wrong'];
     }
     public function notifications(Request $request){
@@ -475,5 +501,11 @@ class DeliveryBoyController extends Controller
             $new_details = DB::table('delivery_boys')->where('id',$driver_id)->first();
             return ['status'=>1,'message' => 'Profile details updated!',"data" => $new_details];
         }return ['status' => 0,'message' => 'Some internal error',];
+    }
+    public function refresh_details(Request $request){
+        return (array)DB::table('delivery_boys')->where('id',$request->driver_id)->first();
+    }
+    public function earnings(Request $request){
+        return DB::table('earning_status')->where('driver_id',$request->driver_id)->get();
     }
 }
