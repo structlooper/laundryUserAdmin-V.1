@@ -42,7 +42,17 @@ class UserAddressController extends Controller
     }
     public function update_address(Request $request){
         $input = $request->all();
-
+        $validator =  Validator::make($input,[
+            'user_id' => 'required',
+            'door_no' => 'required',
+            'address' => 'required',
+            'lat' => 'required',
+            'lng' => 'required',
+            'pincode' => 'required|numeric',
+        ]);
+        if ($validator->fails()) {
+            return ['status' => 0,'message' => $validator->errors()->first()];
+        }
         $data = [
             'address' => $input['address'],
             'door_no' => $input['door_no'],

@@ -85,8 +85,8 @@ class DeliveryBoyController extends Controller
         if ($validator->fails()) {
             return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
         }
-        if ($request->hasFile('profile_image')){
-            $image = $request->file('profile_image');
+        if ($request->hasFile('profile_picture')){
+            $image = $request->file('profile_picture');
             $name = time().'.'.$image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads/images');
             $image->move($destinationPath, $name);
@@ -490,8 +490,8 @@ class DeliveryBoyController extends Controller
         $driver_id = $request->driver_id;
         $user['delivery_boy_name'] = $request->delivery_boy_name;
         $user['email'] = $request->email;
-        if ($request->hasFile('profile_image')){
-            $image = $request->file('profile_image');
+        if ($request->hasFile('profile_picture')){
+            $image = $request->file('profile_picture');
             $name = time().'.'.$image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads/images');
             $image->move($destinationPath, $name);
