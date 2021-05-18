@@ -39,6 +39,7 @@ class RoleController extends AdminController
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->row->slug == 'administrator') {
                 $actions->disableDelete();
+                $actions->disableEdit();
             }
         });
 
@@ -47,6 +48,7 @@ class RoleController extends AdminController
                 $actions->disableDelete();
             });
         });
+        $grid->disableBatchActions();
 
         return $grid;
     }

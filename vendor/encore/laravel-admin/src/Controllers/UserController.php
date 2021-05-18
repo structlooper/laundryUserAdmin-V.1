@@ -37,6 +37,7 @@ class UserController extends AdminController
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             if ($actions->getKey() == 1) {
                 $actions->disableDelete();
+                $actions->disableEdit();
             }
         });
 

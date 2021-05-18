@@ -8,13 +8,16 @@ use App\DeliveryBoy;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\Dashboard;
+use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
 use Encore\Admin\Facades\Admin;
 
+
 class HomeController extends Controller
 {
+    use HasResourceActions;
     public function index(Content $content)
     {
         return Admin::content(function (Content $content) {
@@ -71,4 +74,5 @@ class HomeController extends Controller
         });
 
     }
+
 }

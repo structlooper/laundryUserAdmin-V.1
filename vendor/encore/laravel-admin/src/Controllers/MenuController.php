@@ -21,6 +21,7 @@ class MenuController extends Controller
      *
      * @return Content
      */
+
     public function index(Content $content)
     {
         return $content

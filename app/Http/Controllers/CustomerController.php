@@ -89,6 +89,7 @@ class CustomerController extends Controller
             'customer_name' => 'required',
             'phone_number' => 'required|numeric|digits_between:10,10|unique:customers,phone_number',
             'email' => 'required|email|regex:/^[a-zA-Z]{1}/|unique:customers,email',
+            'profile_picture' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
 
         if ($validator->fails()) {
@@ -96,6 +97,13 @@ class CustomerController extends Controller
         }
         $input['otp'] = mt_rand(100000, 999999);
         $input['status'] = 1;
+        if ($request->hasFile('profile_picture')){
+            $image = $request->file('profile_picture');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/images');
+            $image->move($destinationPath, $name);
+            $input['profile_picture'] = 'images/'.$name;
+        }
         Customer::create($input);
         if(NotiHelper::sendOtpFunction($input['phone_number'],$input['otp'])){
             return ['status'=> 1,'message' => 'Verification otp sent on your phone','data' => []];
@@ -389,7 +397,7 @@ class CustomerController extends Controller
             'user_id' => 'required',
             'customer_name' => 'required',
             'email' => 'required|email|regex:/^[a-zA-Z]{1}/',
-            'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg'
+            'profile_picture' => 'image|mimes:jpeg,png,jpg,gif,svg'
         ]);
         if ($validator->fails()) {
             return ['status' => 0,'message' => $validator->errors()->first(),'data' => []];
@@ -397,8 +405,8 @@ class CustomerController extends Controller
         $user_id = $request->user_id;
         $user['customer_name'] = $request->customer_name;
         $user['email'] = $request->email;
-        if ($request->hasFile('profile_image')){
-            $image = $request->file('profile_image');
+        if ($request->hasFile('profile_picture')){
+            $image = $request->file('profile_picture');
             $name = time().'.'.$image->getClientOriginalExtension();
             $destinationPath = public_path('/uploads/images');
             $image->move($destinationPath, $name);
