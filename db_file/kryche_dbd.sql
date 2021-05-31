@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.1
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Dec 21, 2020 at 12:39 PM
--- Server version: 10.4.11-MariaDB
--- PHP Version: 7.2.28
+-- Host: 127.0.0.1
+-- Generation Time: May 31, 2021 at 07:26 PM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 7.3.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `rithv2_final`
+-- Database: `kryche_dbd`
 --
 
 -- --------------------------------------------------------
@@ -35,11 +34,24 @@ CREATE TABLE `addresses` (
   `door_no` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `latitude` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `longitude` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `static_map` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `pincode` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `addresses`
+--
+
+INSERT INTO `addresses` (`id`, `customer_id`, `address`, `door_no`, `latitude`, `longitude`, `pincode`, `status`, `created_at`, `updated_at`) VALUES
+(4, 13, 'C/71, Block C, Sector 8 Dwarka, Dwarka, New Delhi, Delhi 110077, India', 'Door number 18 ,', '28.57013269142383', '77.07488419488072', '110077', 1, '2021-04-24 12:44:02', '2021-04-29 11:19:22'),
+(6, 13, '482, Phase III, Jacobpura, Sector 19, Gurugram, Haryana 122016, India', 'Gurugram hrayana updated address', '28.45949615948365', '77.02663796022534', '122016', 1, '2021-04-24 12:59:00', '2021-04-26 08:56:56'),
+(9, 16, 'A104, Block A, Sector 8 Dwarka, Dwarka, New Delhi, Delhi 110077, India', 'Sector 55 gurgaon', '28.574299628160333', '77.07159982994199', '110077', 1, '2021-04-29 06:32:25', NULL),
+(10, 16, 'Unnamed Road, Ghatta Kanarpur, Sector 58, Ghata, Haryana 122102, India', 'House no 106', '28.418584400793655', '77.1139951609075', '122102', 1, '2021-04-29 06:33:32', NULL),
+(12, 13, '22D, Block F, Raj Nagar II Extension, Raj Nagar, New Delhi, Delhi 110045, India', 'Thkgg', '28.5748512241515', '77.08125343546271', '110045', 1, '2021-04-29 11:31:39', NULL),
+(19, 14, '906/7, Block F, Raj Nagar Extension, Raj Nagar, New Delhi, Delhi 110045, India', 'Delhi dwarka', '28.57708502028744', '77.07913348451257', '110045', 1, '2021-04-30 13:23:11', '2021-04-30 13:23:34'),
+(21, 13, '254, Block G, Subhash Park, Palam, New Delhi, Delhi 110075, India', 'Home address updated', '28.605230616230926', '77.05460099503398', '110075', 1, '2021-05-13 07:25:13', '2021-05-13 07:29:42');
 
 -- --------------------------------------------------------
 
@@ -64,21 +76,24 @@ CREATE TABLE `admin_menu` (
 --
 
 INSERT INTO `admin_menu` (`id`, `parent_id`, `order`, `title`, `icon`, `uri`, `permission`, `created_at`, `updated_at`) VALUES
-(1, 0, 1, 'Dashboard', 'fa-bar-chart', '/', NULL, NULL, NULL),
-(8, 0, 18, 'Faqs', 'fa-question-circle', 'faqs', NULL, '2019-07-23 03:37:04', '2020-06-09 13:43:28'),
-(9, 0, 17, 'Lables', 'fa-tag', 'labels', NULL, '2019-07-23 03:37:22', '2020-06-09 13:43:28'),
-(10, 0, 9, 'Services', 'fa-align-justify', 'services', NULL, '2019-07-23 03:37:44', '2019-07-23 03:41:31'),
-(11, 0, 20, 'App Settings', 'fa-cog', 'app_settings', NULL, '2019-07-23 03:38:09', '2020-06-09 13:43:28'),
-(12, 0, 16, 'Promo Codes', 'fa-bookmark', 'promo_codes', NULL, '2019-07-23 03:38:54', '2020-06-09 13:43:28'),
-(13, 0, 10, 'Categories', 'fa-bars', 'categories', NULL, '2019-07-26 10:36:06', '2019-08-20 02:16:19'),
-(14, 0, 14, 'Customers', 'fa-users', 'customers', '*', '2019-08-20 02:12:07', '2020-06-09 13:43:28'),
-(15, 0, 15, 'Delivery Boys', 'fa-user', 'delivery_boys', '*', '2019-08-20 02:12:32', '2020-06-09 13:43:28'),
-(16, 0, 19, 'Privacy Policies', 'fa-file-pdf-o', 'privacy_policies', '*', '2019-08-22 14:34:52', '2020-06-09 13:43:28'),
-(17, 0, 11, 'Products', 'fa-align-justify', 'products', '*', '2019-08-22 14:45:12', '2019-08-22 14:45:18'),
-(18, 0, 12, 'Fare Management', 'fa-dollar', 'fare_managements', '*', '2019-08-24 14:10:33', '2019-08-25 07:47:27'),
-(19, 0, 2, 'Orders', 'fa-align-justify', 'orders', '*', '2019-08-25 07:47:04', '2019-08-28 06:49:07'),
-(20, 0, 21, 'Banner Images', 'fa-image', 'banner-images', '*', '2020-05-30 13:36:16', '2020-06-09 13:43:28'),
-(21, 0, 13, 'Payment Methods', 'fa-product-hunt', 'payment-methods', '*', '2020-06-09 13:43:09', '2020-06-09 13:43:28');
+(1, 0, 1, 'Dashboard', 'fa-bar-chart', '/', NULL, NULL, '2021-04-28 10:11:25'),
+(8, 0, 15, 'Faqs', 'fa-question-circle', 'faqs', NULL, '2019-07-23 03:37:04', '2021-05-12 11:59:27'),
+(10, 25, 4, 'Services', 'fa-align-justify', 'services', NULL, '2019-07-23 03:37:44', '2021-05-12 11:59:27'),
+(11, 0, 18, 'App Settings', 'fa-cog', 'app_settings', NULL, '2019-07-23 03:38:09', '2021-05-12 11:59:27'),
+(12, 0, 13, 'Promo Codes', 'fa-bookmark', 'promo_codes', NULL, '2019-07-23 03:38:54', '2021-05-12 11:59:27'),
+(13, 25, 5, 'Categories', 'fa-bars', 'categories', NULL, '2019-07-26 10:36:06', '2021-05-12 11:59:27'),
+(14, 0, 11, 'Customers', 'fa-users', 'customers', '*', '2019-08-20 02:12:07', '2021-05-12 11:59:27'),
+(15, 0, 12, 'Delivery Boys', 'fa-user', 'delivery_boys', '*', '2019-08-20 02:12:32', '2021-05-12 11:59:27'),
+(16, 0, 16, 'Privacy Policies', 'fa-file-pdf-o', 'privacy_policies', '*', '2019-08-22 14:34:52', '2021-05-12 11:59:27'),
+(17, 25, 6, 'Products', 'fa-align-justify', 'products', '*', '2019-08-22 14:45:12', '2021-05-12 11:59:27'),
+(19, 0, 7, 'Orders', 'fa-th-list', 'orders', '*', '2019-08-25 07:47:04', '2021-05-12 11:59:27'),
+(21, 0, 17, 'Payment Methods', 'fa-product-hunt', 'payment-methods', '*', '2020-06-09 13:43:09', '2021-05-12 11:59:27'),
+(22, 0, 14, 'Units', 'fa-calculator', 'units', '*', '2021-04-22 09:28:59', '2021-05-12 11:59:27'),
+(23, 0, 9, 'Home Banners', 'fa-image', 'banner-images', '*', '2021-04-22 09:45:18', '2021-05-12 11:59:27'),
+(24, 0, 10, 'Time Slots', 'fa-calendar', 'time-slots', '*', '2021-04-26 12:05:40', '2021-05-12 11:59:27'),
+(25, 0, 3, 'Management', 'fa-bars', NULL, '*', '2021-04-28 10:08:35', '2021-05-12 11:59:27'),
+(27, 0, 8, 'Membership', 'fa-universal-access', 'memberships', '*', '2021-05-10 08:51:06', '2021-05-12 11:59:27'),
+(28, 0, 2, 'Service areas', 'fa-location-arrow', 'service-areas', '*', '2021-05-12 11:59:21', '2021-05-12 12:00:42');
 
 -- --------------------------------------------------------
 
@@ -5671,7 +5686,1366 @@ INSERT INTO `admin_operation_log` (`id`, `user_id`, `path`, `method`, `ip`, `inp
 (5549, 1, 'admin/orders', 'GET', '119.160.99.215', '{\"_pjax\":\"#pjax-container\"}', '2020-12-21 04:07:16', '2020-12-21 04:07:16'),
 (5550, 1, 'admin', 'GET', '119.160.99.215', '{\"_pjax\":\"#pjax-container\"}', '2020-12-21 04:07:49', '2020-12-21 04:07:49'),
 (5551, 1, 'admin/fare_managements', 'GET', '119.160.99.215', '{\"_pjax\":\"#pjax-container\"}', '2020-12-21 04:08:57', '2020-12-21 04:08:57'),
-(5552, 1, 'admin/banner-images', 'GET', '119.160.99.215', '{\"_pjax\":\"#pjax-container\"}', '2020-12-21 04:09:04', '2020-12-21 04:09:04');
+(5552, 1, 'admin/banner-images', 'GET', '119.160.99.215', '{\"_pjax\":\"#pjax-container\"}', '2020-12-21 04:09:04', '2020-12-21 04:09:04'),
+(5553, 1, 'admin', 'GET', '::1', '[]', '2021-03-31 09:16:29', '2021-03-31 09:16:29'),
+(5554, 1, 'admin/services', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-03-31 09:16:39', '2021-03-31 09:16:39'),
+(5555, 1, 'admin/services', 'GET', '::1', '[]', '2021-03-31 12:35:23', '2021-03-31 12:35:23'),
+(5556, 1, 'admin', 'GET', '::1', '[]', '2021-04-01 10:13:33', '2021-04-01 10:13:33'),
+(5557, 1, 'admin/orders', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-01 10:13:43', '2021-04-01 10:13:43'),
+(5558, 1, 'admin/categories', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-01 10:13:47', '2021-04-01 10:13:47'),
+(5559, 1, 'admin/fare_managements', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-01 10:13:50', '2021-04-01 10:13:50'),
+(5560, 1, 'admin/products', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-01 10:13:51', '2021-04-01 10:13:51'),
+(5561, 1, 'admin/customers', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-01 10:13:54', '2021-04-01 10:13:54'),
+(5562, 1, 'admin/labels', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-01 10:13:59', '2021-04-01 10:13:59'),
+(5563, 1, 'admin/categories', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-01 10:14:01', '2021-04-01 10:14:01'),
+(5564, 1, 'admin/categories', 'GET', '127.0.0.1', '[]', '2021-04-01 10:55:17', '2021-04-01 10:55:17'),
+(5565, 1, 'admin/categories', 'GET', '127.0.0.1', '[]', '2021-04-01 10:55:41', '2021-04-01 10:55:41'),
+(5566, 1, 'admin', 'GET', '127.0.0.1', '[]', '2021-04-01 12:02:08', '2021-04-01 12:02:08'),
+(5567, 1, 'admin', 'GET', '127.0.0.1', '[]', '2021-04-01 12:12:06', '2021-04-01 12:12:06'),
+(5568, 1, 'admin/categories', 'GET', '127.0.0.1', '[]', '2021-04-01 12:31:15', '2021-04-01 12:31:15'),
+(5569, 1, 'admin', 'GET', '127.0.0.1', '[]', '2021-04-02 04:46:07', '2021-04-02 04:46:07'),
+(5570, 1, 'admin', 'GET', '127.0.0.1', '[]', '2021-04-21 08:04:36', '2021-04-21 08:04:36'),
+(5571, 1, 'admin/services', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:04:50', '2021-04-21 08:04:50'),
+(5572, 1, 'admin/services/create', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:04:54', '2021-04-21 08:04:54'),
+(5573, 1, 'admin/services', 'POST', '127.0.0.1', '{\"service_name\":\"service 1\",\"service_name_ar\":null,\"description\":\"Descriptions of service\",\"description_ar\":null,\"status\":\"1\",\"_token\":\"73b7MsyW3b3CNQXGQK8hE5AeQNL6HirGnRoEr66f\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/services\"}', '2021-04-21 08:05:43', '2021-04-21 08:05:43'),
+(5574, 1, 'admin/services/create', 'GET', '127.0.0.1', '[]', '2021-04-21 08:05:43', '2021-04-21 08:05:43'),
+(5575, 1, 'admin/services', 'POST', '127.0.0.1', '{\"service_name\":\"service 1\",\"service_name_ar\":\"service Ar\",\"description\":\"Descriptions of service\",\"description_ar\":\"ar description\",\"status\":\"1\",\"_token\":\"73b7MsyW3b3CNQXGQK8hE5AeQNL6HirGnRoEr66f\"}', '2021-04-21 08:06:03', '2021-04-21 08:06:03'),
+(5576, 1, 'admin/services/create', 'GET', '127.0.0.1', '[]', '2021-04-21 08:06:03', '2021-04-21 08:06:03'),
+(5577, 1, 'admin/services', 'POST', '127.0.0.1', '{\"service_name\":\"service 1\",\"service_name_ar\":\"service Ar\",\"description\":\"Descriptions of service\",\"description_ar\":\"ar description\",\"status\":\"1\",\"_token\":\"73b7MsyW3b3CNQXGQK8hE5AeQNL6HirGnRoEr66f\"}', '2021-04-21 08:06:09', '2021-04-21 08:06:09'),
+(5578, 1, 'admin/services', 'GET', '127.0.0.1', '[]', '2021-04-21 08:06:09', '2021-04-21 08:06:09'),
+(5579, 1, 'admin/services/create', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:06:15', '2021-04-21 08:06:15'),
+(5580, 1, 'admin/services', 'POST', '127.0.0.1', '{\"service_name\":\"service 2\",\"service_name_ar\":\"service Ar 2\",\"description\":\"service descriptions\",\"description_ar\":\"second descriptions\",\"status\":\"1\",\"_token\":\"73b7MsyW3b3CNQXGQK8hE5AeQNL6HirGnRoEr66f\",\"_previous_\":\"http:\\/\\/127.0.0.1:8000\\/admin\\/services\"}', '2021-04-21 08:06:46', '2021-04-21 08:06:46'),
+(5581, 1, 'admin/services', 'GET', '127.0.0.1', '[]', '2021-04-21 08:06:46', '2021-04-21 08:06:46'),
+(5582, 1, 'admin/categories', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:07:11', '2021-04-21 08:07:11'),
+(5583, 1, 'admin/services', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:07:13', '2021-04-21 08:07:13'),
+(5584, 1, 'admin/products', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:07:17', '2021-04-21 08:07:17'),
+(5585, 1, 'admin/products/create', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:07:19', '2021-04-21 08:07:19'),
+(5586, 1, 'admin/categories', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:07:29', '2021-04-21 08:07:29'),
+(5587, 1, 'admin/services', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:07:32', '2021-04-21 08:07:32'),
+(5588, 1, 'admin/categories', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:14:07', '2021-04-21 08:14:07'),
+(5589, 1, 'admin/products', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:14:09', '2021-04-21 08:14:09'),
+(5590, 1, 'admin/services', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:14:11', '2021-04-21 08:14:11'),
+(5591, 1, 'admin/services/create', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:14:13', '2021-04-21 08:14:13'),
+(5592, 1, 'admin/services', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:14:16', '2021-04-21 08:14:16'),
+(5593, 1, 'admin/categories', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:14:18', '2021-04-21 08:14:18'),
+(5594, 1, 'admin/products', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:14:21', '2021-04-21 08:14:21'),
+(5595, 1, 'admin/products/create', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:16:11', '2021-04-21 08:16:11'),
+(5596, 1, 'admin/categories', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:16:33', '2021-04-21 08:16:33'),
+(5597, 1, 'admin/categories/create', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 08:16:34', '2021-04-21 08:16:34'),
+(5598, 1, 'admin/categories/create', 'GET', '127.0.0.1', '[]', '2021-04-21 13:07:21', '2021-04-21 13:07:21'),
+(5599, 1, 'admin/categories', 'POST', '127.0.0.1', '{\"service_id\":[\"1\",null],\"category_name\":\"SampleCat\",\"category_name_ar\":\"arSampleCat\",\"status\":\"1\",\"_token\":\"2ciKjrbBzwfiBDTF3M3lXYgKnbdvCIa0dgp2IePA\"}', '2021-04-21 13:07:57', '2021-04-21 13:07:57'),
+(5600, 1, 'admin/categories', 'GET', '127.0.0.1', '[]', '2021-04-21 13:07:58', '2021-04-21 13:07:58'),
+(5601, 1, 'admin/categories/create', 'GET', '127.0.0.1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:08:00', '2021-04-21 13:08:00'),
+(5602, 1, 'admin', 'GET', '192.168.43.39', '[]', '2021-04-22 06:10:39', '2021-04-22 06:10:39'),
+(5603, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:10:59', '2021-04-22 06:10:59'),
+(5604, 1, 'admin', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:11:09', '2021-04-22 06:11:09'),
+(5605, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:11:16', '2021-04-22 06:11:16'),
+(5606, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:11:18', '2021-04-22 06:11:18'),
+(5607, 1, 'admin/products', 'POST', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product1\",\"product_name_ar\":\"product1ar\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 06:11:52', '2021-04-22 06:11:52'),
+(5608, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 06:11:54', '2021-04-22 06:11:54'),
+(5609, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:11:57', '2021-04-22 06:11:57'),
+(5610, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:12:04', '2021-04-22 06:12:04'),
+(5611, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:12:07', '2021-04-22 06:12:07'),
+(5612, 1, 'admin/products', 'POST', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product2\",\"product_name_ar\":\"product2ar\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 06:12:26', '2021-04-22 06:12:26'),
+(5613, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 06:12:27', '2021-04-22 06:12:27'),
+(5614, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:12:39', '2021-04-22 06:12:39'),
+(5615, 1, 'admin/products', 'POST', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product3\",\"product_name_ar\":\"product3ar\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 06:13:00', '2021-04-22 06:13:00'),
+(5616, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 06:13:01', '2021-04-22 06:13:01'),
+(5617, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:13:05', '2021-04-22 06:13:05'),
+(5618, 1, 'admin/products', 'POST', '192.168.43.39', '{\"category_id\":\"2\",\"product_name\":\"product4\",\"product_name_ar\":\"product4ar\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 06:13:24', '2021-04-22 06:13:24'),
+(5619, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 06:13:25', '2021-04-22 06:13:25'),
+(5620, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:14:48', '2021-04-22 06:14:48'),
+(5621, 1, 'admin/products', 'POST', '192.168.43.39', '{\"category_id\":\"2\",\"product_name\":\"product5\",\"product_name_ar\":\"product5ar\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 06:15:09', '2021-04-22 06:15:09'),
+(5622, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 06:15:09', '2021-04-22 06:15:09'),
+(5623, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 06:15:19', '2021-04-22 06:15:19'),
+(5624, 1, 'admin/customers', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:15:26', '2021-04-22 06:15:26'),
+(5625, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 06:15:30', '2021-04-22 06:15:30'),
+(5626, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:23:34', '2021-04-22 07:23:34'),
+(5627, 1, 'admin/products', 'POST', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"product_name_ar\":\"product3ar\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:23:56', '2021-04-22 07:23:56'),
+(5628, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:23:56', '2021-04-22 07:23:56'),
+(5629, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:28:20', '2021-04-22 07:28:20'),
+(5630, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:28:23', '2021-04-22 07:28:23'),
+(5631, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:28:24', '2021-04-22 07:28:24'),
+(5632, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:35:05', '2021-04-22 07:35:05'),
+(5633, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:36:22', '2021-04-22 07:36:22'),
+(5634, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:37:02', '2021-04-22 07:37:02'),
+(5635, 1, 'admin/products', 'POST', '192.168.43.39', '{\"category_id\":null,\"product_name\":null,\"product_name_ar\":null,\"Product_Price\":null,\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\"}', '2021-04-22 07:37:15', '2021-04-22 07:37:15'),
+(5636, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:37:15', '2021-04-22 07:37:15'),
+(5637, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:38:23', '2021-04-22 07:38:23'),
+(5638, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:38:42', '2021-04-22 07:38:42'),
+(5639, 1, 'admin/products', 'POST', '192.168.43.39', '{\"category_id\":null,\"product_name\":null,\"product_name_ar\":null,\"price\":null,\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\"}', '2021-04-22 07:38:45', '2021-04-22 07:38:45'),
+(5640, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:38:45', '2021-04-22 07:38:45'),
+(5641, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:38:59', '2021-04-22 07:38:59'),
+(5642, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:39:01', '2021-04-22 07:39:01'),
+(5643, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:39:02', '2021-04-22 07:39:02'),
+(5644, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:39:04', '2021-04-22 07:39:04'),
+(5645, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:40:13', '2021-04-22 07:40:13'),
+(5646, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:40:43', '2021-04-22 07:40:43'),
+(5647, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:40:51', '2021-04-22 07:40:51'),
+(5648, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:40:57', '2021-04-22 07:40:57'),
+(5649, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:41:05', '2021-04-22 07:41:05'),
+(5650, 1, 'admin/products/3/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:41:06', '2021-04-22 07:41:06'),
+(5651, 1, 'admin/products/3', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product3\",\"product_name_ar\":\"product3ar\",\"price\":\"10\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:42:22', '2021-04-22 07:42:22'),
+(5652, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:42:23', '2021-04-22 07:42:23'),
+(5653, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:42:28', '2021-04-22 07:42:28'),
+(5654, 1, 'admin/products/1', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product1\",\"product_name_ar\":\"product1ar\",\"price\":\"8.0\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:42:35', '2021-04-22 07:42:35'),
+(5655, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:42:35', '2021-04-22 07:42:35'),
+(5656, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:42:41', '2021-04-22 07:42:41'),
+(5657, 1, 'admin/products/1', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product1\",\"product_name_ar\":\"product1ar\",\"price\":\"8sadasdf\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:42:45', '2021-04-22 07:42:45'),
+(5658, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 07:42:45', '2021-04-22 07:42:45'),
+(5659, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 07:43:30', '2021-04-22 07:43:30'),
+(5660, 1, 'admin/products/1', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product1\",\"price\":\"10\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\"}', '2021-04-22 07:43:37', '2021-04-22 07:43:37'),
+(5661, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:43:37', '2021-04-22 07:43:37'),
+(5662, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:43:53', '2021-04-22 07:43:53'),
+(5663, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:43:57', '2021-04-22 07:43:57'),
+(5664, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:43:59', '2021-04-22 07:43:59'),
+(5665, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:44:02', '2021-04-22 07:44:02'),
+(5666, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:44:58', '2021-04-22 07:44:58'),
+(5667, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:49:46', '2021-04-22 07:49:46'),
+(5668, 1, 'admin/products/create', 'GET', '192.168.43.39', '[]', '2021-04-22 07:49:58', '2021-04-22 07:49:58'),
+(5669, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:50:10', '2021-04-22 07:50:10'),
+(5670, 1, 'admin/products/3/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:50:12', '2021-04-22 07:50:12'),
+(5671, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:50:30', '2021-04-22 07:50:30'),
+(5672, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:50:33', '2021-04-22 07:50:33'),
+(5673, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:50:36', '2021-04-22 07:50:36'),
+(5674, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:50:50', '2021-04-22 07:50:50'),
+(5675, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:50:50', '2021-04-22 07:50:50'),
+(5676, 1, 'admin/products/2/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:50:52', '2021-04-22 07:50:52'),
+(5677, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:50:56', '2021-04-22 07:50:56'),
+(5678, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:50:59', '2021-04-22 07:50:59'),
+(5679, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:51:03', '2021-04-22 07:51:03'),
+(5680, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:51:03', '2021-04-22 07:51:03'),
+(5681, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:51:05', '2021-04-22 07:51:05'),
+(5682, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:51:50', '2021-04-22 07:51:50'),
+(5683, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:51:50', '2021-04-22 07:51:50'),
+(5684, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:51:59', '2021-04-22 07:51:59'),
+(5685, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"1\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:52:03', '2021-04-22 07:52:03'),
+(5686, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:52:03', '2021-04-22 07:52:03'),
+(5687, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:52:16', '2021-04-22 07:52:16'),
+(5688, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"0\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:52:22', '2021-04-22 07:52:22'),
+(5689, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:52:22', '2021-04-22 07:52:22'),
+(5690, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:54:56', '2021-04-22 07:54:56'),
+(5691, 1, 'admin/products/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:54:58', '2021-04-22 07:54:58'),
+(5692, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:55:02', '2021-04-22 07:55:02'),
+(5693, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:55:05', '2021-04-22 07:55:05'),
+(5694, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"1\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:55:13', '2021-04-22 07:55:13'),
+(5695, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:55:13', '2021-04-22 07:55:13'),
+(5696, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:55:18', '2021-04-22 07:55:18'),
+(5697, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:55:23', '2021-04-22 07:55:23'),
+(5698, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 07:55:23', '2021-04-22 07:55:23'),
+(5699, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 07:55:27', '2021-04-22 07:55:27'),
+(5700, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":null,\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 07:55:33', '2021-04-22 07:55:33'),
+(5701, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 07:55:33', '2021-04-22 07:55:33'),
+(5702, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 07:56:12', '2021-04-22 07:56:12'),
+(5703, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 07:56:39', '2021-04-22 07:56:39'),
+(5704, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 08:00:04', '2021-04-22 08:00:04'),
+(5705, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 08:00:20', '2021-04-22 08:00:20'),
+(5706, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\"}', '2021-04-22 08:00:28', '2021-04-22 08:00:28'),
+(5707, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:00:28', '2021-04-22 08:00:28'),
+(5708, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:00:42', '2021-04-22 08:00:42'),
+(5709, 1, 'admin/products/1', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product1\",\"price\":\"10\",\"unit\":\"1\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:00:50', '2021-04-22 08:00:50'),
+(5710, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:00:50', '2021-04-22 08:00:50'),
+(5711, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:00:53', '2021-04-22 08:00:53'),
+(5712, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:01:07', '2021-04-22 08:01:07'),
+(5713, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:01:09', '2021-04-22 08:01:09'),
+(5714, 1, 'admin/products/1', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product1\",\"price\":\"10\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:01:13', '2021-04-22 08:01:13'),
+(5715, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:01:13', '2021-04-22 08:01:13'),
+(5716, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:01:17', '2021-04-22 08:01:17'),
+(5717, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:01:20', '2021-04-22 08:01:20'),
+(5718, 1, 'admin/products/2/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:01:22', '2021-04-22 08:01:22'),
+(5719, 1, 'admin/products/2', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product2\",\"price\":\"6.5\",\"unit\":\"3\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:01:26', '2021-04-22 08:01:26'),
+(5720, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:01:26', '2021-04-22 08:01:26'),
+(5721, 1, 'admin/products/2/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:03:00', '2021-04-22 08:03:00'),
+(5722, 1, 'admin/products/2', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product2\",\"price\":\"6.5\",\"unit\":null,\"status\":\"2\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:03:05', '2021-04-22 08:03:05'),
+(5723, 1, 'admin/products/2/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 08:03:05', '2021-04-22 08:03:05'),
+(5724, 1, 'admin/products/2', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product2\",\"price\":\"6.5\",\"unit\":\"2\",\"status\":\"2\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\"}', '2021-04-22 08:03:13', '2021-04-22 08:03:13'),
+(5725, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:03:14', '2021-04-22 08:03:14'),
+(5726, 1, 'admin/products/2/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:03:17', '2021-04-22 08:03:17'),
+(5727, 1, 'admin/products/2/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 08:09:33', '2021-04-22 08:09:33'),
+(5728, 1, 'admin/products/2', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product2\",\"price\":\"6.5\",\"unit\":\"1\",\"status\":\"2\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\"}', '2021-04-22 08:09:37', '2021-04-22 08:09:37'),
+(5729, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:09:38', '2021-04-22 08:09:38'),
+(5730, 1, 'admin/products/2/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:09:45', '2021-04-22 08:09:45'),
+(5731, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:09:54', '2021-04-22 08:09:54'),
+(5732, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:12:02', '2021-04-22 08:12:02'),
+(5733, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:12:13', '2021-04-22 08:12:13'),
+(5734, 1, 'admin/products/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:12:17', '2021-04-22 08:12:17'),
+(5735, 1, 'admin/products/1', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product1\",\"price\":\"10\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:12:21', '2021-04-22 08:12:21'),
+(5736, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:12:21', '2021-04-22 08:12:21'),
+(5737, 1, 'admin/products/3/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:12:25', '2021-04-22 08:12:25'),
+(5738, 1, 'admin/products/3', 'PUT', '192.168.43.39', '{\"category_id\":\"1\",\"product_name\":\"product3\",\"price\":\"10\",\"unit\":\"3\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:12:30', '2021-04-22 08:12:30'),
+(5739, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:12:30', '2021-04-22 08:12:30'),
+(5740, 1, 'admin/products/4/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:12:32', '2021-04-22 08:12:32'),
+(5741, 1, 'admin/products/4', 'PUT', '192.168.43.39', '{\"category_id\":\"2\",\"product_name\":\"product4\",\"price\":\"15\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:12:37', '2021-04-22 08:12:37'),
+(5742, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:12:37', '2021-04-22 08:12:37');
+INSERT INTO `admin_operation_log` (`id`, `user_id`, `path`, `method`, `ip`, `input`, `created_at`, `updated_at`) VALUES
+(5743, 1, 'admin/products/5/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:12:39', '2021-04-22 08:12:39'),
+(5744, 1, 'admin/products/5', 'PUT', '192.168.43.39', '{\"category_id\":\"2\",\"product_name\":\"product5\",\"price\":\"7\",\"unit\":\"1\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:12:42', '2021-04-22 08:12:42'),
+(5745, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:12:42', '2021-04-22 08:12:42'),
+(5746, 1, 'admin/products/6/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:12:44', '2021-04-22 08:12:44'),
+(5747, 1, 'admin/products/6', 'PUT', '192.168.43.39', '{\"category_id\":\"3\",\"product_name\":\"sampleproduct3\",\"price\":\"12\",\"unit\":\"1\",\"status\":\"1\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/products\"}', '2021-04-22 08:12:47', '2021-04-22 08:12:47'),
+(5748, 1, 'admin/products', 'GET', '192.168.43.39', '[]', '2021-04-22 08:12:48', '2021-04-22 08:12:48'),
+(5749, 1, 'admin/products/5/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:12:50', '2021-04-22 08:12:50'),
+(5750, 1, 'admin/products', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:12:53', '2021-04-22 08:12:53'),
+(5751, 1, 'admin/fare_managements', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:28:10', '2021-04-22 08:28:10'),
+(5752, 1, 'admin/payment-methods', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:28:13', '2021-04-22 08:28:13'),
+(5753, 1, 'admin/customers', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:28:20', '2021-04-22 08:28:20'),
+(5754, 1, 'admin/delivery_boys', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:28:27', '2021-04-22 08:28:27'),
+(5755, 1, 'admin/promo_codes', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:28:30', '2021-04-22 08:28:30'),
+(5756, 1, 'admin/labels', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:28:35', '2021-04-22 08:28:35'),
+(5757, 1, 'admin/fare_managements', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:29:13', '2021-04-22 08:29:13'),
+(5758, 1, 'admin/payment-methods', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 08:29:15', '2021-04-22 08:29:15'),
+(5759, 1, 'admin/app_settings', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:10:10', '2021-04-22 09:10:10'),
+(5760, 1, 'admin/auth/setting', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:10:19', '2021-04-22 09:10:19'),
+(5761, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:11:21', '2021-04-22 09:11:21'),
+(5762, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:23:08', '2021-04-22 09:23:08'),
+(5763, 1, 'admin', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:23:14', '2021-04-22 09:23:14'),
+(5764, 1, 'admin/orders', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:23:16', '2021-04-22 09:23:16'),
+(5765, 1, 'admin/units', 'GET', '192.168.43.39', '[]', '2021-04-22 09:23:37', '2021-04-22 09:23:37'),
+(5766, 1, 'admin/units/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:23:46', '2021-04-22 09:23:46'),
+(5767, 1, 'admin/units', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:23:54', '2021-04-22 09:23:54'),
+(5768, 1, 'admin/units', 'GET', '192.168.43.39', '[]', '2021-04-22 09:24:54', '2021-04-22 09:24:54'),
+(5769, 1, 'admin/units/1', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:24:57', '2021-04-22 09:24:57'),
+(5770, 1, 'admin/units', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:25:06', '2021-04-22 09:25:06'),
+(5771, 1, 'admin/units', 'GET', '192.168.43.39', '[]', '2021-04-22 09:25:30', '2021-04-22 09:25:30'),
+(5772, 1, 'admin/units/1', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:25:33', '2021-04-22 09:25:33'),
+(5773, 1, 'admin/units', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:25:36', '2021-04-22 09:25:36'),
+(5774, 1, 'admin/units/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:25:38', '2021-04-22 09:25:38'),
+(5775, 1, 'admin/units/1', 'PUT', '192.168.43.39', '{\"unit_code\":\"pieces\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/units\"}', '2021-04-22 09:25:41', '2021-04-22 09:25:41'),
+(5776, 1, 'admin/units', 'GET', '192.168.43.39', '[]', '2021-04-22 09:25:41', '2021-04-22 09:25:41'),
+(5777, 1, 'admin/units/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:25:45', '2021-04-22 09:25:45'),
+(5778, 1, 'admin/units/1', 'PUT', '192.168.43.39', '{\"unit_code\":\"piece\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/192.168.43.39:8000\\/admin\\/units\"}', '2021-04-22 09:25:48', '2021-04-22 09:25:48'),
+(5779, 1, 'admin/units', 'GET', '192.168.43.39', '[]', '2021-04-22 09:25:48', '2021-04-22 09:25:48'),
+(5780, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:26:15', '2021-04-22 09:26:15'),
+(5781, 1, 'admin/auth/menu/1/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 09:28:23', '2021-04-22 09:28:23'),
+(5782, 1, 'admin/auth/menu/19/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 09:28:36', '2021-04-22 09:28:36'),
+(5783, 1, 'admin/auth/menu', 'POST', '192.168.43.39', '{\"parent_id\":\"0\",\"title\":\"Units\",\"icon\":\"fa-calculator\",\"uri\":\"units\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\"}', '2021-04-22 09:28:59', '2021-04-22 09:28:59'),
+(5784, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:28:59', '2021-04-22 09:28:59'),
+(5785, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:29:14', '2021-04-22 09:29:14'),
+(5786, 1, 'admin/auth/menu', 'POST', '192.168.43.39', '{\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":19},{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17},{\\\"id\\\":18},{\\\"id\\\":21},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":9},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":11},{\\\"id\\\":20}]\"}', '2021-04-22 09:29:28', '2021-04-22 09:29:28'),
+(5787, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:29:28', '2021-04-22 09:29:28'),
+(5788, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:29:33', '2021-04-22 09:29:33'),
+(5789, 1, 'admin/units', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:29:40', '2021-04-22 09:29:40'),
+(5790, 1, 'admin/banners', 'GET', '192.168.43.39', '[]', '2021-04-22 09:31:32', '2021-04-22 09:31:32'),
+(5791, 1, 'admin/banners', 'GET', '192.168.43.39', '[]', '2021-04-22 09:32:28', '2021-04-22 09:32:28'),
+(5792, 1, 'admin/banner-images', 'GET', '192.168.43.39', '[]', '2021-04-22 09:33:55', '2021-04-22 09:33:55'),
+(5793, 1, 'admin/banner-images/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:34:03', '2021-04-22 09:34:03'),
+(5794, 1, 'admin/banner-images', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:34:37', '2021-04-22 09:34:37'),
+(5795, 1, 'admin/banner-images/create', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:36:23', '2021-04-22 09:36:23'),
+(5796, 1, 'admin/banner-images/create', 'GET', '192.168.43.39', '[]', '2021-04-22 09:36:56', '2021-04-22 09:36:56'),
+(5797, 1, 'admin/banner-images/create', 'GET', '192.168.43.39', '[]', '2021-04-22 09:37:45', '2021-04-22 09:37:45'),
+(5798, 1, 'admin/banner-images', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:38:11', '2021-04-22 09:38:11'),
+(5799, 1, 'admin/banner-images', 'GET', '192.168.43.39', '[]', '2021-04-22 09:40:33', '2021-04-22 09:40:33'),
+(5800, 1, 'admin/banner-images', 'GET', '192.168.43.39', '[]', '2021-04-22 09:42:01', '2021-04-22 09:42:01'),
+(5801, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:43:49', '2021-04-22 09:43:49'),
+(5802, 1, 'admin/auth/menu', 'POST', '192.168.43.39', '{\"parent_id\":\"0\",\"title\":\"Home Banners\",\"icon\":\"fa-image\",\"uri\":\"banner-images\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\"}', '2021-04-22 09:45:18', '2021-04-22 09:45:18'),
+(5803, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:45:18', '2021-04-22 09:45:18'),
+(5804, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:45:22', '2021-04-22 09:45:22'),
+(5805, 1, 'admin/auth/menu', 'POST', '192.168.43.39', '{\"_token\":\"e1kc5jmUJZkygdc0vINcW89jWj2UQZq2AmJj8FO9\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":19},{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17},{\\\"id\\\":23},{\\\"id\\\":18},{\\\"id\\\":21},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":9},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":11},{\\\"id\\\":20}]\"}', '2021-04-22 09:45:46', '2021-04-22 09:45:46'),
+(5806, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:45:46', '2021-04-22 09:45:46'),
+(5807, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:45:49', '2021-04-22 09:45:49'),
+(5808, 1, 'admin/auth/menu', 'GET', '192.168.43.39', '[]', '2021-04-22 09:45:54', '2021-04-22 09:45:54'),
+(5809, 1, 'admin/banner-images', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:45:56', '2021-04-22 09:45:56'),
+(5810, 1, 'admin/banner-images/1/edit', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:47:09', '2021-04-22 09:47:09'),
+(5811, 1, 'admin', 'GET', '::1', '[]', '2021-04-22 09:50:21', '2021-04-22 09:50:21'),
+(5812, 1, 'admin/banner-images', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:50:38', '2021-04-22 09:50:38'),
+(5813, 1, 'admin/banner-images', 'GET', '::1', '[]', '2021-04-22 09:50:54', '2021-04-22 09:50:54'),
+(5814, 1, 'admin/banner-images/1/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 09:51:02', '2021-04-22 09:51:02'),
+(5815, 1, 'admin/banner-images/1/edit', 'GET', '192.168.43.39', '[]', '2021-04-22 09:51:05', '2021-04-22 09:51:05'),
+(5816, 1, 'admin/banner-images', 'GET', '192.168.43.39', '[]', '2021-04-22 09:51:10', '2021-04-22 09:51:10'),
+(5817, 1, 'admin/banner-images', 'GET', '192.168.43.39', '[]', '2021-04-22 09:51:13', '2021-04-22 09:51:13'),
+(5818, 1, 'admin/banner-images', 'GET', '192.168.43.39', '[]', '2021-04-22 09:51:14', '2021-04-22 09:51:14'),
+(5819, 1, 'admin/banner-images/1/edit', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:51:33', '2021-04-22 09:51:33'),
+(5820, 1, 'admin/banner-images', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:51:44', '2021-04-22 09:51:44'),
+(5821, 1, 'admin/banner-images', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:51:55', '2021-04-22 09:51:55'),
+(5822, 1, 'admin/banner-images', 'GET', '192.168.43.39', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:52:01', '2021-04-22 09:52:01'),
+(5823, 1, 'admin/banner-images', 'GET', '192.168.43.39', '[]', '2021-04-22 09:52:04', '2021-04-22 09:52:04'),
+(5824, 1, 'admin/banner-images', 'GET', '192.168.43.39', '[]', '2021-04-22 09:52:24', '2021-04-22 09:52:24'),
+(5825, 1, 'admin/units', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:53:17', '2021-04-22 09:53:17'),
+(5826, 1, 'admin/services', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:53:20', '2021-04-22 09:53:20'),
+(5827, 1, 'admin/categories', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:53:22', '2021-04-22 09:53:22'),
+(5828, 1, 'admin/products', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:53:24', '2021-04-22 09:53:24'),
+(5829, 1, 'admin/banner-images', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:53:27', '2021-04-22 09:53:27'),
+(5830, 1, 'admin/fare_managements', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:53:28', '2021-04-22 09:53:28'),
+(5831, 1, 'admin/payment-methods', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:53:30', '2021-04-22 09:53:30'),
+(5832, 1, 'admin/delivery_boys', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 09:53:54', '2021-04-22 09:53:54'),
+(5833, 1, 'admin/banner-images', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 10:10:15', '2021-04-22 10:10:15'),
+(5834, 1, 'admin/services', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 10:11:22', '2021-04-22 10:11:22'),
+(5835, 1, 'admin/services/1/edit', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 10:11:24', '2021-04-22 10:11:24'),
+(5836, 1, 'admin/services/1/edit', 'GET', '::1', '[]', '2021-04-22 10:41:18', '2021-04-22 10:41:18'),
+(5837, 1, 'admin/services', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 10:41:29', '2021-04-22 10:41:29'),
+(5838, 1, 'admin/services', 'GET', '::1', '[]', '2021-04-22 10:41:31', '2021-04-22 10:41:31'),
+(5839, 1, 'admin/services/1/edit', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 10:41:37', '2021-04-22 10:41:37'),
+(5840, 1, 'admin/services/1', 'PUT', '::1', '{\"service_name\":\"Dry Cleaning\",\"description\":\"12 hours\",\"status\":\"1\",\"_token\":\"Q7gDiwiPQlgn2UPjZZQegA3VYzrX4Avw8W1rfTXx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/localhost\\/laundry\\/public\\/admin\\/services\"}', '2021-04-22 10:41:54', '2021-04-22 10:41:54'),
+(5841, 1, 'admin/services', 'GET', '::1', '[]', '2021-04-22 10:41:55', '2021-04-22 10:41:55'),
+(5842, 1, 'admin/services', 'GET', '::1', '[]', '2021-04-22 10:43:57', '2021-04-22 10:43:57'),
+(5843, 1, 'admin/services/1/edit', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 10:44:13', '2021-04-22 10:44:13'),
+(5844, 1, 'admin/services', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 10:44:18', '2021-04-22 10:44:18'),
+(5845, 1, 'admin/services/1/edit', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 12:04:49', '2021-04-22 12:04:49'),
+(5846, 1, 'admin/banner-images', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 12:39:13', '2021-04-22 12:39:13'),
+(5847, 1, 'admin/services', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 12:40:02', '2021-04-22 12:40:02'),
+(5848, 1, 'admin/units', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 12:42:16', '2021-04-22 12:42:16'),
+(5849, 1, 'admin/categories', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 12:42:32', '2021-04-22 12:42:32'),
+(5850, 1, 'admin/products', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 12:42:36', '2021-04-22 12:42:36'),
+(5851, 1, 'admin', 'GET', '157.37.136.72', '[]', '2021-04-21 12:17:49', '2021-04-21 12:17:49'),
+(5852, 1, 'admin/banner-images', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:18:07', '2021-04-21 12:18:07'),
+(5853, 1, 'admin/banner-images', 'GET', '157.37.136.72', '[]', '2021-04-21 12:19:49', '2021-04-21 12:19:49'),
+(5854, 1, 'admin/banner-images', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:43:19', '2021-04-21 12:43:19'),
+(5855, 1, 'admin/banner-images/1/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:43:23', '2021-04-21 12:43:23'),
+(5856, 1, 'admin/banner-images/1', 'PUT', '157.37.136.72', '{\"service_id\":\"1\",\"title\":\"Flat 20% off on laundry service\",\"text\":\"View all offers\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/banner-images\"}', '2021-04-21 12:44:31', '2021-04-21 12:44:31'),
+(5857, 1, 'admin/banner-images', 'GET', '157.37.136.72', '[]', '2021-04-21 12:44:31', '2021-04-21 12:44:31'),
+(5858, 1, 'admin/banner-images/2/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:45:11', '2021-04-21 12:45:11'),
+(5859, 1, 'admin/banner-images/2', 'PUT', '157.37.136.72', '{\"service_id\":\"2\",\"title\":\"Rupees 100 discount on new users\",\"text\":\"More offers\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/banner-images\"}', '2021-04-21 12:45:56', '2021-04-21 12:45:56'),
+(5860, 1, 'admin/banner-images', 'GET', '157.37.136.72', '[]', '2021-04-21 12:45:56', '2021-04-21 12:45:56'),
+(5861, 1, 'admin/banner-images/3/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:46:07', '2021-04-21 12:46:07'),
+(5862, 1, 'admin/banner-images/3', 'PUT', '157.37.136.72', '{\"service_id\":\"3\",\"title\":\"Make Iron with wash and get 20% off\",\"text\":\"View all offers\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/banner-images\"}', '2021-04-21 12:48:11', '2021-04-21 12:48:11'),
+(5863, 1, 'admin/banner-images', 'GET', '157.37.136.72', '[]', '2021-04-21 12:48:12', '2021-04-21 12:48:12'),
+(5864, 1, 'admin/services', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:49:05', '2021-04-21 12:49:05'),
+(5865, 1, 'admin/services/1/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:49:11', '2021-04-21 12:49:11'),
+(5866, 1, 'admin/services/1', 'PUT', '157.37.136.72', '{\"service_name\":\"Dry Cleaning\",\"description\":\"12 hours min\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-04-21 12:49:47', '2021-04-21 12:49:47'),
+(5867, 1, 'admin/services', 'GET', '157.37.136.72', '[]', '2021-04-21 12:49:48', '2021-04-21 12:49:48'),
+(5868, 1, 'admin/services/2/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:50:15', '2021-04-21 12:50:15'),
+(5869, 1, 'admin/services/2', 'PUT', '157.37.136.72', '{\"service_name\":\"Wash only\",\"description\":\"2 hours min\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-04-21 12:50:49', '2021-04-21 12:50:49'),
+(5870, 1, 'admin/services', 'GET', '157.37.136.72', '[]', '2021-04-21 12:50:49', '2021-04-21 12:50:49'),
+(5871, 1, 'admin/services/2/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:51:10', '2021-04-21 12:51:10'),
+(5872, 1, 'admin/services/2', 'PUT', '157.37.136.72', '{\"service_name\":\"Wash only\",\"description\":\"2 hours min\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-04-21 12:51:18', '2021-04-21 12:51:18'),
+(5873, 1, 'admin/services', 'GET', '157.37.136.72', '[]', '2021-04-21 12:51:19', '2021-04-21 12:51:19'),
+(5874, 1, 'admin/services/3/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:51:24', '2021-04-21 12:51:24'),
+(5875, 1, 'admin/services/3', 'PUT', '157.37.136.72', '{\"service_name\":\"Wash & Iron\",\"description\":\"5 hours min\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-04-21 12:51:49', '2021-04-21 12:51:49'),
+(5876, 1, 'admin/services', 'GET', '157.37.136.72', '[]', '2021-04-21 12:51:50', '2021-04-21 12:51:50'),
+(5877, 1, 'admin/services/3/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 12:57:14', '2021-04-21 12:57:14'),
+(5878, 1, 'admin/services/3', 'PUT', '157.37.136.72', '{\"service_name\":\"Wash & Iron\",\"description\":\"5 hours min\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-04-21 12:57:23', '2021-04-21 12:57:23'),
+(5879, 1, 'admin/services', 'GET', '157.37.136.72', '[]', '2021-04-21 12:57:23', '2021-04-21 12:57:23'),
+(5880, 1, 'admin/services', 'GET', '157.37.136.72', '[]', '2021-04-21 13:19:54', '2021-04-21 13:19:54'),
+(5881, 1, 'admin', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:19:58', '2021-04-21 13:19:58'),
+(5882, 1, 'admin', 'GET', '157.37.136.72', '[]', '2021-04-21 13:20:01', '2021-04-21 13:20:01'),
+(5883, 1, 'admin', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:20:04', '2021-04-21 13:20:04'),
+(5884, 1, 'admin/banner-images', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:20:10', '2021-04-21 13:20:10'),
+(5885, 1, 'admin/categories', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:40:02', '2021-04-21 13:40:02'),
+(5886, 1, 'admin/categories/1/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:40:05', '2021-04-21 13:40:05'),
+(5887, 1, 'admin/categories/1', 'PUT', '157.37.136.72', '{\"service_id\":[\"1\",\"2\",null],\"category_name\":\"Men\",\"category_name_ar\":\"arSampleCat\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/categories\"}', '2021-04-21 13:40:40', '2021-04-21 13:40:40'),
+(5888, 1, 'admin/categories', 'GET', '157.37.136.72', '[]', '2021-04-21 13:40:40', '2021-04-21 13:40:40'),
+(5889, 1, 'admin/categories/2/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:40:45', '2021-04-21 13:40:45'),
+(5890, 1, 'admin/categories/2', 'PUT', '157.37.136.72', '{\"service_id\":[\"1\",null],\"category_name\":\"Women\",\"category_name_ar\":\"arSampleCat2\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/categories\"}', '2021-04-21 13:40:53', '2021-04-21 13:40:53'),
+(5891, 1, 'admin/categories', 'GET', '157.37.136.72', '[]', '2021-04-21 13:40:54', '2021-04-21 13:40:54'),
+(5892, 1, 'admin/categories/1/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:41:33', '2021-04-21 13:41:33'),
+(5893, 1, 'admin/categories/1', 'PUT', '157.37.136.72', '{\"service_id\":[\"1\",null],\"category_name\":\"Men\",\"category_name_ar\":\"arSampleCat\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/categories\"}', '2021-04-21 13:41:39', '2021-04-21 13:41:39'),
+(5894, 1, 'admin/categories', 'GET', '157.37.136.72', '[]', '2021-04-21 13:41:39', '2021-04-21 13:41:39'),
+(5895, 1, 'admin/categories/1/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:42:20', '2021-04-21 13:42:20'),
+(5896, 1, 'admin/categories', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:42:35', '2021-04-21 13:42:35'),
+(5897, 1, 'admin/categories/3/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:42:52', '2021-04-21 13:42:52'),
+(5898, 1, 'admin/categories/3', 'PUT', '157.37.136.72', '{\"service_id\":[\"1\",null],\"category_name\":\"Kids\",\"category_name_ar\":\"arSampleCat3\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/categories\"}', '2021-04-21 13:43:01', '2021-04-21 13:43:01'),
+(5899, 1, 'admin/categories', 'GET', '157.37.136.72', '[]', '2021-04-21 13:43:01', '2021-04-21 13:43:01'),
+(5900, 1, 'admin/categories/4/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:43:04', '2021-04-21 13:43:04'),
+(5901, 1, 'admin/categories/4', 'PUT', '157.37.136.72', '{\"service_id\":[\"1\",null],\"category_name\":\"Others\",\"category_name_ar\":\"arSampleCat4\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/categories\"}', '2021-04-21 13:43:12', '2021-04-21 13:43:12'),
+(5902, 1, 'admin/categories', 'GET', '157.37.136.72', '[]', '2021-04-21 13:43:14', '2021-04-21 13:43:14'),
+(5903, 1, 'admin/products', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:43:27', '2021-04-21 13:43:27'),
+(5904, 1, 'admin/products/1/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:43:34', '2021-04-21 13:43:34'),
+(5905, 1, 'admin/products/1', 'PUT', '157.37.136.72', '{\"category_id\":\"1\",\"product_name\":\"Blazer\",\"price\":\"10\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/products\"}', '2021-04-21 13:44:07', '2021-04-21 13:44:07'),
+(5906, 1, 'admin/products', 'GET', '157.37.136.72', '[]', '2021-04-21 13:44:08', '2021-04-21 13:44:08'),
+(5907, 1, 'admin/products/2/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:44:11', '2021-04-21 13:44:11'),
+(5908, 1, 'admin/products/2', 'PUT', '157.37.136.72', '{\"category_id\":\"1\",\"product_name\":\"Jeans\",\"price\":\"6.5\",\"unit\":\"1\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/products\"}', '2021-04-21 13:44:31', '2021-04-21 13:44:31'),
+(5909, 1, 'admin/products', 'GET', '157.37.136.72', '[]', '2021-04-21 13:44:31', '2021-04-21 13:44:31'),
+(5910, 1, 'admin/products/3/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:44:42', '2021-04-21 13:44:42'),
+(5911, 1, 'admin/products/3', 'PUT', '157.37.136.72', '{\"category_id\":\"1\",\"product_name\":\"Mens Kurta\",\"price\":\"10\",\"unit\":\"3\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/products\"}', '2021-04-21 13:45:13', '2021-04-21 13:45:13'),
+(5912, 1, 'admin/products', 'GET', '157.37.136.72', '[]', '2021-04-21 13:45:13', '2021-04-21 13:45:13'),
+(5913, 1, 'admin/products/6', 'DELETE', '157.37.136.72', '{\"_method\":\"delete\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\"}', '2021-04-21 13:45:33', '2021-04-21 13:45:33'),
+(5914, 1, 'admin/products', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:45:33', '2021-04-21 13:45:33'),
+(5915, 1, 'admin/products/4/edit', 'GET', '157.37.136.72', '{\"_pjax\":\"#pjax-container\"}', '2021-04-21 13:45:37', '2021-04-21 13:45:37'),
+(5916, 1, 'admin/products/4', 'PUT', '157.37.136.72', '{\"category_id\":\"2\",\"product_name\":\"Shirt\",\"price\":\"15\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"YPn0WzXEb86polu4ZKgJr9XUuobiU4rhJg2htyTw\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/products\"}', '2021-04-21 13:46:10', '2021-04-21 13:46:10'),
+(5917, 1, 'admin/products', 'GET', '157.37.136.72', '[]', '2021-04-21 13:46:13', '2021-04-21 13:46:13'),
+(5918, 1, 'admin', 'GET', '47.31.210.138', '[]', '2021-04-22 03:47:41', '2021-04-22 03:47:41'),
+(5919, 1, 'admin/banner-images', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 03:48:48', '2021-04-22 03:48:48'),
+(5920, 1, 'admin/products', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 03:49:07', '2021-04-22 03:49:07'),
+(5921, 1, 'admin/categories', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 03:49:27', '2021-04-22 03:49:27'),
+(5922, 1, 'admin/categories/1/edit', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 03:49:31', '2021-04-22 03:49:31'),
+(5923, 1, 'admin/categories/1', 'PUT', '47.31.210.138', '{\"service_id\":[\"1\",\"2\",null],\"category_name\":\"Men\",\"category_name_ar\":\"arSampleCat\",\"status\":\"1\",\"_token\":\"0HKJgxbDcLZDGPyye64OdQz5QPKtqOAo40D9yxwJ\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/categories\"}', '2021-04-22 03:49:49', '2021-04-22 03:49:49'),
+(5924, 1, 'admin/categories', 'GET', '47.31.210.138', '[]', '2021-04-22 03:49:50', '2021-04-22 03:49:50'),
+(5925, 1, 'admin/categories', 'GET', '47.31.210.138', '[]', '2021-04-22 05:19:36', '2021-04-22 05:19:36'),
+(5926, 1, 'admin/services', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:19:43', '2021-04-22 05:19:43'),
+(5927, 1, 'admin/categories', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:19:51', '2021-04-22 05:19:51'),
+(5928, 1, 'admin/categories', 'GET', '47.31.210.138', '[]', '2021-04-22 05:20:53', '2021-04-22 05:20:53'),
+(5929, 1, 'admin/categories/1/edit', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:20:58', '2021-04-22 05:20:58'),
+(5930, 1, 'admin/categories/1/edit', 'GET', '47.31.210.138', '[]', '2021-04-22 05:21:21', '2021-04-22 05:21:21'),
+(5931, 1, 'admin/categories', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:22:41', '2021-04-22 05:22:41'),
+(5932, 1, 'admin/categories', 'GET', '47.31.210.138', '{\"_columns_\":\"category_name,id\",\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:22:52', '2021-04-22 05:22:52'),
+(5933, 1, 'admin/categories', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:22:55', '2021-04-22 05:22:55'),
+(5934, 1, 'admin/products', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:23:07', '2021-04-22 05:23:07'),
+(5935, 1, 'admin/products', 'GET', '47.31.210.138', '[]', '2021-04-22 05:24:49', '2021-04-22 05:24:49'),
+(5936, 1, 'admin/products', 'GET', '47.31.210.138', '[]', '2021-04-22 05:25:59', '2021-04-22 05:25:59'),
+(5937, 1, 'admin/products/1/edit', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:26:00', '2021-04-22 05:26:00'),
+(5938, 1, 'admin/products', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:26:07', '2021-04-22 05:26:07'),
+(5939, 1, 'admin/products', 'GET', '47.31.210.138', '[]', '2021-04-22 05:26:10', '2021-04-22 05:26:10'),
+(5940, 1, 'admin/products/1/edit', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:26:13', '2021-04-22 05:26:13'),
+(5941, 1, 'admin/products/1/edit', 'GET', '47.31.210.138', '[]', '2021-04-22 05:26:55', '2021-04-22 05:26:55'),
+(5942, 1, 'admin/products/1/edit', 'GET', '47.31.210.138', '[]', '2021-04-22 05:27:13', '2021-04-22 05:27:13'),
+(5943, 1, 'admin/products/1', 'PUT', '47.31.210.138', '{\"service_is\":\"1\",\"category_id\":\"1\",\"product_name\":\"Blazer\",\"price\":\"10\",\"unit\":\"2\",\"status\":\"1\",\"_token\":\"0HKJgxbDcLZDGPyye64OdQz5QPKtqOAo40D9yxwJ\",\"_method\":\"PUT\"}', '2021-04-22 05:27:22', '2021-04-22 05:27:22'),
+(5944, 1, 'admin/products/1/edit', 'GET', '47.31.210.138', '[]', '2021-04-22 05:27:23', '2021-04-22 05:27:23'),
+(5945, 1, 'admin/products/1/edit', 'GET', '47.31.210.138', '[]', '2021-04-22 05:27:35', '2021-04-22 05:27:35'),
+(5946, 1, 'admin/products/1/edit', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:27:39', '2021-04-22 05:27:39'),
+(5947, 1, 'admin/products', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:27:40', '2021-04-22 05:27:40'),
+(5948, 1, 'admin/products/5/edit', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:27:44', '2021-04-22 05:27:44'),
+(5949, 1, 'admin/products', 'GET', '47.31.210.138', '{\"_pjax\":\"#pjax-container\"}', '2021-04-22 05:27:56', '2021-04-22 05:27:56'),
+(5950, 1, 'admin', 'GET', '157.37.195.11', '[]', '2021-04-24 14:06:00', '2021-04-24 14:06:00'),
+(5951, 1, 'admin', 'GET', '47.31.208.90', '[]', '2021-04-26 04:44:57', '2021-04-26 04:44:57'),
+(5952, 1, 'admin/banner-images', 'GET', '47.31.208.90', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 04:46:30', '2021-04-26 04:46:30'),
+(5953, 1, 'admin', 'GET', '47.31.208.90', '[]', '2021-04-26 05:18:05', '2021-04-26 05:18:05'),
+(5954, 1, 'admin', 'GET', '47.31.208.90', '[]', '2021-04-26 07:30:46', '2021-04-26 07:30:46'),
+(5955, 1, 'admin', 'GET', '47.31.215.96', '[]', '2021-04-26 11:55:53', '2021-04-26 11:55:53'),
+(5956, 1, 'admin/banner-images', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 11:56:23', '2021-04-26 11:56:23'),
+(5957, 1, 'admin/time-slots', 'GET', '47.31.215.96', '[]', '2021-04-26 11:57:01', '2021-04-26 11:57:01'),
+(5958, 1, 'admin/time-slots/create', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 11:57:04', '2021-04-26 11:57:04'),
+(5959, 1, 'admin/time-slots', 'POST', '47.31.215.96', '{\"time_from\":\"9 am\",\"time_to\":\"10 am\",\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/time-slots\"}', '2021-04-26 11:58:19', '2021-04-26 11:58:19'),
+(5960, 1, 'admin/time-slots/create', 'GET', '47.31.215.96', '[]', '2021-04-26 11:58:20', '2021-04-26 11:58:20'),
+(5961, 1, 'admin/time-slots', 'POST', '47.31.215.96', '{\"time_from\":\"9 am\",\"time_to\":\"10 am\",\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\"}', '2021-04-26 12:02:03', '2021-04-26 12:02:03'),
+(5962, 1, 'admin/time-slots/create', 'GET', '47.31.215.96', '[]', '2021-04-26 12:02:04', '2021-04-26 12:02:04'),
+(5963, 1, 'admin/time-slots', 'POST', '47.31.215.96', '{\"time_from\":\"9 am\",\"time_to\":\"10 am\",\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\"}', '2021-04-26 12:03:26', '2021-04-26 12:03:26'),
+(5964, 1, 'admin/time-slots', 'GET', '47.31.215.96', '[]', '2021-04-26 12:03:26', '2021-04-26 12:03:26'),
+(5965, 1, 'admin/time-slots/1', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:03:34', '2021-04-26 12:03:34'),
+(5966, 1, 'admin/time-slots', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:03:39', '2021-04-26 12:03:39'),
+(5967, 1, 'admin/time-slots/create', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:03:44', '2021-04-26 12:03:44'),
+(5968, 1, 'admin/time-slots', 'POST', '47.31.215.96', '{\"time_from\":\"10 am\",\"time_to\":\"11 am\",\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/time-slots\"}', '2021-04-26 12:04:01', '2021-04-26 12:04:01'),
+(5969, 1, 'admin/time-slots', 'GET', '47.31.215.96', '[]', '2021-04-26 12:04:01', '2021-04-26 12:04:01'),
+(5970, 1, 'admin/time-slots', 'GET', '47.31.215.96', '{\"_columns_\":\"id,time_from,time_to\",\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:04:13', '2021-04-26 12:04:13'),
+(5971, 1, 'admin/time-slots', 'GET', '47.31.215.96', '{\"_columns_\":\"id,time_from,time_to\"}', '2021-04-26 12:04:15', '2021-04-26 12:04:15'),
+(5972, 1, 'admin/time-slots', 'GET', '47.31.215.96', '[]', '2021-04-26 12:04:32', '2021-04-26 12:04:32'),
+(5973, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '[]', '2021-04-26 12:04:53', '2021-04-26 12:04:53'),
+(5974, 1, 'admin/auth/menu', 'POST', '47.31.215.96', '{\"parent_id\":\"0\",\"title\":\"Time Slots\",\"icon\":\"fa-calendar\",\"uri\":\"time-slots\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\"}', '2021-04-26 12:05:40', '2021-04-26 12:05:40'),
+(5975, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '[]', '2021-04-26 12:05:40', '2021-04-26 12:05:40'),
+(5976, 1, 'admin/auth/menu', 'POST', '47.31.215.96', '{\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":19},{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":18},{\\\"id\\\":21},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":9},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":11},{\\\"id\\\":20}]\"}', '2021-04-26 12:05:51', '2021-04-26 12:05:51'),
+(5977, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:05:51', '2021-04-26 12:05:51'),
+(5978, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '[]', '2021-04-26 12:05:53', '2021-04-26 12:05:53'),
+(5979, 1, 'admin/time-slots', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:05:58', '2021-04-26 12:05:58'),
+(5980, 1, 'admin/time-slots', 'GET', '47.31.215.96', '[]', '2021-04-26 12:08:47', '2021-04-26 12:08:47'),
+(5981, 1, 'admin/app_settings', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:08:59', '2021-04-26 12:08:59'),
+(5982, 1, 'admin/app_settings/1/edit', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:09:13', '2021-04-26 12:09:13'),
+(5983, 1, 'admin/app_settings/1', 'PUT', '47.31.215.96', '{\"application_name\":\"Rith Laundry\",\"contact_number\":\"9876543210\",\"email\":\"support@rithlaundry.com\",\"country\":\"India\",\"default_currency\":\"$\",\"currency_short_code\":\"INR\",\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/app_settings\"}', '2021-04-26 12:09:38', '2021-04-26 12:09:38'),
+(5984, 1, 'admin/app_settings', 'GET', '47.31.215.96', '[]', '2021-04-26 12:09:39', '2021-04-26 12:09:39'),
+(5985, 1, 'admin/app_settings/1/edit', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:09:44', '2021-04-26 12:09:44'),
+(5986, 1, 'admin/banner-images', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:10:04', '2021-04-26 12:10:04'),
+(5987, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '[]', '2021-04-26 12:10:16', '2021-04-26 12:10:16'),
+(5988, 1, 'admin/auth/menu/20', 'DELETE', '47.31.215.96', '{\"_method\":\"delete\",\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\"}', '2021-04-26 12:10:20', '2021-04-26 12:10:20'),
+(5989, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:10:21', '2021-04-26 12:10:21'),
+(5990, 1, 'admin/auth/menu', 'POST', '47.31.215.96', '{\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":19},{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":18},{\\\"id\\\":21},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":9},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":11}]\"}', '2021-04-26 12:10:26', '2021-04-26 12:10:26'),
+(5991, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:10:27', '2021-04-26 12:10:27'),
+(5992, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '[]', '2021-04-26 12:10:29', '2021-04-26 12:10:29'),
+(5993, 1, 'admin/auth/menu', 'POST', '47.31.215.96', '{\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":19},{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":18},{\\\"id\\\":21},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":9},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":11}]\"}', '2021-04-26 12:10:50', '2021-04-26 12:10:50'),
+(5994, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '[]', '2021-04-26 12:10:50', '2021-04-26 12:10:50'),
+(5995, 1, 'admin/auth/menu', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:10:52', '2021-04-26 12:10:52'),
+(5996, 1, 'admin/time-slots', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:12:18', '2021-04-26 12:12:18'),
+(5997, 1, 'admin/time-slots', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:12:20', '2021-04-26 12:12:20'),
+(5998, 1, 'admin/time-slots/create', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 12:15:05', '2021-04-26 12:15:05'),
+(5999, 1, 'admin/time-slots', 'POST', '47.31.215.96', '{\"time_from\":\"11 am\",\"time_to\":\"12 am\",\"_token\":\"hRHa2omZ7TkRzgpPbTEJ0D3Z3vRAhfz7QdICcpAk\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/time-slots\"}', '2021-04-26 12:15:19', '2021-04-26 12:15:19'),
+(6000, 1, 'admin/time-slots', 'GET', '47.31.215.96', '[]', '2021-04-26 12:15:23', '2021-04-26 12:15:23'),
+(6001, 1, 'admin/time-slots', 'GET', '47.31.215.96', '[]', '2021-04-26 12:21:07', '2021-04-26 12:21:07'),
+(6002, 1, 'admin/services', 'GET', '47.31.215.96', '{\"_pjax\":\"#pjax-container\"}', '2021-04-26 13:18:21', '2021-04-26 13:18:21'),
+(6003, 1, 'admin', 'GET', '47.31.203.113', '[]', '2021-04-27 03:52:42', '2021-04-27 03:52:42'),
+(6004, 1, 'admin', 'GET', '47.31.203.113', '[]', '2021-04-27 03:52:45', '2021-04-27 03:52:45'),
+(6005, 1, 'admin/customers', 'GET', '47.31.203.113', '{\"_pjax\":\"#pjax-container\"}', '2021-04-27 03:52:58', '2021-04-27 03:52:58'),
+(6006, 1, 'admin/customers', 'GET', '47.31.203.113', '[]', '2021-04-27 04:42:38', '2021-04-27 04:42:38'),
+(6007, 1, 'admin', 'GET', '47.31.206.146', '[]', '2021-04-28 04:14:32', '2021-04-28 04:14:32'),
+(6008, 1, 'admin/time-slots', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 04:14:41', '2021-04-28 04:14:41'),
+(6009, 1, 'admin/time-slots/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 04:14:46', '2021-04-28 04:14:46'),
+(6010, 1, 'admin/time-slots/1', 'PUT', '47.31.206.146', '{\"time_from\":\"09 am\",\"time_to\":\"10 am\",\"_token\":\"MNRtDtiJOvJA6t1cvK6bD8EoHtdEYcQEV0suJZ1U\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/time-slots\"}', '2021-04-28 04:14:52', '2021-04-28 04:14:52'),
+(6011, 1, 'admin/time-slots', 'GET', '47.31.206.146', '[]', '2021-04-28 04:14:52', '2021-04-28 04:14:52'),
+(6012, 1, 'admin/time-slots', 'GET', '47.31.206.146', '[]', '2021-04-28 07:32:30', '2021-04-28 07:32:30'),
+(6013, 1, 'admin/time-slots', 'GET', '47.31.206.146', '[]', '2021-04-28 07:46:45', '2021-04-28 07:46:45'),
+(6014, 1, 'admin/time-slots', 'GET', '47.31.206.146', '[]', '2021-04-28 07:47:23', '2021-04-28 07:47:23'),
+(6015, 1, 'admin/customers', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:04:38', '2021-04-28 10:04:38'),
+(6016, 1, 'admin/fare_managements', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:04:44', '2021-04-28 10:04:44'),
+(6017, 1, 'admin/fare_managements/create', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:04:49', '2021-04-28 10:04:49'),
+(6018, 1, 'admin/get_products', 'GET', '47.31.206.146', '{\"q\":\"2\"}', '2021-04-28 10:04:58', '2021-04-28 10:04:58'),
+(6019, 1, 'admin/products', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:05:06', '2021-04-28 10:05:06'),
+(6020, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:05:25', '2021-04-28 10:05:25'),
+(6021, 1, 'admin/auth/menu/18', 'DELETE', '47.31.206.146', '{\"_method\":\"delete\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\"}', '2021-04-28 10:05:38', '2021-04-28 10:05:38'),
+(6022, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:05:38', '2021-04-28 10:05:38'),
+(6023, 1, 'admin/auth/menu', 'POST', '47.31.206.146', '{\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":19},{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":21},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":9},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":11}]\"}', '2021-04-28 10:05:53', '2021-04-28 10:05:53'),
+(6024, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:05:53', '2021-04-28 10:05:53'),
+(6025, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:05:59', '2021-04-28 10:05:59'),
+(6026, 1, 'admin/privacy_policies', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:06:06', '2021-04-28 10:06:06'),
+(6027, 1, 'admin/privacy_policies/create', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:06:10', '2021-04-28 10:06:10'),
+(6028, 1, 'admin/categories', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:06:20', '2021-04-28 10:06:20'),
+(6029, 1, 'admin/units', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:06:26', '2021-04-28 10:06:26'),
+(6030, 1, 'admin/promo_codes', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:07:15', '2021-04-28 10:07:15'),
+(6031, 1, 'admin/labels', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:07:16', '2021-04-28 10:07:16'),
+(6032, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:07:29', '2021-04-28 10:07:29'),
+(6033, 1, 'admin/auth/menu/9', 'DELETE', '47.31.206.146', '{\"_method\":\"delete\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\"}', '2021-04-28 10:07:35', '2021-04-28 10:07:35'),
+(6034, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:07:35', '2021-04-28 10:07:35'),
+(6035, 1, 'admin/auth/menu', 'POST', '47.31.206.146', '{\"parent_id\":\"0\",\"title\":\"test\",\"icon\":\"fa-bars\",\"uri\":null,\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\"}', '2021-04-28 10:08:35', '2021-04-28 10:08:35'),
+(6036, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:08:37', '2021-04-28 10:08:37'),
+(6037, 1, 'admin/auth/menu', 'POST', '47.31.206.146', '{\"parent_id\":\"25\",\"title\":\"test1\",\"icon\":\"fa-bars\",\"uri\":null,\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\"}', '2021-04-28 10:09:10', '2021-04-28 10:09:10'),
+(6038, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:09:10', '2021-04-28 10:09:10'),
+(6039, 1, 'admin/auth/menu', 'POST', '47.31.206.146', '{\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_order\":\"[{\\\"id\\\":25,\\\"children\\\":[{\\\"id\\\":26}]},{\\\"id\\\":1},{\\\"id\\\":19},{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":21},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":11}]\"}', '2021-04-28 10:09:22', '2021-04-28 10:09:22'),
+(6040, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:09:23', '2021-04-28 10:09:23'),
+(6041, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:09:23', '2021-04-28 10:09:23'),
+(6042, 1, 'admin/auth/menu/25/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:09:34', '2021-04-28 10:09:34'),
+(6043, 1, 'admin/auth/menu/25', 'PUT', '47.31.206.146', '{\"parent_id\":\"0\",\"title\":\"Management\",\"icon\":\"fa-bars\",\"uri\":null,\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/auth\\/menu\"}', '2021-04-28 10:10:08', '2021-04-28 10:10:08'),
+(6044, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:10:10', '2021-04-28 10:10:10'),
+(6045, 1, 'admin/auth/menu/26', 'DELETE', '47.31.206.146', '{\"_method\":\"delete\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\"}', '2021-04-28 10:10:19', '2021-04-28 10:10:19'),
+(6046, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:10:19', '2021-04-28 10:10:19'),
+(6047, 1, 'admin/auth/menu/19/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:10:22', '2021-04-28 10:10:22'),
+(6048, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:10:25', '2021-04-28 10:10:25'),
+(6049, 1, 'admin/auth/menu/10/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:10:30', '2021-04-28 10:10:30'),
+(6050, 1, 'admin/auth/menu/10', 'PUT', '47.31.206.146', '{\"parent_id\":\"25\",\"title\":\"Services\",\"icon\":\"fa-align-justify\",\"uri\":\"services\",\"roles\":[\"1\",null],\"permission\":null,\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/auth\\/menu\"}', '2021-04-28 10:10:36', '2021-04-28 10:10:36'),
+(6051, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:10:36', '2021-04-28 10:10:36'),
+(6052, 1, 'admin/auth/menu/13/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:10:40', '2021-04-28 10:10:40'),
+(6053, 1, 'admin/auth/menu/13', 'PUT', '47.31.206.146', '{\"parent_id\":\"25\",\"title\":\"Categories\",\"icon\":\"fa-bars\",\"uri\":\"categories\",\"roles\":[\"1\",null],\"permission\":null,\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/auth\\/menu\"}', '2021-04-28 10:10:47', '2021-04-28 10:10:47'),
+(6054, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:10:49', '2021-04-28 10:10:49'),
+(6055, 1, 'admin/auth/menu/17/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:10:56', '2021-04-28 10:10:56'),
+(6056, 1, 'admin/auth/menu/17', 'PUT', '47.31.206.146', '{\"parent_id\":\"25\",\"title\":\"Products\",\"icon\":\"fa-align-justify\",\"uri\":\"products\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/auth\\/menu\"}', '2021-04-28 10:11:05', '2021-04-28 10:11:05'),
+(6057, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:11:05', '2021-04-28 10:11:05'),
+(6058, 1, 'admin/auth/menu', 'POST', '47.31.206.146', '{\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":25,\\\"children\\\":[{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17}]},{\\\"id\\\":19},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":21},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":11}]\"}', '2021-04-28 10:11:25', '2021-04-28 10:11:25'),
+(6059, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:11:26', '2021-04-28 10:11:26');
+INSERT INTO `admin_operation_log` (`id`, `user_id`, `path`, `method`, `ip`, `input`, `created_at`, `updated_at`) VALUES
+(6060, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 10:11:28', '2021-04-28 10:11:28'),
+(6061, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:11:41', '2021-04-28 10:11:41'),
+(6062, 1, 'admin/payment-methods', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:12:40', '2021-04-28 10:12:40'),
+(6063, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:13:10', '2021-04-28 10:13:10'),
+(6064, 1, 'admin/orders', 'GET', '47.31.206.146', '[]', '2021-04-28 10:19:11', '2021-04-28 10:19:11'),
+(6065, 1, 'admin/delivery_boys', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:19:25', '2021-04-28 10:19:25'),
+(6066, 1, 'admin/delivery_boys/create', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:19:27', '2021-04-28 10:19:27'),
+(6067, 1, 'admin/delivery_boys', 'POST', '47.31.206.146', '{\"delivery_boy_name\":\"test Driver\",\"phone_number\":\"1234567890\",\"email\":\"test@test.com\",\"password\":\"123456\",\"status\":\"1\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/delivery_boys\"}', '2021-04-28 10:20:10', '2021-04-28 10:20:10'),
+(6068, 1, 'admin/delivery_boys/create', 'GET', '47.31.206.146', '[]', '2021-04-28 10:20:11', '2021-04-28 10:20:11'),
+(6069, 1, 'admin/delivery_boys', 'POST', '47.31.206.146', '{\"delivery_boy_name\":\"test Driver\",\"phone_number\":\"1234567892\",\"email\":\"test@test.com\",\"password\":\"123456\",\"status\":\"1\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\"}', '2021-04-28 10:20:28', '2021-04-28 10:20:28'),
+(6070, 1, 'admin/delivery_boys/create', 'GET', '47.31.206.146', '[]', '2021-04-28 10:20:30', '2021-04-28 10:20:30'),
+(6071, 1, 'admin/delivery_boys', 'POST', '47.31.206.146', '{\"delivery_boy_name\":\"test Driver\",\"phone_number\":\"1234567892\",\"email\":\"test@test123.com\",\"password\":\"123456\",\"status\":\"1\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\"}', '2021-04-28 10:21:11', '2021-04-28 10:21:11'),
+(6072, 1, 'admin/delivery_boys/create', 'GET', '47.31.206.146', '[]', '2021-04-28 10:21:12', '2021-04-28 10:21:12'),
+(6073, 1, 'admin/delivery_boys', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:21:22', '2021-04-28 10:21:22'),
+(6074, 1, 'admin/delivery_boys/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:21:29', '2021-04-28 10:21:29'),
+(6075, 1, 'admin/delivery_boys', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:21:35', '2021-04-28 10:21:35'),
+(6076, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:21:39', '2021-04-28 10:21:39'),
+(6077, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:21:42', '2021-04-28 10:21:42'),
+(6078, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:22:01', '2021-04-28 10:22:01'),
+(6079, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:22:47', '2021-04-28 10:22:47'),
+(6080, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:22:59', '2021-04-28 10:22:59'),
+(6081, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:23:07', '2021-04-28 10:23:07'),
+(6082, 1, 'admin/orders/1', 'PUT', '47.31.206.146', '{\"order_id\":\"wetwreyerwyuwtry\",\"delivered_by\":\"1\",\"status\":\"7\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-04-28 10:23:16', '2021-04-28 10:23:16'),
+(6083, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '[]', '2021-04-28 10:23:16', '2021-04-28 10:23:16'),
+(6084, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:23:36', '2021-04-28 10:23:36'),
+(6085, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:23:39', '2021-04-28 10:23:39'),
+(6086, 1, 'admin/orders/1', 'PUT', '47.31.206.146', '{\"order_id\":\"wetwreyerwyuwtry\",\"delivered_by\":\"1\",\"status\":\"6\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-04-28 10:23:49', '2021-04-28 10:23:49'),
+(6087, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '[]', '2021-04-28 10:23:49', '2021-04-28 10:23:49'),
+(6088, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:24:27', '2021-04-28 10:24:27'),
+(6089, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:24:50', '2021-04-28 10:24:50'),
+(6090, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:24:53', '2021-04-28 10:24:53'),
+(6091, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:25:00', '2021-04-28 10:25:00'),
+(6092, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:25:16', '2021-04-28 10:25:16'),
+(6093, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:25:22', '2021-04-28 10:25:22'),
+(6094, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:25:30', '2021-04-28 10:25:30'),
+(6095, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:27:36', '2021-04-28 10:27:36'),
+(6096, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:28:12', '2021-04-28 10:28:12'),
+(6097, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:28:15', '2021-04-28 10:28:15'),
+(6098, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:28:18', '2021-04-28 10:28:18'),
+(6099, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:31:46', '2021-04-28 10:31:46'),
+(6100, 1, 'admin/orders', 'GET', '47.31.206.146', '[]', '2021-04-28 10:33:12', '2021-04-28 10:33:12'),
+(6101, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:33:46', '2021-04-28 10:33:46'),
+(6102, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:33:54', '2021-04-28 10:33:54'),
+(6103, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:34:05', '2021-04-28 10:34:05'),
+(6104, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:34:15', '2021-04-28 10:34:15'),
+(6105, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:34:43', '2021-04-28 10:34:43'),
+(6106, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:37:10', '2021-04-28 10:37:10'),
+(6107, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:37:13', '2021-04-28 10:37:13'),
+(6108, 1, 'admin/orders/1', 'PUT', '47.31.206.146', '{\"order_id\":\"wetwreyerwyuwtry\",\"delivered_by\":null,\"status\":\"6\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-04-28 10:37:26', '2021-04-28 10:37:26'),
+(6109, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '[]', '2021-04-28 10:37:26', '2021-04-28 10:37:26'),
+(6110, 1, 'admin/orders/1', 'PUT', '47.31.206.146', '{\"order_id\":\"wetwreyerwyuwtry\",\"delivered_by\":\"1\",\"status\":\"5\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\"}', '2021-04-28 10:37:34', '2021-04-28 10:37:34'),
+(6111, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '[]', '2021-04-28 10:37:35', '2021-04-28 10:37:35'),
+(6112, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:40:54', '2021-04-28 10:40:54'),
+(6113, 1, 'admin/services', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:41:22', '2021-04-28 10:41:22'),
+(6114, 1, 'admin/services/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:41:27', '2021-04-28 10:41:27'),
+(6115, 1, 'admin/services/1', 'PUT', '47.31.206.146', '{\"service_name\":\"Wash only.\",\"description\":\"2 hours min\",\"status\":\"1\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-04-28 10:41:35', '2021-04-28 10:41:35'),
+(6116, 1, 'admin/services', 'GET', '47.31.206.146', '[]', '2021-04-28 10:41:35', '2021-04-28 10:41:35'),
+(6117, 1, 'admin/services/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:41:40', '2021-04-28 10:41:40'),
+(6118, 1, 'admin/services/1', 'PUT', '47.31.206.146', '{\"service_name\":\"Wash only\",\"description\":\"2 hours min\",\"status\":\"1\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-04-28 10:41:46', '2021-04-28 10:41:46'),
+(6119, 1, 'admin/services', 'GET', '47.31.206.146', '[]', '2021-04-28 10:41:47', '2021-04-28 10:41:47'),
+(6120, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:41:58', '2021-04-28 10:41:58'),
+(6121, 1, 'admin/time-slots', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:42:00', '2021-04-28 10:42:00'),
+(6122, 1, 'admin/banner-images', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:42:10', '2021-04-28 10:42:10'),
+(6123, 1, 'admin/payment-methods', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:42:17', '2021-04-28 10:42:17'),
+(6124, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 10:42:31', '2021-04-28 10:42:31'),
+(6125, 1, 'admin/orders', 'GET', '47.31.206.146', '[]', '2021-04-28 11:12:59', '2021-04-28 11:12:59'),
+(6126, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:13:01', '2021-04-28 11:13:01'),
+(6127, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:13:31', '2021-04-28 11:13:31'),
+(6128, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:13:44', '2021-04-28 11:13:44'),
+(6129, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:14:12', '2021-04-28 11:14:12'),
+(6130, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:15:20', '2021-04-28 11:15:20'),
+(6131, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:16:11', '2021-04-28 11:16:11'),
+(6132, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:27:34', '2021-04-28 11:27:34'),
+(6133, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:27:48', '2021-04-28 11:27:48'),
+(6134, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:30:04', '2021-04-28 11:30:04'),
+(6135, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:30:28', '2021-04-28 11:30:28'),
+(6136, 1, 'admin/payment-methods', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:30:55', '2021-04-28 11:30:55'),
+(6137, 1, 'admin/payment-methods/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:00', '2021-04-28 11:31:00'),
+(6138, 1, 'admin/payment-methods', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:04', '2021-04-28 11:31:04'),
+(6139, 1, 'admin/promo_codes', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:11', '2021-04-28 11:31:11'),
+(6140, 1, 'admin/promo_codes/create', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:14', '2021-04-28 11:31:14'),
+(6141, 1, 'admin/promo_codes', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:17', '2021-04-28 11:31:17'),
+(6142, 1, 'admin/units', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:19', '2021-04-28 11:31:19'),
+(6143, 1, 'admin/promo_codes', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:29', '2021-04-28 11:31:29'),
+(6144, 1, 'admin/privacy_policies', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:34', '2021-04-28 11:31:34'),
+(6145, 1, 'admin/app_settings', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:38', '2021-04-28 11:31:38'),
+(6146, 1, 'admin/app_settings/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:42', '2021-04-28 11:31:42'),
+(6147, 1, 'admin/app_settings', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:31:58', '2021-04-28 11:31:58'),
+(6148, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 11:32:22', '2021-04-28 11:32:22'),
+(6149, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 11:32:22', '2021-04-28 11:32:22'),
+(6150, 1, 'admin/auth/menu/19/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:32:30', '2021-04-28 11:32:30'),
+(6151, 1, 'admin/auth/menu/19', 'PUT', '47.31.206.146', '{\"parent_id\":\"0\",\"title\":\"Orders\",\"icon\":\"fa-th-list\",\"uri\":\"orders\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/auth\\/menu\"}', '2021-04-28 11:33:14', '2021-04-28 11:33:14'),
+(6152, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 11:33:14', '2021-04-28 11:33:14'),
+(6153, 1, 'admin/auth/menu', 'GET', '47.31.206.146', '[]', '2021-04-28 11:33:16', '2021-04-28 11:33:16'),
+(6154, 1, 'admin', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:33:35', '2021-04-28 11:33:35'),
+(6155, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:33:44', '2021-04-28 11:33:44'),
+(6156, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:33:48', '2021-04-28 11:33:48'),
+(6157, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:33:54', '2021-04-28 11:33:54'),
+(6158, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:33:56', '2021-04-28 11:33:56'),
+(6159, 1, 'admin/orders/1', 'PUT', '47.31.206.146', '{\"order_id\":\"wetwreyerwyuwtry\",\"delivered_by\":\"1\",\"status\":\"7\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-04-28 11:34:02', '2021-04-28 11:34:02'),
+(6160, 1, 'admin/orders/1/edit', 'GET', '47.31.206.146', '[]', '2021-04-28 11:34:02', '2021-04-28 11:34:02'),
+(6161, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:34:30', '2021-04-28 11:34:30'),
+(6162, 1, 'admin', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:34:34', '2021-04-28 11:34:34'),
+(6163, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:35:01', '2021-04-28 11:35:01'),
+(6164, 1, 'admin', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 11:35:05', '2021-04-28 11:35:05'),
+(6165, 1, 'admin', 'GET', '47.31.206.146', '[]', '2021-04-28 11:35:07', '2021-04-28 11:35:07'),
+(6166, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 12:53:08', '2021-04-28 12:53:08'),
+(6167, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 12:59:42', '2021-04-28 12:59:42'),
+(6168, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 13:19:36', '2021-04-28 13:19:36'),
+(6169, 1, 'admin/view_orders/2', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 13:19:48', '2021-04-28 13:19:48'),
+(6170, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 13:21:02', '2021-04-28 13:21:02'),
+(6171, 1, 'admin/view_orders/1', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 13:21:04', '2021-04-28 13:21:04'),
+(6172, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 13:21:10', '2021-04-28 13:21:10'),
+(6173, 1, 'admin/orders', 'GET', '47.31.206.146', '[]', '2021-04-28 13:25:28', '2021-04-28 13:25:28'),
+(6174, 1, 'admin/orders', 'GET', '47.31.206.146', '[]', '2021-04-28 13:26:04', '2021-04-28 13:26:04'),
+(6175, 1, 'admin/view_orders/2', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 13:26:36', '2021-04-28 13:26:36'),
+(6176, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 13:26:53', '2021-04-28 13:26:53'),
+(6177, 1, 'admin/orders/1', 'DELETE', '47.31.206.146', '{\"_method\":\"delete\",\"_token\":\"KnWmPff1I8u7tpdf5ktgdkwRmI4rEF2tmrMWh75l\"}', '2021-04-28 13:27:30', '2021-04-28 13:27:30'),
+(6178, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 13:27:30', '2021-04-28 13:27:30'),
+(6179, 1, 'admin/orders', 'GET', '47.31.206.146', '[]', '2021-04-28 14:11:11', '2021-04-28 14:11:11'),
+(6180, 1, 'admin/view_orders/3', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 14:11:15', '2021-04-28 14:11:15'),
+(6181, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 14:32:13', '2021-04-28 14:32:13'),
+(6182, 1, 'admin/view_orders/4', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 14:33:11', '2021-04-28 14:33:11'),
+(6183, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 14:33:19', '2021-04-28 14:33:19'),
+(6184, 1, 'admin/orders', 'GET', '47.31.206.146', '[]', '2021-04-28 14:43:49', '2021-04-28 14:43:49'),
+(6185, 1, 'admin', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 14:43:53', '2021-04-28 14:43:53'),
+(6186, 1, 'admin/orders', 'GET', '47.31.206.146', '{\"_pjax\":\"#pjax-container\"}', '2021-04-28 14:43:59', '2021-04-28 14:43:59'),
+(6187, 1, 'admin/orders', 'GET', '47.31.212.123', '[]', '2021-04-29 03:27:52', '2021-04-29 03:27:52'),
+(6188, 1, 'admin', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 03:27:53', '2021-04-29 03:27:53'),
+(6189, 1, 'admin', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 03:28:02', '2021-04-29 03:28:02'),
+(6190, 1, 'admin/customers', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 03:28:07', '2021-04-29 03:28:07'),
+(6191, 1, 'admin/orders', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 03:28:17', '2021-04-29 03:28:17'),
+(6192, 1, 'admin/view_orders/2', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 03:28:21', '2021-04-29 03:28:21'),
+(6193, 1, 'admin/orders', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 03:28:27', '2021-04-29 03:28:27'),
+(6194, 1, 'admin/orders', 'GET', '47.31.212.123', '[]', '2021-04-29 03:48:42', '2021-04-29 03:48:42'),
+(6195, 1, 'admin', 'GET', '103.163.151.59', '[]', '2021-04-29 04:34:09', '2021-04-29 04:34:09'),
+(6196, 1, 'admin/services', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:35:46', '2021-04-29 04:35:46'),
+(6197, 1, 'admin/services', 'GET', '103.163.151.59', '[]', '2021-04-29 04:35:48', '2021-04-29 04:35:48'),
+(6198, 1, 'admin/orders', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:37:49', '2021-04-29 04:37:49'),
+(6199, 1, 'admin/view_orders/2', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:38:12', '2021-04-29 04:38:12'),
+(6200, 1, 'admin/banner-images', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:39:55', '2021-04-29 04:39:55'),
+(6201, 1, 'admin/time-slots', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:40:14', '2021-04-29 04:40:14'),
+(6202, 1, 'admin/payment-methods', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:40:44', '2021-04-29 04:40:44'),
+(6203, 1, 'admin/customers', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:41:00', '2021-04-29 04:41:00'),
+(6204, 1, 'admin/delivery_boys', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:41:39', '2021-04-29 04:41:39'),
+(6205, 1, 'admin/promo_codes', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:41:54', '2021-04-29 04:41:54'),
+(6206, 1, 'admin/units', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:42:04', '2021-04-29 04:42:04'),
+(6207, 1, 'admin/faqs', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:42:44', '2021-04-29 04:42:44'),
+(6208, 1, 'admin/app_settings', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:42:56', '2021-04-29 04:42:56'),
+(6209, 1, 'admin/faqs', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:47:28', '2021-04-29 04:47:28'),
+(6210, 1, 'admin/categories', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:53:06', '2021-04-29 04:53:06'),
+(6211, 1, 'admin/categories', 'GET', '103.163.151.59', '[]', '2021-04-29 04:53:29', '2021-04-29 04:53:29'),
+(6212, 1, 'admin/faqs', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:53:34', '2021-04-29 04:53:34'),
+(6213, 1, 'admin', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 04:56:48', '2021-04-29 04:56:48'),
+(6214, 1, 'admin/faqs', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 06:11:22', '2021-04-29 06:11:22'),
+(6215, 1, 'admin/units', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 06:11:28', '2021-04-29 06:11:28'),
+(6216, 1, 'admin/promo_codes', 'GET', '103.163.151.59', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 06:11:32', '2021-04-29 06:11:32'),
+(6217, 1, 'admin/promo_codes', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:21:50', '2021-04-29 09:21:50'),
+(6218, 1, 'admin/promo_codes/create', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:22:22', '2021-04-29 09:22:22'),
+(6219, 1, 'admin/units', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:23:18', '2021-04-29 09:23:18'),
+(6220, 1, 'admin/promo_codes/create', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:23:32', '2021-04-29 09:23:32'),
+(6221, 1, 'admin/orders', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:23:55', '2021-04-29 09:23:55'),
+(6222, 1, 'admin/time-slots', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:24:04', '2021-04-29 09:24:04'),
+(6223, 1, 'admin/payment-methods', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:24:11', '2021-04-29 09:24:11'),
+(6224, 1, 'admin/customers', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:24:24', '2021-04-29 09:24:24'),
+(6225, 1, 'admin/customers/create', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:24:30', '2021-04-29 09:24:30'),
+(6226, 1, 'admin/customers', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:24:38', '2021-04-29 09:24:38'),
+(6227, 1, 'admin', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:25:21', '2021-04-29 09:25:21'),
+(6228, 1, 'admin/orders', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:25:29', '2021-04-29 09:25:29'),
+(6229, 1, 'admin/services', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:25:34', '2021-04-29 09:25:34'),
+(6230, 1, 'admin/categories', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:25:38', '2021-04-29 09:25:38'),
+(6231, 1, 'admin/categories/2/edit', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:25:43', '2021-04-29 09:25:43'),
+(6232, 1, 'admin/categories', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:25:54', '2021-04-29 09:25:54'),
+(6233, 1, 'admin/products', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:26:06', '2021-04-29 09:26:06'),
+(6234, 1, 'admin/app_settings', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:27:09', '2021-04-29 09:27:09'),
+(6235, 1, 'admin/promo_codes', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 09:27:31', '2021-04-29 09:27:31'),
+(6236, 1, 'admin/promo_codes', 'GET', '47.31.212.123', '[]', '2021-04-29 10:02:46', '2021-04-29 10:02:46'),
+(6237, 1, 'admin/orders', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 13:53:52', '2021-04-29 13:53:52'),
+(6238, 1, 'admin/view_orders/2', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 13:53:53', '2021-04-29 13:53:53'),
+(6239, 1, 'admin/orders', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 13:53:56', '2021-04-29 13:53:56'),
+(6240, 1, 'admin/orders/2/edit', 'GET', '47.31.212.123', '{\"_pjax\":\"#pjax-container\"}', '2021-04-29 13:53:58', '2021-04-29 13:53:58'),
+(6241, 1, 'admin', 'GET', '47.31.221.187', '[]', '2021-04-30 04:20:15', '2021-04-30 04:20:15'),
+(6242, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 04:20:24', '2021-04-30 04:20:24'),
+(6243, 1, 'admin/promo_codes/create', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 04:20:28', '2021-04-30 04:20:28'),
+(6244, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 04:20:32', '2021-04-30 04:20:32'),
+(6245, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '[]', '2021-04-30 04:26:10', '2021-04-30 04:26:10'),
+(6246, 1, 'admin/promo_codes/create', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 04:28:22', '2021-04-30 04:28:22'),
+(6247, 1, 'admin/promo_codes', 'POST', '47.31.221.187', '{\"promo_name\":\"New Offers\",\"promo_code\":\"NEWOFFER13\",\"description\":\"This offer is applicable for new user and Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia\",\"promo_type\":\"1\",\"discount\":\"10\",\"status\":\"1\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/promo_codes\"}', '2021-04-30 04:30:07', '2021-04-30 04:30:07'),
+(6248, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '[]', '2021-04-30 04:30:11', '2021-04-30 04:30:11'),
+(6249, 1, 'admin/promo_codes/create', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 04:30:21', '2021-04-30 04:30:21'),
+(6250, 1, 'admin/promo_codes', 'POST', '47.31.221.187', '{\"promo_name\":\"Percent Discount\",\"promo_code\":\"PEROFFER13\",\"description\":\"\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\",\"promo_type\":\"2\",\"discount\":\"10\",\"status\":\"1\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/promo_codes\"}', '2021-04-30 04:32:20', '2021-04-30 04:32:20'),
+(6251, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '[]', '2021-04-30 04:32:20', '2021-04-30 04:32:20'),
+(6252, 1, 'admin', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 04:32:34', '2021-04-30 04:32:34'),
+(6253, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 04:32:36', '2021-04-30 04:32:36'),
+(6254, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\",\"id\":null,\"promo_name\":null,\"status\":null,\"promo_type\":null}', '2021-04-30 04:32:51', '2021-04-30 04:32:51'),
+(6255, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '{\"id\":null,\"promo_name\":null,\"status\":null,\"promo_type\":null}', '2021-04-30 04:57:38', '2021-04-30 04:57:38'),
+(6256, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '{\"id\":null,\"promo_name\":null,\"status\":null,\"promo_type\":null}', '2021-04-30 05:22:14', '2021-04-30 05:22:14'),
+(6257, 1, 'admin/orders', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:37:04', '2021-04-30 05:37:04'),
+(6258, 1, 'admin/orders/2/edit', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:37:08', '2021-04-30 05:37:08'),
+(6259, 1, 'admin/orders/2', 'PUT', '47.31.221.187', '{\"order_id\":\"ORD93571319\",\"delivered_by\":null,\"status\":\"2\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-04-30 05:37:13', '2021-04-30 05:37:13'),
+(6260, 1, 'admin/orders/2/edit', 'GET', '47.31.221.187', '[]', '2021-04-30 05:37:14', '2021-04-30 05:37:14'),
+(6261, 1, 'admin/orders/2', 'PUT', '47.31.221.187', '{\"order_id\":\"ORD93571319\",\"delivered_by\":\"1\",\"status\":\"2\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\"}', '2021-04-30 05:37:18', '2021-04-30 05:37:18'),
+(6262, 1, 'admin/orders/2/edit', 'GET', '47.31.221.187', '[]', '2021-04-30 05:37:21', '2021-04-30 05:37:21'),
+(6263, 1, 'admin/orders', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:38:26', '2021-04-30 05:38:26'),
+(6264, 1, 'admin/orders/3/edit', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:38:32', '2021-04-30 05:38:32'),
+(6265, 1, 'admin/orders/3', 'PUT', '47.31.221.187', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"3\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-04-30 05:38:40', '2021-04-30 05:38:40'),
+(6266, 1, 'admin/orders/3/edit', 'GET', '47.31.221.187', '[]', '2021-04-30 05:38:40', '2021-04-30 05:38:40'),
+(6267, 1, 'admin/orders', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:38:42', '2021-04-30 05:38:42'),
+(6268, 1, 'admin/orders/4/edit', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:38:45', '2021-04-30 05:38:45'),
+(6269, 1, 'admin/orders/4', 'PUT', '47.31.221.187', '{\"order_id\":\"ORD30542021\",\"delivered_by\":\"1\",\"status\":\"4\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-04-30 05:38:53', '2021-04-30 05:38:53'),
+(6270, 1, 'admin/orders/4/edit', 'GET', '47.31.221.187', '[]', '2021-04-30 05:38:53', '2021-04-30 05:38:53'),
+(6271, 1, 'admin/orders', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:38:55', '2021-04-30 05:38:55'),
+(6272, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:50:07', '2021-04-30 05:50:07'),
+(6273, 1, 'admin/promo_codes/1/edit', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:50:21', '2021-04-30 05:50:21'),
+(6274, 1, 'admin/promo_codes/1', 'PUT', '47.31.221.187', '{\"promo_name\":\"Get Rupee 10 Flat discount on order\",\"promo_code\":\"NEWOFFER13\",\"description\":\"This offer is applicable for new user and Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia\",\"promo_type\":\"1\",\"discount\":\"10\",\"status\":\"1\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/promo_codes\"}', '2021-04-30 05:51:06', '2021-04-30 05:51:06'),
+(6275, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '[]', '2021-04-30 05:51:08', '2021-04-30 05:51:08'),
+(6276, 1, 'admin/promo_codes/2/edit', 'GET', '47.31.221.187', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 05:51:13', '2021-04-30 05:51:13'),
+(6277, 1, 'admin/promo_codes/2', 'PUT', '47.31.221.187', '{\"promo_name\":\"Get 10 % discount on special offer\",\"promo_code\":\"PEROFFER13\",\"description\":\"\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\",\"promo_type\":\"2\",\"discount\":\"10\",\"status\":\"1\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/promo_codes\"}', '2021-04-30 05:51:46', '2021-04-30 05:51:46'),
+(6278, 1, 'admin/promo_codes', 'GET', '47.31.221.187', '[]', '2021-04-30 05:52:02', '2021-04-30 05:52:02'),
+(6279, 1, 'admin/promo_codes/1/edit', 'GET', '47.31.209.164', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 07:24:06', '2021-04-30 07:24:06'),
+(6280, 1, 'admin/promo_codes/1', 'PUT', '47.31.209.164', '{\"promo_name\":\"Get Rupee 10 Flat discount on order\",\"promo_code\":\"NEWOFFER13\",\"description\":\"This offer is applicable for new user and Contrary to popular belief, Lorem Ipsum is not simply random text.\",\"promo_type\":\"1\",\"discount\":\"10\",\"status\":\"1\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/promo_codes\"}', '2021-04-30 07:24:14', '2021-04-30 07:24:14'),
+(6281, 1, 'admin/promo_codes', 'GET', '47.31.209.164', '[]', '2021-04-30 07:24:14', '2021-04-30 07:24:14'),
+(6282, 1, 'admin/promo_codes/2/edit', 'GET', '47.31.209.164', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 07:24:18', '2021-04-30 07:24:18'),
+(6283, 1, 'admin/promo_codes/2', 'PUT', '47.31.209.164', '{\"promo_name\":\"Get 10 % discount on special offer\",\"promo_code\":\"PEROFFER13\",\"description\":\"\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\",\"promo_type\":\"2\",\"discount\":\"10\",\"status\":\"1\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/promo_codes\"}', '2021-04-30 07:24:27', '2021-04-30 07:24:27'),
+(6284, 1, 'admin/promo_codes', 'GET', '47.31.209.164', '[]', '2021-04-30 07:24:27', '2021-04-30 07:24:27'),
+(6285, 1, 'admin/promo_codes', 'GET', '47.31.209.164', '[]', '2021-04-30 08:32:35', '2021-04-30 08:32:35'),
+(6286, 1, 'admin/promo_codes', 'GET', '157.37.182.244', '[]', '2021-04-30 10:06:32', '2021-04-30 10:06:32'),
+(6287, 1, 'admin/promo_codes', 'GET', '157.37.182.244', '[]', '2021-04-30 10:29:26', '2021-04-30 10:29:26'),
+(6288, 1, 'admin/banner-images', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 10:31:11', '2021-04-30 10:31:11'),
+(6289, 1, 'admin/banner-images/1/edit', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 10:31:16', '2021-04-30 10:31:16'),
+(6290, 1, 'admin/app_settings', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 11:32:47', '2021-04-30 11:32:47'),
+(6291, 1, 'admin/app_settings', 'GET', '157.37.182.244', '[]', '2021-04-30 11:38:05', '2021-04-30 11:38:05'),
+(6292, 1, 'admin/app_settings', 'GET', '157.37.182.244', '[]', '2021-04-30 11:40:09', '2021-04-30 11:40:09'),
+(6293, 1, 'admin/app_settings/1/edit', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 11:40:12', '2021-04-30 11:40:12'),
+(6294, 1, 'admin/app_settings/1', 'PUT', '157.37.182.244', '{\"application_name\":\"Rith Laundry\",\"contact_number\":\"9876543210\",\"whatsapp_number\":\"7678178911\",\"email\":\"support@rithlaundry.com\",\"country\":\"India\",\"default_currency\":\"\\u20b9\",\"currency_short_code\":\"INR\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/app_settings\"}', '2021-04-30 11:40:26', '2021-04-30 11:40:26'),
+(6295, 1, 'admin/app_settings', 'GET', '157.37.182.244', '[]', '2021-04-30 11:40:26', '2021-04-30 11:40:26'),
+(6296, 1, 'admin/app_settings/1/edit', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 11:40:31', '2021-04-30 11:40:31'),
+(6297, 1, 'admin/app_settings', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 11:40:44', '2021-04-30 11:40:44'),
+(6298, 1, 'admin/app_settings/1/edit', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 11:41:08', '2021-04-30 11:41:08'),
+(6299, 1, 'admin/app_settings/1', 'PUT', '157.37.182.244', '{\"application_name\":\"Rith Laundry\",\"contact_number\":\"9876543210\",\"whatsapp_number\":\"7678178911\",\"email\":\"support@rithlaundry.com\",\"country\":\"India\",\"default_currency\":\"\\u20b9\",\"currency_short_code\":\"INR\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/app_settings\"}', '2021-04-30 11:41:12', '2021-04-30 11:41:12'),
+(6300, 1, 'admin/app_settings', 'GET', '157.37.182.244', '[]', '2021-04-30 11:41:14', '2021-04-30 11:41:14'),
+(6301, 1, 'admin/app_settings/1/edit', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 11:41:16', '2021-04-30 11:41:16'),
+(6302, 1, 'admin/app_settings/1', 'PUT', '157.37.182.244', '{\"application_name\":\"KRYCHE\",\"contact_number\":\"9876543210\",\"whatsapp_number\":\"7678178911\",\"email\":\"support@rithlaundry.com\",\"country\":\"India\",\"default_currency\":\"\\u20b9\",\"currency_short_code\":\"INR\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/app_settings\"}', '2021-04-30 11:41:33', '2021-04-30 11:41:33'),
+(6303, 1, 'admin/app_settings', 'GET', '157.37.182.244', '[]', '2021-04-30 11:41:33', '2021-04-30 11:41:33'),
+(6304, 1, 'admin/app_settings/1/edit', 'GET', '157.37.182.244', '{\"_pjax\":\"#pjax-container\"}', '2021-04-30 11:43:00', '2021-04-30 11:43:00'),
+(6305, 1, 'admin/app_settings/1', 'PUT', '157.37.182.244', '{\"application_name\":\"KRYCHE\",\"contact_number\":\"7678178911\",\"whatsapp_number\":\"7678178911\",\"email\":\"support@kryche.com\",\"country\":\"India\",\"default_currency\":\"\\u20b9\",\"currency_short_code\":\"INR\",\"_token\":\"knN1j5SRoFjPiADQc7FMKEZwAkWld5zTBHnAonZb\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/app_settings\"}', '2021-04-30 11:43:17', '2021-04-30 11:43:17'),
+(6306, 1, 'admin/app_settings', 'GET', '157.37.182.244', '[]', '2021-04-30 11:43:18', '2021-04-30 11:43:18'),
+(6307, 1, 'admin', 'GET', '157.37.191.22', '[]', '2021-05-01 08:29:10', '2021-05-01 08:29:10'),
+(6308, 1, 'admin/orders', 'GET', '157.37.191.22', '{\"_pjax\":\"#pjax-container\"}', '2021-05-01 08:29:30', '2021-05-01 08:29:30'),
+(6309, 1, 'admin/services', 'GET', '157.37.191.22', '{\"_pjax\":\"#pjax-container\"}', '2021-05-01 08:29:41', '2021-05-01 08:29:41'),
+(6310, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:36:08', '2021-05-01 08:36:08'),
+(6311, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:36:30', '2021-05-01 08:36:30'),
+(6312, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:36:58', '2021-05-01 08:36:58'),
+(6313, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:37:05', '2021-05-01 08:37:05'),
+(6314, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:38:03', '2021-05-01 08:38:03'),
+(6315, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:38:44', '2021-05-01 08:38:44'),
+(6316, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:39:26', '2021-05-01 08:39:26'),
+(6317, 1, 'admin/services/1/edit', 'GET', '157.37.191.22', '{\"_pjax\":\"#pjax-container\"}', '2021-05-01 08:39:29', '2021-05-01 08:39:29'),
+(6318, 1, 'admin/services/1/edit', 'GET', '157.37.191.22', '[]', '2021-05-01 08:39:56', '2021-05-01 08:39:56'),
+(6319, 1, 'admin/services/1', 'PUT', '157.37.191.22', '{\"service_name\":\"Wash only\",\"service_time\":\"10\",\"description\":\"10 hours min\",\"status\":\"1\",\"_token\":\"hBqrXYMz1xDJojVvAYAwUh9olkCLKyFcstRbHNgD\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-05-01 08:40:10', '2021-05-01 08:40:10'),
+(6320, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:40:12', '2021-05-01 08:40:12'),
+(6321, 1, 'admin/services/2/edit', 'GET', '157.37.191.22', '{\"_pjax\":\"#pjax-container\"}', '2021-05-01 08:40:16', '2021-05-01 08:40:16'),
+(6322, 1, 'admin/services/2', 'PUT', '157.37.191.22', '{\"service_name\":\"Dry Cleaning\",\"service_time\":\"18\",\"description\":\"18 hours min\",\"status\":\"1\",\"_token\":\"hBqrXYMz1xDJojVvAYAwUh9olkCLKyFcstRbHNgD\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-05-01 08:40:22', '2021-05-01 08:40:22'),
+(6323, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:40:22', '2021-05-01 08:40:22'),
+(6324, 1, 'admin/services/3/edit', 'GET', '157.37.191.22', '{\"_pjax\":\"#pjax-container\"}', '2021-05-01 08:40:25', '2021-05-01 08:40:25'),
+(6325, 1, 'admin/services/3', 'PUT', '157.37.191.22', '{\"service_name\":\"Wash & Iron\",\"service_time\":\"24\",\"description\":\"24 hours min\",\"status\":\"1\",\"_token\":\"hBqrXYMz1xDJojVvAYAwUh9olkCLKyFcstRbHNgD\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/services\"}', '2021-05-01 08:40:32', '2021-05-01 08:40:32'),
+(6326, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 08:40:32', '2021-05-01 08:40:32'),
+(6327, 1, 'admin/services', 'GET', '157.37.191.22', '[]', '2021-05-01 11:57:35', '2021-05-01 11:57:35'),
+(6328, 1, 'admin', 'GET', '157.37.175.141', '[]', '2021-05-03 05:12:19', '2021-05-03 05:12:19'),
+(6329, 1, 'admin/orders', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 05:12:32', '2021-05-03 05:12:32'),
+(6330, 1, 'admin/orders/7/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 05:12:47', '2021-05-03 05:12:47'),
+(6331, 1, 'admin/orders/7/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 06:34:43', '2021-05-03 06:34:43'),
+(6332, 1, 'admin/orders', 'GET', '157.37.175.141', '[]', '2021-05-03 06:34:47', '2021-05-03 06:34:47'),
+(6333, 1, 'admin/orders/6/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:35:13', '2021-05-03 06:35:13'),
+(6334, 1, 'admin/orders/6', 'PUT', '157.37.175.141', '{\"order_id\":\"ORD85519272\",\"delivered_by\":null,\"status\":\"4\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-03 06:35:18', '2021-05-03 06:35:18'),
+(6335, 1, 'admin/orders/6/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 06:35:18', '2021-05-03 06:35:18'),
+(6336, 1, 'admin/orders/6', 'PUT', '157.37.175.141', '{\"order_id\":\"ORD85519272\",\"delivered_by\":\"1\",\"status\":\"4\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_method\":\"PUT\"}', '2021-05-03 06:35:23', '2021-05-03 06:35:23'),
+(6337, 1, 'admin/orders/6/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 06:35:24', '2021-05-03 06:35:24'),
+(6338, 1, 'admin/orders', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:35:30', '2021-05-03 06:35:30'),
+(6339, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:56:29', '2021-05-03 06:56:29'),
+(6340, 1, 'admin/faqs', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:56:32', '2021-05-03 06:56:32'),
+(6341, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:56:37', '2021-05-03 06:56:37'),
+(6342, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:56:49', '2021-05-03 06:56:49'),
+(6343, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:57:23', '2021-05-03 06:57:23'),
+(6344, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:58:40', '2021-05-03 06:58:40'),
+(6345, 1, 'admin/privacy_policies/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 06:58:42', '2021-05-03 06:58:42'),
+(6346, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:06:12', '2021-05-03 07:06:12'),
+(6347, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:06:58', '2021-05-03 07:06:58'),
+(6348, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:07:06', '2021-05-03 07:07:06'),
+(6349, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:07:23', '2021-05-03 07:07:23'),
+(6350, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:08:25', '2021-05-03 07:08:25'),
+(6351, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:08:34', '2021-05-03 07:08:34'),
+(6352, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:14:16', '2021-05-03 07:14:16'),
+(6353, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '[]', '2021-05-03 07:16:54', '2021-05-03 07:16:54'),
+(6354, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '[]', '2021-05-03 07:17:19', '2021-05-03 07:17:19'),
+(6355, 1, 'admin/privacy_policies/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:17:21', '2021-05-03 07:17:21'),
+(6356, 1, 'admin/privacy_policies', 'POST', '157.37.175.141', '{\"title\":\"Terms of use\",\"description\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"status\":\"1\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/privacy_policies\"}', '2021-05-03 07:18:33', '2021-05-03 07:18:33'),
+(6357, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '[]', '2021-05-03 07:18:33', '2021-05-03 07:18:33'),
+(6358, 1, 'admin/privacy_policies/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:18:40', '2021-05-03 07:18:40'),
+(6359, 1, 'admin/privacy_policies', 'POST', '157.37.175.141', '{\"title\":\"Privacy Policy\",\"description\":\"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur\",\"status\":\"1\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/privacy_policies\"}', '2021-05-03 07:19:26', '2021-05-03 07:19:26'),
+(6360, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '[]', '2021-05-03 07:19:26', '2021-05-03 07:19:26'),
+(6361, 1, 'admin/faqs', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:24:06', '2021-05-03 07:24:06'),
+(6362, 1, 'admin/faqs', 'GET', '157.37.175.141', '[]', '2021-05-03 07:25:47', '2021-05-03 07:25:47'),
+(6363, 1, 'admin/faqs/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:25:51', '2021-05-03 07:25:51'),
+(6364, 1, 'admin/faqs', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:26:13', '2021-05-03 07:26:13'),
+(6365, 1, 'admin/faqs/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:26:51', '2021-05-03 07:26:51');
+INSERT INTO `admin_operation_log` (`id`, `user_id`, `path`, `method`, `ip`, `input`, `created_at`, `updated_at`) VALUES
+(6366, 1, 'admin/faqs', 'POST', '157.37.175.141', '{\"question\":\"How do i book my pickup?\",\"answer\":\"We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability   We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability.\",\"status\":\"1\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/faqs\"}', '2021-05-03 07:27:42', '2021-05-03 07:27:42'),
+(6367, 1, 'admin/faqs/create', 'GET', '157.37.175.141', '[]', '2021-05-03 07:27:43', '2021-05-03 07:27:43'),
+(6368, 1, 'admin/faqs', 'POST', '157.37.175.141', '{\"question\":\"How do i book my pickup?\",\"answer\":\"We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability   We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability.\",\"status\":\"1\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\"}', '2021-05-03 07:29:32', '2021-05-03 07:29:32'),
+(6369, 1, 'admin/faqs', 'GET', '157.37.175.141', '[]', '2021-05-03 07:29:33', '2021-05-03 07:29:33'),
+(6370, 1, 'admin/faqs/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:29:37', '2021-05-03 07:29:37'),
+(6371, 1, 'admin/faqs', 'POST', '157.37.175.141', '{\"question\":\"How will I know that my laundry has been picked-up?\",\"answer\":\"We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability\",\"status\":\"1\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/faqs\"}', '2021-05-03 07:30:01', '2021-05-03 07:30:01'),
+(6372, 1, 'admin/faqs', 'GET', '157.37.175.141', '[]', '2021-05-03 07:30:02', '2021-05-03 07:30:02'),
+(6373, 1, 'admin/faqs/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:30:21', '2021-05-03 07:30:21'),
+(6374, 1, 'admin/faqs', 'POST', '157.37.175.141', '{\"question\":\"My concierge doesn\'t accept laundry. What shall I do?\",\"answer\":\"We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability\\r\\n                                We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability\",\"status\":\"1\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/faqs\"}', '2021-05-03 07:30:42', '2021-05-03 07:30:42'),
+(6375, 1, 'admin/faqs', 'GET', '157.37.175.141', '[]', '2021-05-03 07:30:42', '2021-05-03 07:30:42'),
+(6376, 1, 'admin/faqs/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:30:46', '2021-05-03 07:30:46'),
+(6377, 1, 'admin/faqs', 'POST', '157.37.175.141', '{\"question\":\"Do I need to count the items in my order?\",\"answer\":\"items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability\",\"status\":\"1\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/faqs\"}', '2021-05-03 07:31:20', '2021-05-03 07:31:20'),
+(6378, 1, 'admin/faqs', 'GET', '157.37.175.141', '[]', '2021-05-03 07:31:21', '2021-05-03 07:31:21'),
+(6379, 1, 'admin/faqs/create', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 07:31:26', '2021-05-03 07:31:26'),
+(6380, 1, 'admin/faqs', 'POST', '157.37.175.141', '{\"question\":\"What happens to my laundry bag?\",\"answer\":\"sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded,\",\"status\":\"1\",\"_token\":\"C0zQsg3UsYxHzhctFOxITzhwXTaihE4v95RArrrA\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/faqs\"}', '2021-05-03 07:31:57', '2021-05-03 07:31:57'),
+(6381, 1, 'admin/faqs', 'GET', '157.37.175.141', '[]', '2021-05-03 07:31:58', '2021-05-03 07:31:58'),
+(6382, 1, 'admin/faqs', 'GET', '157.37.175.141', '[]', '2021-05-03 08:17:03', '2021-05-03 08:17:03'),
+(6383, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:12:35', '2021-05-03 09:12:35'),
+(6384, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:13:41', '2021-05-03 09:13:41'),
+(6385, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 09:14:41', '2021-05-03 09:14:41'),
+(6386, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 09:15:23', '2021-05-03 09:15:23'),
+(6387, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 09:16:28', '2021-05-03 09:16:28'),
+(6388, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 09:17:26', '2021-05-03 09:17:26'),
+(6389, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 09:17:47', '2021-05-03 09:17:47'),
+(6390, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 09:18:27', '2021-05-03 09:18:27'),
+(6391, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 09:19:29', '2021-05-03 09:19:29'),
+(6392, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:19:58', '2021-05-03 09:19:58'),
+(6393, 1, 'admin/faqs', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:20:04', '2021-05-03 09:20:04'),
+(6394, 1, 'admin/time-slots', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:20:15', '2021-05-03 09:20:15'),
+(6395, 1, 'admin/time-slots/1/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:20:37', '2021-05-03 09:20:37'),
+(6396, 1, 'admin/time-slots', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:20:50', '2021-05-03 09:20:50'),
+(6397, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:20:58', '2021-05-03 09:20:58'),
+(6398, 1, 'admin/banner-images', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:21:22', '2021-05-03 09:21:22'),
+(6399, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:21:27', '2021-05-03 09:21:27'),
+(6400, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:21:32', '2021-05-03 09:21:32'),
+(6401, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:21:41', '2021-05-03 09:21:41'),
+(6402, 1, 'admin/faqs', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:21:46', '2021-05-03 09:21:46'),
+(6403, 1, 'admin/faqs', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 09:24:48', '2021-05-03 09:24:48'),
+(6404, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 11:32:48', '2021-05-03 11:32:48'),
+(6405, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 11:32:50', '2021-05-03 11:32:50'),
+(6406, 1, 'admin/app_settings/1', 'PUT', '157.37.175.141', '{\"application_name\":\"KRYCHE\",\"contact_number\":\"7678178911\",\"whatsapp_number\":\"7678178911\",\"email\":\"support@kryche.com\",\"address\":\"Block A, 2nd Floor, Plot No. 11, 12, 16, 17 Palam Extension, Sector 7 Dwarka, Dwarka, Delhi, 110075\",\"address_lat\":\"28.5851\",\"address_lng\":\"77.0713\",\"country\":\"India\",\"default_currency\":\"\\u20b9\",\"currency_short_code\":\"INR\",\"about_us\":\"this is new Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lacinia placerat nunc pretium efficitur. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla id eros tortor. Etiam ut porttitor dolor. Vivamus interdum, purus a eleifend condimentum, eros erat finibus ex, nec lacinia elit arcu eget neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean elementum quam magna, et ultrices orci dignissim ac. Integer eu viverra lacus. In metus augue, porta sed ullamcorper sit amet, semper a sapien. Etiam congue eu massa sed facilisis. Pellentesque scelerisque viverra rutrum. Maecenas fermentum vehicula tellus. Aliquam sit amet pretium mauris, quis mollis erat.\",\"_token\":\"Mbvn8Kvby41HOJlaYDfNXsO2ojkhcI5AviIn65lp\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/app_settings\"}', '2021-05-03 11:32:57', '2021-05-03 11:32:57'),
+(6407, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '[]', '2021-05-03 11:32:58', '2021-05-03 11:32:58'),
+(6408, 1, 'admin/app_settings/1', 'PUT', '157.37.175.141', '{\"application_name\":\"KRYCHE\",\"contact_number\":\"7678178911\",\"whatsapp_number\":\"7678178911\",\"email\":\"support@kryche.com\",\"address\":\"Block A, 2nd Floor, Plot No. 11, 12, 16, 17 Palam Extension, Sector 7 Dwarka, Dwarka, Delhi, 110075\",\"address_lat\":\"28.5851\",\"address_lng\":\"77.0713\",\"country\":\"India\",\"default_currency\":\"\\u20b9\",\"currency_short_code\":\"INR\",\"about_us\":\"this is new Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lacinia placerat nunc pretium efficitur. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla id eros tortor. Etiam ut porttitor dolor. Vivamus interdum, purus a eleifend condimentum, eros erat finibus ex, nec lacinia elit arcu eget neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean elementum quam magna, et ultrices orci dignissim ac. Integer eu viverra lacus. In metus augue, porta sed ullamcorper sit amet, semper a sapien. Etiam congue eu massa sed facilisis. Pellentesque scelerisque viverra rutrum. Maecenas fermentum vehicula tellus. Aliquam sit amet pretium mauris, quis mollis erat.\",\"_token\":\"Mbvn8Kvby41HOJlaYDfNXsO2ojkhcI5AviIn65lp\",\"_method\":\"PUT\"}', '2021-05-03 11:34:01', '2021-05-03 11:34:01'),
+(6409, 1, 'admin/app_settings', 'GET', '157.37.175.141', '[]', '2021-05-03 11:34:01', '2021-05-03 11:34:01'),
+(6410, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 11:38:28', '2021-05-03 11:38:28'),
+(6411, 1, 'admin/app_settings/1', 'PUT', '157.37.175.141', '{\"application_name\":\"KRYCHE\",\"contact_number\":\"7678178911\",\"whatsapp_number\":\"7678178911\",\"email\":\"support@kryche.com\",\"address\":\"Block A, 2nd Floor, Plot No. 11, 12, 16, 17 Palam Extension, Sector 7 Dwarka, Dwarka, Delhi, 110075\",\"address_lat\":\"28.5851\",\"address_lng\":\"77.0713\",\"country\":\"India\",\"default_currency\":\"\\u20b9\",\"currency_short_code\":\"INR\",\"about_us\":\"this Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lacinia placerat nunc pretium efficitur. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla id eros tortor. Etiam ut porttitor dolor. Vivamus interdum, purus a eleifend condimentum, eros erat finibus ex, nec lacinia elit arcu eget neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean elementum quam magna, et ultrices orci dignissim ac. Integer eu viverra lacus. In metus augue, porta sed ullamcorper sit amet, semper a sapien. Etiam congue eu massa sed facilisis. Pellentesque scelerisque viverra rutrum. Maecenas fermentum vehicula tellus. Aliquam sit amet pretium mauris, quis mollis erat.\",\"_token\":\"Mbvn8Kvby41HOJlaYDfNXsO2ojkhcI5AviIn65lp\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/app_settings\"}', '2021-05-03 11:38:37', '2021-05-03 11:38:37'),
+(6412, 1, 'admin/app_settings', 'GET', '157.37.175.141', '[]', '2021-05-03 11:38:38', '2021-05-03 11:38:38'),
+(6413, 1, 'admin/faqs', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 11:57:51', '2021-05-03 11:57:51'),
+(6414, 1, 'admin/privacy_policies', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 11:59:20', '2021-05-03 11:59:20'),
+(6415, 1, 'admin/app_settings', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 12:00:25', '2021-05-03 12:00:25'),
+(6416, 1, 'admin/app_settings/1/edit', 'GET', '157.37.175.141', '{\"_pjax\":\"#pjax-container\"}', '2021-05-03 12:02:26', '2021-05-03 12:02:26'),
+(6417, 1, 'admin', 'GET', '157.37.180.166', '[]', '2021-05-04 04:38:03', '2021-05-04 04:38:03'),
+(6418, 1, 'admin/orders', 'GET', '157.37.180.166', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 04:38:34', '2021-05-04 04:38:34'),
+(6419, 1, 'admin/view_orders/7', 'GET', '157.37.180.166', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 04:38:45', '2021-05-04 04:38:45'),
+(6420, 1, 'admin/orders', 'GET', '157.37.180.166', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 04:39:01', '2021-05-04 04:39:01'),
+(6421, 1, 'admin/view_orders/6', 'GET', '157.37.180.166', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 04:39:05', '2021-05-04 04:39:05'),
+(6422, 1, 'admin/orders', 'GET', '157.37.180.166', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 04:39:09', '2021-05-04 04:39:09'),
+(6423, 1, 'admin/customers', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 10:05:45', '2021-05-04 10:05:45'),
+(6424, 1, 'admin/customers/13/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 10:05:51', '2021-05-04 10:05:51'),
+(6425, 1, 'admin', 'GET', '157.37.176.40', '[]', '2021-05-04 10:06:01', '2021-05-04 10:06:01'),
+(6426, 1, 'admin/customers/13/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:42:34', '2021-05-04 11:42:34'),
+(6427, 1, 'admin', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 11:42:40', '2021-05-04 11:42:40'),
+(6428, 1, 'admin/orders', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 11:42:47', '2021-05-04 11:42:47'),
+(6429, 1, 'admin/orders/2/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 11:42:50', '2021-05-04 11:42:50'),
+(6430, 1, 'admin/orders/2/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:47:57', '2021-05-04 11:47:57'),
+(6431, 1, 'admin/orders/2', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD93571319\",\"delivered_by\":\"1\",\"status\":\"3\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 11:48:05', '2021-05-04 11:48:05'),
+(6432, 1, 'admin/orders/2/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:48:07', '2021-05-04 11:48:07'),
+(6433, 1, 'admin/orders', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 11:48:58', '2021-05-04 11:48:58'),
+(6434, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 11:49:07', '2021-05-04 11:49:07'),
+(6435, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:49:30', '2021-05-04 11:49:30'),
+(6436, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"2\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\\/2\\/edit\"}', '2021-05-04 11:49:33', '2021-05-04 11:49:33'),
+(6437, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:49:34', '2021-05-04 11:49:34'),
+(6438, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:52:37', '2021-05-04 11:52:37'),
+(6439, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"3\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 11:52:41', '2021-05-04 11:52:41'),
+(6440, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:52:43', '2021-05-04 11:52:43'),
+(6441, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"4\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 11:53:00', '2021-05-04 11:53:00'),
+(6442, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:53:01', '2021-05-04 11:53:01'),
+(6443, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"6\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 11:53:10', '2021-05-04 11:53:10'),
+(6444, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:53:11', '2021-05-04 11:53:11'),
+(6445, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"3\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 11:53:35', '2021-05-04 11:53:35'),
+(6446, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:53:35', '2021-05-04 11:53:35'),
+(6447, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"4\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 11:53:52', '2021-05-04 11:53:52'),
+(6448, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:53:52', '2021-05-04 11:53:52'),
+(6449, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"2\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 11:55:26', '2021-05-04 11:55:26'),
+(6450, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:55:28', '2021-05-04 11:55:28'),
+(6451, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 11:56:12', '2021-05-04 11:56:12'),
+(6452, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"3\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 11:56:16', '2021-05-04 11:56:16'),
+(6453, 1, 'admin/orders', 'GET', '157.37.176.40', '[]', '2021-05-04 11:56:17', '2021-05-04 11:56:17'),
+(6454, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 12:04:41', '2021-05-04 12:04:41'),
+(6455, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"4\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-04 12:04:51', '2021-05-04 12:04:51'),
+(6456, 1, 'admin/orders/3', 'GET', '157.37.176.40', '[]', '2021-05-04 12:05:23', '2021-05-04 12:05:23'),
+(6457, 1, 'admin/orders/3', 'GET', '157.37.176.40', '[]', '2021-05-04 12:05:50', '2021-05-04 12:05:50'),
+(6458, 1, 'admin/orders/3', 'GET', '157.37.176.40', '[]', '2021-05-04 12:05:54', '2021-05-04 12:05:54'),
+(6459, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 12:05:57', '2021-05-04 12:05:57'),
+(6460, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"4\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\\/3\"}', '2021-05-04 12:06:00', '2021-05-04 12:06:00'),
+(6461, 1, 'admin/orders/3', 'GET', '157.37.176.40', '[]', '2021-05-04 12:10:46', '2021-05-04 12:10:46'),
+(6462, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 12:10:48', '2021-05-04 12:10:48'),
+(6463, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"4\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\\/3\"}', '2021-05-04 12:10:50', '2021-05-04 12:10:50'),
+(6464, 1, 'admin/orders/3', 'GET', '157.37.176.40', '[]', '2021-05-04 12:11:18', '2021-05-04 12:11:18'),
+(6465, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 12:11:20', '2021-05-04 12:11:20'),
+(6466, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"3\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\\/3\"}', '2021-05-04 12:11:23', '2021-05-04 12:11:23'),
+(6467, 1, 'admin/orders/3/edit', 'GET', '157.37.176.40', '[]', '2021-05-04 12:11:24', '2021-05-04 12:11:24'),
+(6468, 1, 'admin/orders/3', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"1\",\"status\":\"3\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\"}', '2021-05-04 12:13:10', '2021-05-04 12:13:10'),
+(6469, 1, 'admin/orders', 'GET', '157.37.176.40', '[]', '2021-05-04 12:13:10', '2021-05-04 12:13:10'),
+(6470, 1, 'admin/orders', 'GET', '157.37.176.40', '[]', '2021-05-04 13:01:50', '2021-05-04 13:01:50'),
+(6471, 1, 'admin/orders/4/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 13:01:53', '2021-05-04 13:01:53'),
+(6472, 1, 'admin/orders/4', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD30542021\",\"delivered_by\":\"1\",\"status\":\"2\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-04 13:02:01', '2021-05-04 13:02:01'),
+(6473, 1, 'admin/orders', 'GET', '157.37.176.40', '[]', '2021-05-04 13:02:04', '2021-05-04 13:02:04'),
+(6474, 1, 'admin/orders/6/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 13:02:38', '2021-05-04 13:02:38'),
+(6475, 1, 'admin/orders/6', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD85519272\",\"delivered_by\":\"1\",\"status\":\"7\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-04 13:02:47', '2021-05-04 13:02:47'),
+(6476, 1, 'admin/orders', 'GET', '157.37.176.40', '[]', '2021-05-04 13:02:48', '2021-05-04 13:02:48'),
+(6477, 1, 'admin', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 13:03:25', '2021-05-04 13:03:25'),
+(6478, 1, 'admin/banner-images', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 13:03:30', '2021-05-04 13:03:30'),
+(6479, 1, 'admin/orders', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 13:03:35', '2021-05-04 13:03:35'),
+(6480, 1, 'admin/orders/4/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 13:30:01', '2021-05-04 13:30:01'),
+(6481, 1, 'admin/orders/4', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD30542021\",\"delivered_by\":\"1\",\"status\":\"3\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-04 13:30:04', '2021-05-04 13:30:04'),
+(6482, 1, 'admin/orders', 'GET', '157.37.176.40', '[]', '2021-05-04 13:30:05', '2021-05-04 13:30:05'),
+(6483, 1, 'admin/orders/4/edit', 'GET', '157.37.176.40', '{\"_pjax\":\"#pjax-container\"}', '2021-05-04 13:30:20', '2021-05-04 13:30:20'),
+(6484, 1, 'admin/orders/4', 'PUT', '157.37.176.40', '{\"order_id\":\"ORD30542021\",\"delivered_by\":\"1\",\"status\":\"2\",\"_token\":\"QM88PpUT7x0CHrtEaiSWrM60oSqGktTveXYhl3om\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-04 13:30:26', '2021-05-04 13:30:26'),
+(6485, 1, 'admin/orders', 'GET', '157.37.176.40', '[]', '2021-05-04 13:30:27', '2021-05-04 13:30:27'),
+(6486, 1, 'admin', 'GET', '157.37.183.223', '[]', '2021-05-05 03:46:01', '2021-05-05 03:46:01'),
+(6487, 1, 'admin/banner-images', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:47:28', '2021-05-05 03:47:28'),
+(6488, 1, 'admin/banner-images', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:47:29', '2021-05-05 03:47:29'),
+(6489, 1, 'admin/time-slots', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:48:03', '2021-05-05 03:48:03'),
+(6490, 1, 'admin/customers', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:48:27', '2021-05-05 03:48:27'),
+(6491, 1, 'admin/promo_codes', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:48:32', '2021-05-05 03:48:32'),
+(6492, 1, 'admin/faqs', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:49:09', '2021-05-05 03:49:09'),
+(6493, 1, 'admin/privacy_policies', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:49:21', '2021-05-05 03:49:21'),
+(6494, 1, 'admin/app_settings', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:50:36', '2021-05-05 03:50:36'),
+(6495, 1, 'admin/customers', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:51:00', '2021-05-05 03:51:00'),
+(6496, 1, 'admin/customers/1/edit', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:51:05', '2021-05-05 03:51:05'),
+(6497, 1, 'admin/customers', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 03:51:11', '2021-05-05 03:51:11'),
+(6498, 1, 'admin/customers', 'GET', '157.37.183.223', '[]', '2021-05-05 06:20:37', '2021-05-05 06:20:37'),
+(6499, 1, 'admin/delivery_boys', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:20:49', '2021-05-05 06:20:49'),
+(6500, 1, 'admin/delivery_boys/create', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:20:53', '2021-05-05 06:20:53'),
+(6501, 1, 'admin/customers', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:20:57', '2021-05-05 06:20:57'),
+(6502, 1, 'admin/customers/create', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:20:59', '2021-05-05 06:20:59'),
+(6503, 1, 'admin/customers/create', 'GET', '157.37.183.223', '[]', '2021-05-05 06:22:15', '2021-05-05 06:22:15'),
+(6504, 1, 'admin/app_settings', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:23:07', '2021-05-05 06:23:07'),
+(6505, 1, 'admin/app_settings/1/edit', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:23:11', '2021-05-05 06:23:11'),
+(6506, 1, 'admin/app_settings/1/edit', 'GET', '157.37.183.223', '[]', '2021-05-05 06:26:28', '2021-05-05 06:26:28'),
+(6507, 1, 'admin/app_settings/1/edit', 'GET', '157.37.183.223', '[]', '2021-05-05 06:26:36', '2021-05-05 06:26:36'),
+(6508, 1, 'admin/app_settings/1', 'PUT', '157.37.183.223', '{\"application_name\":\"KRYCHE\",\"contact_number\":\"7678178911\",\"whatsapp_number\":\"7678178911\",\"email\":\"support@kryche.com\",\"address\":\"Block A, 2nd Floor, Plot No. 11, 12, 16, 17 Palam Extension, Sector 7 Dwarka, Dwarka, Delhi, 110075\",\"address_lat\":\"28.5851\",\"address_lng\":\"77.0713\",\"country\":\"India\",\"default_currency\":\"\\u20b9\",\"currency_short_code\":\"INR\",\"about_us\":\"this Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lacinia placerat nunc pretium efficitur. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla id eros tortor. Etiam ut porttitor dolor. Vivamus interdum, purus a eleifend condimentum, eros erat finibus ex, nec lacinia elit arcu eget neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean elementum quam magna, et ultrices orci dignissim ac. Integer eu viverra lacus. In metus augue, porta sed ullamcorper sit amet, semper a sapien. Etiam congue eu massa sed facilisis. Pellentesque scelerisque viverra rutrum. Maecenas fermentum vehicula tellus. Aliquam sit amet pretium mauris, quis mollis erat.\",\"fcm_server_key\":\"AAAA6CbcUU4:APA91bEjXcUD5QHo5eJ70JNWQYhbgmS24mDBwIIwn4sexCbT8mKThwddBoevcjOM8uOcZZ_5E_3MikmSmQgtNiVaeUDnHxKrvh9yY1wan673VZs4TBlpyNS4gK06bKP5C895CP6dNmcD\",\"_token\":\"sIYVyAJpo4PEhTuyLCctzny0Z8xcUCda1SPBALPi\",\"_method\":\"PUT\"}', '2021-05-05 06:26:55', '2021-05-05 06:26:55'),
+(6509, 1, 'admin/app_settings', 'GET', '157.37.183.223', '[]', '2021-05-05 06:26:56', '2021-05-05 06:26:56'),
+(6510, 1, 'admin/delivery_boys', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:53:08', '2021-05-05 06:53:08'),
+(6511, 1, 'admin/delivery_boys/create', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:53:11', '2021-05-05 06:53:11'),
+(6512, 1, 'admin/promo_codes', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:54:14', '2021-05-05 06:54:14'),
+(6513, 1, 'admin/delivery_boys', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:54:16', '2021-05-05 06:54:16'),
+(6514, 1, 'admin/delivery_boys/create', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:54:20', '2021-05-05 06:54:20'),
+(6515, 1, 'admin/delivery_boys', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:54:22', '2021-05-05 06:54:22'),
+(6516, 1, 'admin/delivery_boys/create', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 06:54:25', '2021-05-05 06:54:25'),
+(6517, 1, 'admin/delivery_boys/create', 'GET', '157.37.183.223', '[]', '2021-05-05 07:15:33', '2021-05-05 07:15:33'),
+(6518, 1, 'admin/delivery_boys/create', 'GET', '157.37.183.223', '[]', '2021-05-05 07:15:48', '2021-05-05 07:15:48'),
+(6519, 1, 'admin/delivery_boys', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 07:15:51', '2021-05-05 07:15:51'),
+(6520, 1, 'admin/delivery_boys/create', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 07:15:54', '2021-05-05 07:15:54'),
+(6521, 1, 'admin/delivery_boys', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 07:29:55', '2021-05-05 07:29:55'),
+(6522, 1, 'admin/delivery_boys/1/edit', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 07:29:58', '2021-05-05 07:29:58'),
+(6523, 1, 'admin/delivery_boys', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 08:08:12', '2021-05-05 08:08:12'),
+(6524, 1, 'admin/delivery_boys/1/edit', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 08:08:16', '2021-05-05 08:08:16'),
+(6525, 1, 'admin', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 09:36:28', '2021-05-05 09:36:28'),
+(6526, 1, 'admin', 'GET', '157.37.183.223', '[]', '2021-05-05 09:36:57', '2021-05-05 09:36:57'),
+(6527, 1, 'admin/delivery_boys', 'GET', '157.37.183.223', '{\"_pjax\":\"#pjax-container\"}', '2021-05-05 13:11:25', '2021-05-05 13:11:25'),
+(6528, 1, 'admin', 'GET', '157.37.213.38', '[]', '2021-05-06 04:12:19', '2021-05-06 04:12:19'),
+(6529, 1, 'admin', 'GET', '157.37.213.38', '[]', '2021-05-06 04:12:26', '2021-05-06 04:12:26'),
+(6530, 1, 'admin/orders', 'GET', '157.37.213.38', '{\"_pjax\":\"#pjax-container\"}', '2021-05-06 04:12:36', '2021-05-06 04:12:36'),
+(6531, 1, 'admin/orders/6/edit', 'GET', '157.37.213.38', '{\"_pjax\":\"#pjax-container\"}', '2021-05-06 04:12:48', '2021-05-06 04:12:48'),
+(6532, 1, 'admin/orders', 'GET', '157.37.213.38', '{\"_pjax\":\"#pjax-container\"}', '2021-05-06 04:12:57', '2021-05-06 04:12:57'),
+(6533, 1, 'admin/view_orders/2', 'GET', '157.37.213.38', '{\"_pjax\":\"#pjax-container\"}', '2021-05-06 04:13:26', '2021-05-06 04:13:26'),
+(6534, 1, 'admin/orders', 'GET', '157.37.213.38', '{\"_pjax\":\"#pjax-container\"}', '2021-05-06 04:13:33', '2021-05-06 04:13:33'),
+(6535, 1, 'admin', 'GET', '157.37.213.38', '[]', '2021-05-06 07:07:21', '2021-05-06 07:07:21'),
+(6536, 1, 'admin/orders', 'GET', '157.37.213.38', '{\"_pjax\":\"#pjax-container\"}', '2021-05-06 10:14:20', '2021-05-06 10:14:20'),
+(6537, 1, 'admin/orders/3/edit', 'GET', '157.37.213.38', '{\"_pjax\":\"#pjax-container\"}', '2021-05-06 10:14:39', '2021-05-06 10:14:39'),
+(6538, 1, 'admin/orders/3', 'PUT', '157.37.213.38', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"2\",\"status\":\"4\",\"_token\":\"VRP5DSMSk1TBPycu1g92HsDGEz5XhH3I9WKWWknC\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-06 10:14:47', '2021-05-06 10:14:47'),
+(6539, 1, 'admin/orders', 'GET', '157.37.213.38', '[]', '2021-05-06 10:14:48', '2021-05-06 10:14:48'),
+(6540, 1, 'admin', 'GET', '157.37.193.157', '[]', '2021-05-07 04:12:46', '2021-05-07 04:12:46'),
+(6541, 1, 'admin/orders', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:00:40', '2021-05-07 09:00:40'),
+(6542, 1, 'admin/orders/3/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:00:54', '2021-05-07 09:00:54'),
+(6543, 1, 'admin/orders/3', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"2\",\"status\":\"5\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:01:03', '2021-05-07 09:01:03'),
+(6544, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:01:04', '2021-05-07 09:01:04'),
+(6545, 1, 'admin/orders/5/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:02:01', '2021-05-07 09:02:01'),
+(6546, 1, 'admin/orders', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:02:04', '2021-05-07 09:02:04'),
+(6547, 1, 'admin/orders/6/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:02:08', '2021-05-07 09:02:08'),
+(6548, 1, 'admin/orders/6', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD85519272\",\"delivered_by\":\"2\",\"status\":\"5\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:02:14', '2021-05-07 09:02:14'),
+(6549, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:02:14', '2021-05-07 09:02:14'),
+(6550, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:02:42', '2021-05-07 09:02:42'),
+(6551, 1, 'admin/orders/7', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD54113423\",\"delivered_by\":\"2\",\"status\":\"2\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:02:46', '2021-05-07 09:02:46'),
+(6552, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:02:47', '2021-05-07 09:02:47'),
+(6553, 1, 'admin/orders/6/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:03:47', '2021-05-07 09:03:47'),
+(6554, 1, 'admin/orders/6', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD85519272\",\"delivered_by\":\"2\",\"status\":\"2\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:03:51', '2021-05-07 09:03:51'),
+(6555, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:03:52', '2021-05-07 09:03:52'),
+(6556, 1, 'admin/orders/3/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:05:29', '2021-05-07 09:05:29'),
+(6557, 1, 'admin/orders/3', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD18316715\",\"delivered_by\":\"2\",\"status\":\"2\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:05:32', '2021-05-07 09:05:32'),
+(6558, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:05:33', '2021-05-07 09:05:33'),
+(6559, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:07:15', '2021-05-07 09:07:15'),
+(6560, 1, 'admin/orders/6/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:07:18', '2021-05-07 09:07:18'),
+(6561, 1, 'admin/orders/6', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD85519272\",\"delivered_by\":\"2\",\"status\":\"5\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:07:25', '2021-05-07 09:07:25'),
+(6562, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:07:26', '2021-05-07 09:07:26'),
+(6563, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:16:34', '2021-05-07 09:16:34'),
+(6564, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:16:42', '2021-05-07 09:16:42'),
+(6565, 1, 'admin/orders/7', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD54113423\",\"delivered_by\":\"2\",\"status\":\"5\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:16:47', '2021-05-07 09:16:47'),
+(6566, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '[]', '2021-05-07 09:16:52', '2021-05-07 09:16:52'),
+(6567, 1, 'admin/orders/7', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD54113423\",\"delivered_by\":\"2\",\"status\":\"5\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\"}', '2021-05-07 09:18:31', '2021-05-07 09:18:31'),
+(6568, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '[]', '2021-05-07 09:18:32', '2021-05-07 09:18:32'),
+(6569, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '[]', '2021-05-07 09:18:37', '2021-05-07 09:18:37'),
+(6570, 1, 'admin/orders/7', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD54113423\",\"delivered_by\":\"2\",\"status\":\"5\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:18:39', '2021-05-07 09:18:39'),
+(6571, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '[]', '2021-05-07 09:18:41', '2021-05-07 09:18:41'),
+(6572, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '[]', '2021-05-07 09:21:18', '2021-05-07 09:21:18'),
+(6573, 1, 'admin/orders/7', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD54113423\",\"delivered_by\":\"2\",\"status\":\"5\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\"}', '2021-05-07 09:21:20', '2021-05-07 09:21:20'),
+(6574, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:21:27', '2021-05-07 09:21:27'),
+(6575, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:29:20', '2021-05-07 09:29:20'),
+(6576, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:29:33', '2021-05-07 09:29:33'),
+(6577, 1, 'admin/orders/7', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD54113423\",\"delivered_by\":\"2\",\"status\":\"2\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:29:37', '2021-05-07 09:29:37'),
+(6578, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '[]', '2021-05-07 09:29:37', '2021-05-07 09:29:37'),
+(6579, 1, 'admin/orders/7', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD54113423\",\"delivered_by\":\"2\",\"status\":\"2\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\"}', '2021-05-07 09:30:39', '2021-05-07 09:30:39'),
+(6580, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:30:40', '2021-05-07 09:30:40'),
+(6581, 1, 'admin/orders/7/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:31:52', '2021-05-07 09:31:52'),
+(6582, 1, 'admin/orders/7', 'PUT', '47.31.211.165', '{\"order_id\":\"ORD54113423\",\"delivered_by\":\"2\",\"status\":\"5\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-07 09:31:59', '2021-05-07 09:31:59'),
+(6583, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-07 09:32:00', '2021-05-07 09:32:00'),
+(6584, 1, 'admin/orders/3/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:32:43', '2021-05-07 09:32:43'),
+(6585, 1, 'admin/orders', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 09:32:51', '2021-05-07 09:32:51'),
+(6586, 1, 'admin/delivery_boys', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 11:10:24', '2021-05-07 11:10:24'),
+(6587, 1, 'admin/delivery_boys/2/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 11:10:28', '2021-05-07 11:10:28'),
+(6588, 1, 'admin/delivery_boys/2/edit', 'GET', '47.31.211.165', '[]', '2021-05-07 13:03:00', '2021-05-07 13:03:00'),
+(6589, 1, 'admin/delivery_boys', 'GET', '47.31.211.165', '[]', '2021-05-07 13:03:06', '2021-05-07 13:03:06'),
+(6590, 1, 'admin/delivery_boys/1/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 13:03:08', '2021-05-07 13:03:08'),
+(6591, 1, 'admin/customers', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 13:04:23', '2021-05-07 13:04:23'),
+(6592, 1, 'admin/customers/1/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 13:04:32', '2021-05-07 13:04:32'),
+(6593, 1, 'admin/customers', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 13:04:36', '2021-05-07 13:04:36'),
+(6594, 1, 'admin/customers/13/edit', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 13:04:40', '2021-05-07 13:04:40'),
+(6595, 1, 'admin/customers', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 13:04:47', '2021-05-07 13:04:47'),
+(6596, 1, 'admin/customers/1', 'DELETE', '47.31.211.165', '{\"_method\":\"delete\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\"}', '2021-05-07 13:04:52', '2021-05-07 13:04:52'),
+(6597, 1, 'admin/customers', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 13:04:52', '2021-05-07 13:04:52'),
+(6598, 1, 'admin/customers/17', 'DELETE', '47.31.211.165', '{\"_method\":\"delete\",\"_token\":\"boaceVMetSiCCINBtyMgHWs7yR2i528L0IX0VhVx\"}', '2021-05-07 13:05:07', '2021-05-07 13:05:07'),
+(6599, 1, 'admin/customers', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-07 13:05:07', '2021-05-07 13:05:07'),
+(6600, 1, 'admin', 'GET', '47.31.211.165', '[]', '2021-05-08 04:44:26', '2021-05-08 04:44:26'),
+(6601, 1, 'admin/orders', 'GET', '47.31.211.165', '{\"_pjax\":\"#pjax-container\"}', '2021-05-08 05:13:03', '2021-05-08 05:13:03'),
+(6602, 1, 'admin/orders', 'GET', '47.31.211.165', '[]', '2021-05-08 05:16:16', '2021-05-08 05:16:16'),
+(6603, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-08 12:13:37', '2021-05-08 12:13:37'),
+(6604, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-08 12:14:21', '2021-05-08 12:14:21'),
+(6605, 1, 'admin', 'GET', '157.37.142.83', '[]', '2021-05-10 03:49:16', '2021-05-10 03:49:16'),
+(6606, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 03:49:22', '2021-05-10 03:49:22'),
+(6607, 1, 'admin', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 03:49:33', '2021-05-10 03:49:33'),
+(6608, 1, 'admin/services', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 03:49:51', '2021-05-10 03:49:51'),
+(6609, 1, 'admin/categories', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 03:49:59', '2021-05-10 03:49:59'),
+(6610, 1, 'admin/customers', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 03:50:09', '2021-05-10 03:50:09'),
+(6611, 1, 'admin/customers', 'GET', '157.37.142.83', '[]', '2021-05-10 04:04:01', '2021-05-10 04:04:01'),
+(6612, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 04:48:48', '2021-05-10 04:48:48'),
+(6613, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 04:49:08', '2021-05-10 04:49:08'),
+(6614, 1, 'admin/categories', 'GET', '157.37.142.83', '[]', '2021-05-10 04:51:00', '2021-05-10 04:51:00'),
+(6615, 1, 'admin/categories/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 04:51:05', '2021-05-10 04:51:05'),
+(6616, 1, 'admin/categories', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 04:51:09', '2021-05-10 04:51:09'),
+(6617, 1, 'admin/categories/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 04:51:13', '2021-05-10 04:51:13'),
+(6618, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 04:51:54', '2021-05-10 04:51:54'),
+(6619, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 04:53:44', '2021-05-10 04:53:44'),
+(6620, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 04:53:46', '2021-05-10 04:53:46'),
+(6621, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 04:55:39', '2021-05-10 04:55:39'),
+(6622, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[null],\"title\":null,\"desc_1\":null,\"desc_2\":null,\"desc_3\":null,\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 04:55:42', '2021-05-10 04:55:42'),
+(6623, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 04:55:44', '2021-05-10 04:55:44'),
+(6624, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 04:56:14', '2021-05-10 04:56:14'),
+(6625, 1, 'admin/categories/1/edit', 'GET', '157.37.142.83', '[]', '2021-05-10 05:28:01', '2021-05-10 05:28:01'),
+(6626, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 05:28:08', '2021-05-10 05:28:08'),
+(6627, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 05:52:07', '2021-05-10 05:52:07'),
+(6628, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 05:52:08', '2021-05-10 05:52:08'),
+(6629, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 05:52:33', '2021-05-10 05:52:33'),
+(6630, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 05:54:05', '2021-05-10 05:54:05'),
+(6631, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 05:54:06', '2021-05-10 05:54:06'),
+(6632, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 05:54:22', '2021-05-10 05:54:22'),
+(6633, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 05:55:15', '2021-05-10 05:55:15'),
+(6634, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 05:55:21', '2021-05-10 05:55:21'),
+(6635, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 05:56:14', '2021-05-10 05:56:14'),
+(6636, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[null],\"title\":null,\"price\":null,\"discount\":null,\"desc_1\":null,\"desc_2\":null,\"desc_3\":null,\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\"}', '2021-05-10 05:57:10', '2021-05-10 05:57:10');
+INSERT INTO `admin_operation_log` (`id`, `user_id`, `path`, `method`, `ip`, `input`, `created_at`, `updated_at`) VALUES
+(6637, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 05:57:11', '2021-05-10 05:57:11'),
+(6638, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 05:58:04', '2021-05-10 05:58:04'),
+(6639, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 05:58:08', '2021-05-10 05:58:08'),
+(6640, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 05:58:19', '2021-05-10 05:58:19'),
+(6641, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 05:58:32', '2021-05-10 05:58:32'),
+(6642, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 05:58:35', '2021-05-10 05:58:35'),
+(6643, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_export_\":\"page:1\"}', '2021-05-10 05:59:00', '2021-05-10 05:59:00'),
+(6644, 1, 'admin/categories', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:00:14', '2021-05-10 06:00:14'),
+(6645, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:02:41', '2021-05-10 06:02:41'),
+(6646, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:03:56', '2021-05-10 06:03:56'),
+(6647, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:04:03', '2021-05-10 06:04:03'),
+(6648, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:04:28', '2021-05-10 06:04:28'),
+(6649, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 06:05:26', '2021-05-10 06:05:26'),
+(6650, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"id\":null,\"title\":null,\"status\":null,\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:05:37', '2021-05-10 06:05:37'),
+(6651, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"id\":null,\"title\":null,\"status\":null}', '2021-05-10 06:06:03', '2021-05-10 06:06:03'),
+(6652, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:06:35', '2021-05-10 06:06:35'),
+(6653, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150\",\"discount\":\"10\",\"desc_1\":\"Basic offer in Basic pack\",\"desc_2\":\"Get a 10% discount on wash only and Dry cleaning services\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships?id=&title=&status=\"}', '2021-05-10 06:08:05', '2021-05-10 06:08:05'),
+(6654, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:08:05', '2021-05-10 06:08:05'),
+(6655, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"Basic offer in Basic pack\",\"desc_2\":\"Get a 10% discount on wash only and Dry cleaning services\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\"}', '2021-05-10 06:09:08', '2021-05-10 06:09:08'),
+(6656, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:09:09', '2021-05-10 06:09:09'),
+(6657, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"Basic offer in Basic pack\",\"desc_2\":\"Get a 10% discount on wash only and Dry cleaning services\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\"}', '2021-05-10 06:11:26', '2021-05-10 06:11:26'),
+(6658, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:11:27', '2021-05-10 06:11:27'),
+(6659, 1, 'admin/categories/4/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:12:17', '2021-05-10 06:12:17'),
+(6660, 1, 'admin/categories/4', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",\"3\",null],\"category_name\":\"Others\",\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/categories\"}', '2021-05-10 06:12:21', '2021-05-10 06:12:21'),
+(6661, 1, 'admin/categories', 'GET', '157.37.142.83', '[]', '2021-05-10 06:12:22', '2021-05-10 06:12:22'),
+(6662, 1, 'admin/categories/4/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:12:24', '2021-05-10 06:12:24'),
+(6663, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:13:01', '2021-05-10 06:13:01'),
+(6664, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"eqweqewqe\",\"desc_2\":\"wewewe\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships?id=&status=&title=\"}', '2021-05-10 06:13:23', '2021-05-10 06:13:23'),
+(6665, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:13:23', '2021-05-10 06:13:23'),
+(6666, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:14:14', '2021-05-10 06:14:14'),
+(6667, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:16:02', '2021-05-10 06:16:02'),
+(6668, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[\"2\",\"3\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"dwefewf\",\"desc_2\":\"fwefwf\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\"}', '2021-05-10 06:16:17', '2021-05-10 06:16:17'),
+(6669, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:16:17', '2021-05-10 06:16:17'),
+(6670, 1, 'admin/categories/4', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",null],\"category_name\":\"Others\",\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/categories\"}', '2021-05-10 06:16:29', '2021-05-10 06:16:29'),
+(6671, 1, 'admin/categories', 'GET', '157.37.142.83', '[]', '2021-05-10 06:16:30', '2021-05-10 06:16:30'),
+(6672, 1, 'admin/categories/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:17:50', '2021-05-10 06:17:50'),
+(6673, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:20:03', '2021-05-10 06:20:03'),
+(6674, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"fasdgdsg\",\"desc_2\":\"gadsfgfdg\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\"}', '2021-05-10 06:21:00', '2021-05-10 06:21:00'),
+(6675, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:21:01', '2021-05-10 06:21:01'),
+(6676, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"fasdgdsg\",\"desc_2\":\"gadsfgfdg\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\"}', '2021-05-10 06:22:08', '2021-05-10 06:22:08'),
+(6677, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 06:22:09', '2021-05-10 06:22:09'),
+(6678, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:23:27', '2021-05-10 06:23:27'),
+(6679, 1, 'admin/memberships/1', 'PUT', '157.37.142.83', '{\"service_id\":[\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"fasdgdsg\",\"desc_2\":\"gadsfgfdg\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 06:23:33', '2021-05-10 06:23:33'),
+(6680, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '[]', '2021-05-10 06:23:34', '2021-05-10 06:23:34'),
+(6681, 1, 'admin/memberships/1', 'PUT', '157.37.142.83', '{\"service_id\":[\"2\",\"3\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"fasdgdsg\",\"desc_2\":\"gadsfgfdg\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\"}', '2021-05-10 06:23:46', '2021-05-10 06:23:46'),
+(6682, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '[]', '2021-05-10 06:23:46', '2021-05-10 06:23:46'),
+(6683, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '[]', '2021-05-10 06:24:50', '2021-05-10 06:24:50'),
+(6684, 1, 'admin/memberships/1', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"fasdgdsg\",\"desc_2\":\"gadsfgfdg\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\\/create\"}', '2021-05-10 06:24:56', '2021-05-10 06:24:56'),
+(6685, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:24:56', '2021-05-10 06:24:56'),
+(6686, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:25:01', '2021-05-10 06:25:01'),
+(6687, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:25:05', '2021-05-10 06:25:05'),
+(6688, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:25:14', '2021-05-10 06:25:14'),
+(6689, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:25:16', '2021-05-10 06:25:16'),
+(6690, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[\"1\",\"3\",null],\"title\":\"professional\",\"price\":\"200\",\"discount\":\"20\",\"desc_1\":\"professional users are nice\",\"desc_2\":\"Get a 20% discount on all wash, wash & Iron services\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 06:27:56', '2021-05-10 06:27:56'),
+(6691, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 06:27:56', '2021-05-10 06:27:56'),
+(6692, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:28:00', '2021-05-10 06:28:00'),
+(6693, 1, 'admin/memberships/1', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"desc_1\":\"Basic Plans for stater user\",\"desc_2\":\"perfect for starting new with us\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 06:28:43', '2021-05-10 06:28:43'),
+(6694, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 06:28:44', '2021-05-10 06:28:44'),
+(6695, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:28:51', '2021-05-10 06:28:51'),
+(6696, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",\"3\",null],\"title\":\"Pro pack\",\"price\":\"400\",\"discount\":\"50\",\"desc_1\":\"These are our premium user\",\"desc_2\":\"Get a big 50% discount on all services\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 06:31:08', '2021-05-10 06:31:08'),
+(6697, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 06:31:08', '2021-05-10 06:31:08'),
+(6698, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:32:22', '2021-05-10 06:32:22'),
+(6699, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:32:33', '2021-05-10 06:32:33'),
+(6700, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:46:55', '2021-05-10 06:46:55'),
+(6701, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:47:36', '2021-05-10 06:47:36'),
+(6702, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:47:51', '2021-05-10 06:47:51'),
+(6703, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:48:13', '2021-05-10 06:48:13'),
+(6704, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:48:21', '2021-05-10 06:48:21'),
+(6705, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:48:28', '2021-05-10 06:48:28'),
+(6706, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-10 06:48:35', '2021-05-10 06:48:35'),
+(6707, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:53:51', '2021-05-10 06:53:51'),
+(6708, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 06:57:10', '2021-05-10 06:57:10'),
+(6709, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 06:58:28', '2021-05-10 06:58:28'),
+(6710, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 06:58:57', '2021-05-10 06:58:57'),
+(6711, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:59:00', '2021-05-10 06:59:00'),
+(6712, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:59:39', '2021-05-10 06:59:39'),
+(6713, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 06:59:48', '2021-05-10 06:59:48'),
+(6714, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 07:21:30', '2021-05-10 07:21:30'),
+(6715, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-10 08:49:05', '2021-05-10 08:49:05'),
+(6716, 1, 'admin/auth/menu', 'POST', '157.37.142.83', '{\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":25,\\\"children\\\":[{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17}]},{\\\"id\\\":19},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":21},{\\\"id\\\":11}]\"}', '2021-05-10 08:49:30', '2021-05-10 08:49:30'),
+(6717, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 08:49:30', '2021-05-10 08:49:30'),
+(6718, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 08:49:32', '2021-05-10 08:49:32'),
+(6719, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-10 08:49:38', '2021-05-10 08:49:38'),
+(6720, 1, 'admin', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 08:49:44', '2021-05-10 08:49:44'),
+(6721, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 08:49:46', '2021-05-10 08:49:46'),
+(6722, 1, 'admin/auth/menu', 'POST', '157.37.142.83', '{\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":25,\\\"children\\\":[{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17}]},{\\\"id\\\":19},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":21},{\\\"id\\\":11}]\"}', '2021-05-10 08:49:54', '2021-05-10 08:49:54'),
+(6723, 1, 'admin/auth/menu', 'POST', '157.37.142.83', '{\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":25,\\\"children\\\":[{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17}]},{\\\"id\\\":19},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":21},{\\\"id\\\":11}]\"}', '2021-05-10 08:49:54', '2021-05-10 08:49:54'),
+(6724, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 08:49:55', '2021-05-10 08:49:55'),
+(6725, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 08:49:55', '2021-05-10 08:49:55'),
+(6726, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-10 08:49:59', '2021-05-10 08:49:59'),
+(6727, 1, 'admin/auth/menu', 'POST', '157.37.142.83', '{\"parent_id\":\"0\",\"title\":\"Membership\",\"icon\":\"fa-universal-access\",\"uri\":\"memberships\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\"}', '2021-05-10 08:51:06', '2021-05-10 08:51:06'),
+(6728, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-10 08:51:06', '2021-05-10 08:51:06'),
+(6729, 1, 'admin/auth/menu', 'POST', '157.37.142.83', '{\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":25,\\\"children\\\":[{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17}]},{\\\"id\\\":19},{\\\"id\\\":27},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":21},{\\\"id\\\":11}]\"}', '2021-05-10 08:51:25', '2021-05-10 08:51:25'),
+(6730, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 08:51:26', '2021-05-10 08:51:26'),
+(6731, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-10 08:51:27', '2021-05-10 08:51:27'),
+(6732, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 08:51:32', '2021-05-10 08:51:32'),
+(6733, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 10:13:49', '2021-05-10 10:13:49'),
+(6734, 1, 'admin/memberships/1', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"duration\":\"1\",\"desc_1\":\"Basic Plans for stater user\",\"desc_2\":\"perfect for starting new with us\",\"desc_3\":\"10% discount on wash and dry cleaning services\",\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 10:14:26', '2021-05-10 10:14:26'),
+(6735, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 10:14:26', '2021-05-10 10:14:26'),
+(6736, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 10:15:48', '2021-05-10 10:15:48'),
+(6737, 1, 'admin/memberships/1', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"duration\":\"1\",\"desc_1\":\"Basic Plans for stater user\",\"desc_2\":\"10% discount on wash and dry cleaning services\",\"desc_3\":\"Starter pack\",\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 10:16:24', '2021-05-10 10:16:24'),
+(6738, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 10:16:24', '2021-05-10 10:16:24'),
+(6739, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 10:18:21', '2021-05-10 10:18:21'),
+(6740, 1, 'admin/memberships/1', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150.23\",\"discount\":\"10\",\"duration\":\"1\",\"desc_1\":\"Basic Plans for stater user\",\"desc_2\":\"10% discount on wash and dry cleaning services\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 10:18:27', '2021-05-10 10:18:27'),
+(6741, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 10:18:27', '2021-05-10 10:18:27'),
+(6742, 1, 'admin/memberships/2/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 10:18:30', '2021-05-10 10:18:30'),
+(6743, 1, 'admin/memberships/2', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",\"3\",null],\"title\":\"professional\",\"price\":\"200\",\"discount\":\"20\",\"duration\":\"2\",\"desc_1\":\"professional users are nice\",\"desc_2\":\"Get a 20% discount on all wash, wash & Iron services\",\"desc_3\":\"Starter pack\",\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 10:18:35', '2021-05-10 10:18:35'),
+(6744, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 10:18:35', '2021-05-10 10:18:35'),
+(6745, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 11:06:17', '2021-05-10 11:06:17'),
+(6746, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 11:07:21', '2021-05-10 11:07:21'),
+(6747, 1, 'admin/memberships/3/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 11:07:37', '2021-05-10 11:07:37'),
+(6748, 1, 'admin/payment-methods', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 11:10:53', '2021-05-10 11:10:53'),
+(6749, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 11:19:25', '2021-05-10 11:19:25'),
+(6750, 1, 'admin/memberships/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 11:19:28', '2021-05-10 11:19:28'),
+(6751, 1, 'admin/memberships/1', 'PUT', '157.37.142.83', '{\"service_id\":[\"1\",\"2\",null],\"title\":\"Basic\",\"price\":\"150\",\"discount\":\"10\",\"duration\":\"1\",\"desc_1\":\"Basic Plans for stater user\",\"desc_2\":\"10% discount on wash and dry cleaning services\",\"desc_3\":null,\"status\":\"1\",\"_token\":\"rrZIYZvlIyGapETqQsekcfNIQOEEjGfDyykgkA3b\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-10 11:19:46', '2021-05-10 11:19:46'),
+(6752, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 11:19:47', '2021-05-10 11:19:47'),
+(6753, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 11:21:03', '2021-05-10 11:21:03'),
+(6754, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 11:21:30', '2021-05-10 11:21:30'),
+(6755, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-10 11:24:14', '2021-05-10 11:24:14'),
+(6756, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-10 12:22:31', '2021-05-10 12:22:31'),
+(6757, 1, 'admin', 'GET', '157.37.142.83', '[]', '2021-05-11 04:42:21', '2021-05-11 04:42:21'),
+(6758, 1, 'admin/customers', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-11 04:44:40', '2021-05-11 04:44:40'),
+(6759, 1, 'admin/customers/13/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-11 04:44:45', '2021-05-11 04:44:45'),
+(6760, 1, 'admin/customers/13/edit', 'GET', '157.37.142.83', '[]', '2021-05-11 06:36:20', '2021-05-11 06:36:20'),
+(6761, 1, 'admin/app_settings', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-11 06:36:24', '2021-05-11 06:36:24'),
+(6762, 1, 'admin/app_settings', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-11 06:36:30', '2021-05-11 06:36:30'),
+(6763, 1, 'admin/app_settings', 'GET', '157.37.142.83', '[]', '2021-05-11 07:03:56', '2021-05-11 07:03:56'),
+(6764, 1, 'admin/app_settings', 'GET', '157.37.142.83', '[]', '2021-05-11 09:38:27', '2021-05-11 09:38:27'),
+(6765, 1, 'admin', 'GET', '157.37.142.83', '[]', '2021-05-11 12:13:52', '2021-05-11 12:13:52'),
+(6766, 1, 'admin', 'GET', '157.37.142.83', '[]', '2021-05-12 03:36:35', '2021-05-12 03:36:35'),
+(6767, 1, 'admin', 'GET', '157.37.142.83', '[]', '2021-05-12 05:00:29', '2021-05-12 05:00:29'),
+(6768, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 05:00:41', '2021-05-12 05:00:41'),
+(6769, 1, 'admin/memberships', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 05:01:06', '2021-05-12 05:01:06'),
+(6770, 1, 'admin/customers', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 05:01:13', '2021-05-12 05:01:13'),
+(6771, 1, 'admin/customers/13/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 05:01:24', '2021-05-12 05:01:24'),
+(6772, 1, 'admin/customers', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 05:01:36', '2021-05-12 05:01:36'),
+(6773, 1, 'admin/app_settings', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 05:01:52', '2021-05-12 05:01:52'),
+(6774, 1, 'admin/app_settings/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 05:01:55', '2021-05-12 05:01:55'),
+(6775, 1, 'admin/app_settings', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 05:02:22', '2021-05-12 05:02:22'),
+(6776, 1, 'admin/app_settings', 'GET', '106.210.32.241', '[]', '2021-05-12 11:31:48', '2021-05-12 11:31:48'),
+(6777, 1, 'admin/app_settings', 'GET', '106.210.32.241', '[]', '2021-05-12 11:33:27', '2021-05-12 11:33:27'),
+(6778, 1, 'admin/app_settings', 'GET', '157.37.142.83', '[]', '2021-05-12 11:33:42', '2021-05-12 11:33:42'),
+(6779, 1, 'admin', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:33:52', '2021-05-12 11:33:52'),
+(6780, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:36:29', '2021-05-12 11:36:29'),
+(6781, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-12 11:46:13', '2021-05-12 11:46:13'),
+(6782, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:46:18', '2021-05-12 11:46:18'),
+(6783, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:46:39', '2021-05-12 11:46:39'),
+(6784, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:46:58', '2021-05-12 11:46:58'),
+(6785, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:47:31', '2021-05-12 11:47:31'),
+(6786, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:47:33', '2021-05-12 11:47:33'),
+(6787, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:47:36', '2021-05-12 11:47:36'),
+(6788, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:47:54', '2021-05-12 11:47:54'),
+(6789, 1, 'admin/memberships', 'GET', '157.37.142.83', '[]', '2021-05-12 11:48:48', '2021-05-12 11:48:48'),
+(6790, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:48:50', '2021-05-12 11:48:50'),
+(6791, 1, 'admin/memberships', 'POST', '157.37.142.83', '{\"service_id\":[null],\"title\":null,\"price\":null,\"discount\":null,\"duration\":null,\"desc_1\":null,\"desc_2\":null,\"desc_3\":null,\"status\":\"1\",\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/memberships\"}', '2021-05-12 11:49:16', '2021-05-12 11:49:16'),
+(6792, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:49:16', '2021-05-12 11:49:16'),
+(6793, 1, 'admin/memberships/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:49:27', '2021-05-12 11:49:27'),
+(6794, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:50:21', '2021-05-12 11:50:21'),
+(6795, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:51:08', '2021-05-12 11:51:08'),
+(6796, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:51:11', '2021-05-12 11:51:11'),
+(6797, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-12 11:51:23', '2021-05-12 11:51:23'),
+(6798, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-12 11:52:14', '2021-05-12 11:52:14'),
+(6799, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:52:16', '2021-05-12 11:52:16'),
+(6800, 1, 'admin/service-areas', 'POST', '157.37.142.83', '{\"title\":null,\"pincode\":null,\"delivery_changes\":null,\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/service-areas\"}', '2021-05-12 11:52:18', '2021-05-12 11:52:18'),
+(6801, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:52:18', '2021-05-12 11:52:18'),
+(6802, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:52:38', '2021-05-12 11:52:38'),
+(6803, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:53:19', '2021-05-12 11:53:19'),
+(6804, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:55:26', '2021-05-12 11:55:26'),
+(6805, 1, 'admin/service-areas', 'POST', '157.37.142.83', '{\"title\":null,\"pincode\":null,\"delivery_changes\":null,\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\"}', '2021-05-12 11:55:27', '2021-05-12 11:55:27'),
+(6806, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:55:28', '2021-05-12 11:55:28'),
+(6807, 1, 'admin/service-areas', 'POST', '157.37.142.83', '{\"title\":\"Uttam Nagar\",\"pincode\":\"110059\",\"delivery_changes\":\"20\",\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\"}', '2021-05-12 11:55:48', '2021-05-12 11:55:48'),
+(6808, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-12 11:55:49', '2021-05-12 11:55:49'),
+(6809, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:55:59', '2021-05-12 11:55:59'),
+(6810, 1, 'admin/service-areas', 'POST', '157.37.142.83', '{\"title\":\"Janak Puri\",\"pincode\":\"110059\",\"delivery_changes\":null,\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/service-areas\"}', '2021-05-12 11:56:14', '2021-05-12 11:56:14'),
+(6811, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '[]', '2021-05-12 11:56:14', '2021-05-12 11:56:14'),
+(6812, 1, 'admin/service-areas', 'POST', '157.37.142.83', '{\"title\":\"Janak Puri\",\"pincode\":\"110060\",\"delivery_changes\":\"30\",\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\"}', '2021-05-12 11:56:30', '2021-05-12 11:56:30'),
+(6813, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-12 11:56:30', '2021-05-12 11:56:30'),
+(6814, 1, 'admin/service-areas/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:56:33', '2021-05-12 11:56:33'),
+(6815, 1, 'admin/service-areas', 'POST', '157.37.142.83', '{\"title\":\"Dawaka\",\"pincode\":\"110075\",\"delivery_changes\":\"50\",\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/service-areas\"}', '2021-05-12 11:58:10', '2021-05-12 11:58:10'),
+(6816, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-12 11:58:10', '2021-05-12 11:58:10'),
+(6817, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-12 11:58:38', '2021-05-12 11:58:38'),
+(6818, 1, 'admin/auth/menu', 'POST', '157.37.142.83', '{\"parent_id\":\"0\",\"title\":\"Areas\",\"icon\":\"fa-location-arrow\",\"uri\":\"service-areas\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\"}', '2021-05-12 11:59:21', '2021-05-12 11:59:21'),
+(6819, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-12 11:59:21', '2021-05-12 11:59:21'),
+(6820, 1, 'admin/auth/menu', 'POST', '157.37.142.83', '{\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\",\"_order\":\"[{\\\"id\\\":1},{\\\"id\\\":28},{\\\"id\\\":25,\\\"children\\\":[{\\\"id\\\":10},{\\\"id\\\":13},{\\\"id\\\":17}]},{\\\"id\\\":19},{\\\"id\\\":27},{\\\"id\\\":23},{\\\"id\\\":24},{\\\"id\\\":14},{\\\"id\\\":15},{\\\"id\\\":12},{\\\"id\\\":22},{\\\"id\\\":8},{\\\"id\\\":16},{\\\"id\\\":21},{\\\"id\\\":11}]\"}', '2021-05-12 11:59:27', '2021-05-12 11:59:27'),
+(6821, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:59:27', '2021-05-12 11:59:27'),
+(6822, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-12 11:59:30', '2021-05-12 11:59:30'),
+(6823, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 11:59:36', '2021-05-12 11:59:36'),
+(6824, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:00:01', '2021-05-12 12:00:01'),
+(6825, 1, 'admin/auth/menu/28/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:00:09', '2021-05-12 12:00:09'),
+(6826, 1, 'admin/auth/menu/28', 'PUT', '157.37.142.83', '{\"parent_id\":\"0\",\"title\":\"Areas\",\"icon\":\"fa-location-arrow\",\"uri\":\"service-areas\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/auth\\/menu\"}', '2021-05-12 12:00:16', '2021-05-12 12:00:16'),
+(6827, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-12 12:00:16', '2021-05-12 12:00:16'),
+(6828, 1, 'admin/auth/menu/28/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:00:20', '2021-05-12 12:00:20'),
+(6829, 1, 'admin/auth/menu/28', 'PUT', '157.37.142.83', '{\"parent_id\":\"0\",\"title\":\"Service areas\",\"icon\":\"fa-location-arrow\",\"uri\":\"service-areas\",\"roles\":[\"1\",null],\"permission\":\"*\",\"_token\":\"5S3SqNqnoZvuMWbuc1CMvCVGysCi7Yotp0kg7Q7E\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/auth\\/menu\"}', '2021-05-12 12:00:38', '2021-05-12 12:00:38'),
+(6830, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-12 12:00:42', '2021-05-12 12:00:42'),
+(6831, 1, 'admin/auth/menu', 'GET', '157.37.142.83', '[]', '2021-05-12 12:00:52', '2021-05-12 12:00:52'),
+(6832, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:00:58', '2021-05-12 12:00:58'),
+(6833, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-12 12:02:14', '2021-05-12 12:02:14'),
+(6834, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"id\":null,\"title\":null,\"pincode\":\"110059\",\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:02:19', '2021-05-12 12:02:19'),
+(6835, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:02:27', '2021-05-12 12:02:27'),
+(6836, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:03:57', '2021-05-12 12:03:57'),
+(6837, 1, 'admin/payment-methods', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:09:10', '2021-05-12 12:09:10'),
+(6838, 1, 'admin/payment-methods/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:09:22', '2021-05-12 12:09:22'),
+(6839, 1, 'admin/payment-methods', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:09:25', '2021-05-12 12:09:25'),
+(6840, 1, 'admin/app_settings', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:09:54', '2021-05-12 12:09:54'),
+(6841, 1, 'admin/faqs', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:09:57', '2021-05-12 12:09:57'),
+(6842, 1, 'admin/units', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:10:07', '2021-05-12 12:10:07'),
+(6843, 1, 'admin/promo_codes', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:10:22', '2021-05-12 12:10:22'),
+(6844, 1, 'admin/delivery_boys', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:10:32', '2021-05-12 12:10:32'),
+(6845, 1, 'admin/customers', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:10:35', '2021-05-12 12:10:35'),
+(6846, 1, 'admin/time-slots', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:10:41', '2021-05-12 12:10:41'),
+(6847, 1, 'admin/time-slots/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:10:56', '2021-05-12 12:10:56'),
+(6848, 1, 'admin/time-slots', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:11:02', '2021-05-12 12:11:02'),
+(6849, 1, 'admin/banner-images', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-12 12:11:05', '2021-05-12 12:11:05'),
+(6850, 1, 'admin', 'GET', '157.37.142.83', '[]', '2021-05-13 04:16:53', '2021-05-13 04:16:53'),
+(6851, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 05:58:24', '2021-05-13 05:58:24'),
+(6852, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-13 05:58:11', '2021-05-13 05:58:11'),
+(6853, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 06:18:55', '2021-05-13 06:18:55'),
+(6854, 1, 'admin/service-areas', 'GET', '157.37.142.83', '[]', '2021-05-13 09:15:28', '2021-05-13 09:15:28'),
+(6855, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:22:02', '2021-05-13 11:22:02'),
+(6856, 1, 'admin/orders/2/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:22:09', '2021-05-13 11:22:09'),
+(6857, 1, 'admin/orders/2', 'PUT', '157.37.142.83', '{\"order_id\":\"ORD93571319\",\"delivered_by\":\"2\",\"status\":\"2\",\"_token\":\"SvAEhjzNsWd5MaYbhVOA7KgGqObvA2yZeJFSAGjv\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-13 11:22:16', '2021-05-13 11:22:16'),
+(6858, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:22:17', '2021-05-13 11:22:17'),
+(6859, 1, 'admin/orders/9/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:35:42', '2021-05-13 11:35:42'),
+(6860, 1, 'admin/orders/9', 'PUT', '157.37.142.83', '{\"order_id\":\"ORD47759552\",\"delivered_by\":\"2\",\"status\":\"2\",\"_token\":\"SvAEhjzNsWd5MaYbhVOA7KgGqObvA2yZeJFSAGjv\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-13 11:35:47', '2021-05-13 11:35:47'),
+(6861, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:35:48', '2021-05-13 11:35:48'),
+(6862, 1, 'admin/orders/9/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:36:10', '2021-05-13 11:36:10'),
+(6863, 1, 'admin/orders/9', 'PUT', '157.37.142.83', '{\"order_id\":\"ORD47759552\",\"delivered_by\":\"2\",\"status\":\"3\",\"_token\":\"SvAEhjzNsWd5MaYbhVOA7KgGqObvA2yZeJFSAGjv\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-13 11:36:16', '2021-05-13 11:36:16'),
+(6864, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:36:17', '2021-05-13 11:36:17'),
+(6865, 1, 'admin/orders/9/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:36:31', '2021-05-13 11:36:31'),
+(6866, 1, 'admin/orders/9', 'PUT', '157.37.142.83', '{\"order_id\":\"ORD47759552\",\"delivered_by\":\"2\",\"status\":\"4\",\"_token\":\"SvAEhjzNsWd5MaYbhVOA7KgGqObvA2yZeJFSAGjv\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/orders\"}', '2021-05-13 11:36:34', '2021-05-13 11:36:34'),
+(6867, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:36:35', '2021-05-13 11:36:35'),
+(6868, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:44:02', '2021-05-13 11:44:02'),
+(6869, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:44:36', '2021-05-13 11:44:36'),
+(6870, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:44:42', '2021-05-13 11:44:42'),
+(6871, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:44:59', '2021-05-13 11:44:59'),
+(6872, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:45:09', '2021-05-13 11:45:09'),
+(6873, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:47:06', '2021-05-13 11:47:06'),
+(6874, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:47:11', '2021-05-13 11:47:11'),
+(6875, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:48:11', '2021-05-13 11:48:11'),
+(6876, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:50:45', '2021-05-13 11:50:45'),
+(6877, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:51:11', '2021-05-13 11:51:11'),
+(6878, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:51:43', '2021-05-13 11:51:43'),
+(6879, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"id\":null,\"customer_id\":null,\"collected_by\":null,\"delivered_by\":null,\"status\":null,\"expected_delivery_date\":\"2021-05-14\",\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:52:18', '2021-05-13 11:52:18'),
+(6880, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\",\"id\":null,\"customer_id\":null,\"collected_by\":\"1\",\"delivered_by\":null,\"status\":null,\"expected_delivery_date\":\"2021-05-14\"}', '2021-05-13 11:52:37', '2021-05-13 11:52:37'),
+(6881, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"id\":null,\"customer_id\":null,\"collected_by\":null,\"delivered_by\":null,\"status\":null,\"expected_delivery_date\":\"2021-05-14\",\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:52:44', '2021-05-13 11:52:44'),
+(6882, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"id\":null,\"customer_id\":null,\"collected_by\":null,\"delivered_by\":null,\"status\":null,\"expected_delivery_date\":\"2021-05-14\"}', '2021-05-13 11:52:57', '2021-05-13 11:52:57'),
+(6883, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"id\":null,\"customer_id\":null,\"delivered_by\":null,\"status\":null,\"expected_delivery_date\":\"2021-05-12\",\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:53:05', '2021-05-13 11:53:05'),
+(6884, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\",\"id\":null,\"customer_id\":null,\"delivered_by\":\"2\",\"status\":null,\"expected_delivery_date\":\"2021-05-12\"}', '2021-05-13 11:53:10', '2021-05-13 11:53:10'),
+(6885, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:53:15', '2021-05-13 11:53:15'),
+(6886, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\",\"id\":null,\"customer_id\":null,\"delivered_by\":\"2\",\"status\":null,\"expected_delivery_date\":null}', '2021-05-13 11:53:21', '2021-05-13 11:53:21'),
+(6887, 1, 'admin/orders', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 11:53:35', '2021-05-13 11:53:35'),
+(6888, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 11:57:49', '2021-05-13 11:57:49'),
+(6889, 1, 'admin/orders', 'GET', '157.37.142.83', '[]', '2021-05-13 12:03:04', '2021-05-13 12:03:04'),
+(6890, 1, 'admin/service-areas', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 12:07:39', '2021-05-13 12:07:39'),
+(6891, 1, 'admin/payment-methods', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 12:07:53', '2021-05-13 12:07:53'),
+(6892, 1, 'admin/payment-methods', 'GET', '157.37.142.83', '[]', '2021-05-13 12:09:43', '2021-05-13 12:09:43'),
+(6893, 1, 'admin/payment-methods', 'GET', '157.37.142.83', '[]', '2021-05-13 12:10:01', '2021-05-13 12:10:01'),
+(6894, 1, 'admin/payment-methods/create', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 12:10:24', '2021-05-13 12:10:24'),
+(6895, 1, 'admin/payment-methods/create', 'GET', '157.37.142.83', '[]', '2021-05-13 12:10:33', '2021-05-13 12:10:33'),
+(6896, 1, 'admin/payment-methods', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 12:11:19', '2021-05-13 12:11:19'),
+(6897, 1, 'admin/payment-methods/1/edit', 'GET', '157.37.142.83', '{\"_pjax\":\"#pjax-container\"}', '2021-05-13 12:11:24', '2021-05-13 12:11:24'),
+(6898, 1, 'admin/payment-methods/1', 'PUT', '157.37.142.83', '{\"payment_mode\":\"Cash\",\"status\":\"1\",\"_token\":\"SvAEhjzNsWd5MaYbhVOA7KgGqObvA2yZeJFSAGjv\",\"_method\":\"PUT\",\"_previous_\":\"http:\\/\\/covidvaccination.co.in\\/admin\\/payment-methods\"}', '2021-05-13 12:11:30', '2021-05-13 12:11:30'),
+(6899, 1, 'admin/payment-methods', 'GET', '157.37.142.83', '[]', '2021-05-13 12:11:30', '2021-05-13 12:11:30'),
+(6900, 1, 'admin', 'GET', '::1', '[]', '2021-05-23 06:20:49', '2021-05-23 06:20:49'),
+(6901, 1, 'admin/app_settings', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-05-23 06:20:56', '2021-05-23 06:20:56'),
+(6902, 1, 'admin/app_settings/1/edit', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-05-23 06:21:01', '2021-05-23 06:21:01'),
+(6903, 1, 'admin', 'GET', '::1', '[]', '2021-05-30 07:10:49', '2021-05-30 07:10:49'),
+(6904, 1, 'admin/orders', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-05-30 07:12:00', '2021-05-30 07:12:00'),
+(6905, 1, 'admin/orders', 'GET', '::1', '{\"_pjax\":\"#pjax-container\",\"id\":null,\"customer_id\":null,\"delivered_by\":null,\"status\":null,\"expected_delivery_date\":null}', '2021-05-30 07:12:21', '2021-05-30 07:12:21'),
+(6906, 1, 'admin/orders', 'GET', '::1', '{\"_pjax\":\"#pjax-container\",\"id\":null,\"customer_id\":\"14\",\"delivered_by\":null,\"status\":null,\"expected_delivery_date\":null}', '2021-05-30 07:12:42', '2021-05-30 07:12:42'),
+(6907, 1, 'admin/service-areas', 'GET', '::1', '{\"_pjax\":\"#pjax-container\"}', '2021-05-30 07:33:44', '2021-05-30 07:33:44');
 
 -- --------------------------------------------------------
 
@@ -5740,7 +7114,6 @@ CREATE TABLE `admin_role_menu` (
 
 INSERT INTO `admin_role_menu` (`role_id`, `menu_id`, `created_at`, `updated_at`) VALUES
 (1, 8, NULL, NULL),
-(1, 9, NULL, NULL),
 (1, 10, NULL, NULL),
 (1, 11, NULL, NULL),
 (1, 12, NULL, NULL),
@@ -5749,12 +7122,9 @@ INSERT INTO `admin_role_menu` (`role_id`, `menu_id`, `created_at`, `updated_at`)
 (1, 15, NULL, NULL),
 (1, 16, NULL, NULL),
 (1, 17, NULL, NULL),
-(1, 18, NULL, NULL),
 (1, 19, NULL, NULL),
-(1, 20, NULL, NULL),
 (1, 21, NULL, NULL),
 (1, 8, NULL, NULL),
-(1, 9, NULL, NULL),
 (1, 10, NULL, NULL),
 (1, 11, NULL, NULL),
 (1, 12, NULL, NULL),
@@ -5763,10 +7133,14 @@ INSERT INTO `admin_role_menu` (`role_id`, `menu_id`, `created_at`, `updated_at`)
 (1, 15, NULL, NULL),
 (1, 16, NULL, NULL),
 (1, 17, NULL, NULL),
-(1, 18, NULL, NULL),
 (1, 19, NULL, NULL),
-(1, 20, NULL, NULL),
-(1, 21, NULL, NULL);
+(1, 21, NULL, NULL),
+(1, 22, NULL, NULL),
+(1, 23, NULL, NULL),
+(1, 24, NULL, NULL),
+(1, 25, NULL, NULL),
+(1, 27, NULL, NULL),
+(1, 28, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5858,10 +7232,16 @@ CREATE TABLE `app_settings` (
   `application_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `logo` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `contact_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `whatsapp_number` varchar(100) NOT NULL,
   `email` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(250) NOT NULL,
+  `address_lat` double NOT NULL,
+  `address_lng` double NOT NULL,
+  `about_us` text NOT NULL,
   `country` varchar(50) NOT NULL,
   `default_currency` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `currency_short_code` varchar(10) NOT NULL,
+  `fcm_server_key` varchar(225) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -5870,8 +7250,8 @@ CREATE TABLE `app_settings` (
 -- Dumping data for table `app_settings`
 --
 
-INSERT INTO `app_settings` (`id`, `application_name`, `logo`, `contact_number`, `email`, `country`, `default_currency`, `currency_short_code`, `created_at`, `updated_at`) VALUES
-(1, 'Rith Laundry', 'images/783d51c4f0e81ca607c929a9c3ad14b1.png', '9876543210', 'support@rithlaundry.com', 'India', '$', 'INR', '2019-07-23 09:14:40', '2020-12-02 15:53:06');
+INSERT INTO `app_settings` (`id`, `application_name`, `logo`, `contact_number`, `whatsapp_number`, `email`, `address`, `address_lat`, `address_lng`, `about_us`, `country`, `default_currency`, `currency_short_code`, `fcm_server_key`, `created_at`, `updated_at`) VALUES
+(1, 'KRYCHE', 'images/86e12013466c485b59229f280aa03415.jpg', '7678178911', '7678178911', 'support@kryche.com', 'Block A, 2nd Floor, Plot No. 11, 12, 16, 17 Palam Extension, Sector 7 Dwarka, Dwarka, Delhi, 110075', 28.5851, 77.0713, 'this Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam lacinia placerat nunc pretium efficitur. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla id eros tortor. Etiam ut porttitor dolor. Vivamus interdum, purus a eleifend condimentum, eros erat finibus ex, nec lacinia elit arcu eget neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean elementum quam magna, et ultrices orci dignissim ac. Integer eu viverra lacus. In metus augue, porta sed ullamcorper sit amet, semper a sapien. Etiam congue eu massa sed facilisis. Pellentesque scelerisque viverra rutrum. Maecenas fermentum vehicula tellus. Aliquam sit amet pretium mauris, quis mollis erat.', 'India', '₹', 'INR', 'AAAA6CbcUU4:APA91bEjXcUD5QHo5eJ70JNWQYhbgmS24mDBwIIwn4sexCbT8mKThwddBoevcjOM8uOcZZ_5E_3MikmSmQgtNiVaeUDnHxKrvh9yY1wan673VZs4TBlpyNS4gK06bKP5C895CP6dNmcD', '2019-07-23 09:14:40', '2021-05-03 17:08:37');
 
 -- --------------------------------------------------------
 
@@ -5882,6 +7262,8 @@ INSERT INTO `app_settings` (`id`, `application_name`, `logo`, `contact_number`, 
 CREATE TABLE `banner_images` (
   `id` int(11) NOT NULL,
   `banner_image` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(225) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `text` varchar(225) COLLATE utf8mb4_unicode_ci NOT NULL,
   `service_id` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -5892,11 +7274,37 @@ CREATE TABLE `banner_images` (
 -- Dumping data for table `banner_images`
 --
 
-INSERT INTO `banner_images` (`id`, `banner_image`, `service_id`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'images/f809fd1b79849aa13569525fe03a151f.png', 1, 1, '2020-06-12 12:58:27', '2020-06-12 12:58:27'),
-(2, 'images/7707f662271d52cc61b2807dba3231b4.png', 2, 1, '2020-06-12 12:58:45', '2020-06-12 12:58:45'),
-(3, 'images/528a1bfd83d9970d7fc29a83976e5d4a.png', 3, 1, '2020-06-12 12:59:04', '2020-06-12 12:59:04'),
-(4, 'images/04e6a7c0fe90b0c0ac867879fda0cbb6.png', 4, 1, '2020-06-12 12:59:18', '2020-06-12 12:59:18');
+INSERT INTO `banner_images` (`id`, `banner_image`, `title`, `text`, `service_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'images/d1383611345f6af5262f1c4bbf2f577f.jpg', 'Flat 20% off on laundry service', 'View all offers', 1, 1, '2020-06-12 12:58:27', '2021-04-21 18:14:31'),
+(2, 'images/af9a96745be6d0b11eb2bdce51aebbad.jpg', 'Rupees 100 discount on new users', 'More offers', 2, 1, '2020-06-12 12:58:45', '2021-04-21 18:15:56'),
+(3, 'images/37577f54019b69030964971caa7e17fd.png', 'Make Iron with wash and get 20% off', 'View all offers', 3, 1, '2020-06-12 12:59:04', '2021-04-21 18:18:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart_products`
+--
+
+CREATE TABLE `cart_products` (
+  `id` int(11) NOT NULL,
+  `cart_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `mem_dis` double(5,2) NOT NULL DEFAULT 0.00,
+  `price` double(10,2) NOT NULL,
+  `final_price` double(5,2) NOT NULL DEFAULT 0.00,
+  `unit` varchar(225) NOT NULL,
+  `product_additional_charges` double(10,2) NOT NULL DEFAULT 0.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cart_products`
+--
+
+INSERT INTO `cart_products` (`id`, `cart_id`, `product_id`, `qty`, `mem_dis`, `price`, `final_price`, `unit`, `product_additional_charges`) VALUES
+(70, 11, 1, 4, 20.00, 40.00, 20.00, 'kg', 0.00),
+(71, 11, 4, 1, 7.50, 15.00, 7.50, 'kg', 0.00),
+(72, 12, 1, 1, 5.00, 10.00, 5.00, 'kg', 0.00);
 
 -- --------------------------------------------------------
 
@@ -5907,12 +7315,22 @@ INSERT INTO `banner_images` (`id`, `banner_image`, `service_id`, `status`, `crea
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL,
   `category_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category_name_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_name_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `service_id` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `category_name`, `category_name_ar`, `service_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Men', 'arSampleCat', '1,2', 1, '2021-04-21 06:07:58', '2021-04-22 09:19:49'),
+(2, 'Women', 'arSampleCat2', '1,2', 1, '2021-04-21 06:07:58', '2021-04-21 19:10:53'),
+(3, 'Kids', 'arSampleCat3', '1', 1, '2021-04-21 06:07:58', '2021-04-21 19:13:01'),
+(4, 'Others', 'arSampleCat4', '1', 1, '2021-04-21 06:07:58', '2021-05-10 11:46:30');
 
 -- --------------------------------------------------------
 
@@ -5922,17 +7340,30 @@ CREATE TABLE `categories` (
 
 CREATE TABLE `customers` (
   `id` int(11) NOT NULL,
+  `membership` int(11) NOT NULL DEFAULT 0,
   `customer_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `profile_picture` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `default_address` int(11) NOT NULL DEFAULT 0,
   `otp` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `fcm_token` text DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`id`, `membership`, `customer_name`, `phone_number`, `email`, `password`, `profile_picture`, `default_address`, `otp`, `fcm_token`, `status`, `created_at`, `updated_at`) VALUES
+(13, 3, 'Deepak kumar', '7678178911', 'structlooper@gmail.com', NULL, 'images/1619881268.jpg', 21, '867494', 'cHTcd6FmRLaE9J820WHrgG:APA91bGx_ZAhfNrhrcakJKTRVRkfhS7zzm39Jd7QrHUFci_acxHZICuZcV_0II6f9iNnMBesiFtYvfU348Y2h-oSXwzfW_j1mctQvXg32KfjIv3pb6VzldCtxmfI7zBYgljw_HQ_trJU', 1, '2021-04-20 23:16:40', '2021-05-13 16:15:52'),
+(14, 0, 'Satish sahab', '9990944381', 'sahabsatish@gmail.com', NULL, NULL, 0, '432528', 'test_token', 1, '2021-04-23 20:09:57', '2021-04-30 18:48:18'),
+(15, 0, 'Sachin', '8601502970', 'sachinmaurya699@gmail.com', NULL, NULL, 0, '882879', NULL, 1, '2021-04-25 13:59:12', '2021-04-25 13:59:12'),
+(16, 0, 'Niraj', '7979034079', 'nirajkumarchoudhary99@gmail.com', NULL, NULL, 0, '272529', NULL, 1, '2021-04-29 11:58:28', '2021-04-29 11:58:28'),
+(22, 0, 'Deepak kumar', '9910655971', 'asdasdasd@gmail.com', NULL, 'images/1621297369.png', 0, '143164', 'dsagadfsgahga', 1, '2021-05-18 05:52:49', '2021-05-18 05:52:49');
 
 -- --------------------------------------------------------
 
@@ -5945,7 +7376,7 @@ CREATE TABLE `delivery_boys` (
   `delivery_boy_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phone_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `profile_picture` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `otp` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -5953,6 +7384,38 @@ CREATE TABLE `delivery_boys` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `delivery_boys`
+--
+
+INSERT INTO `delivery_boys` (`id`, `delivery_boy_name`, `phone_number`, `email`, `password`, `profile_picture`, `status`, `otp`, `fcm_token`, `created_at`, `updated_at`) VALUES
+(1, 'test Driver', '1234567892', 'test@test.com', '$2y$12$WJz6gktTucnlI4UZKuoUzuAezqLfuApJ4UhyRU5FrUsxweKIMpm7i', 'images/a1b12e04dd4bd30d6b0c4ef306e502e3.jpg', 1, NULL, NULL, '2021-04-28 15:50:29', '2021-04-28 15:50:29'),
+(2, 'Deepak kumar', '7678178911', 'structlooper@gmail.com', NULL, 'images/1620451368.jpg', 1, '646772', 'dalsgweohgi', '2021-05-05 14:56:48', '2021-05-08 18:42:18');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `driver_notifications`
+--
+
+CREATE TABLE `driver_notifications` (
+  `id` int(11) NOT NULL,
+  `order_id` varchar(225) NOT NULL,
+  `fcm_msg_id` int(11) NOT NULL,
+  `driver_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `driver_notifications`
+--
+
+INSERT INTO `driver_notifications` (`id`, `order_id`, `fcm_msg_id`, `driver_id`, `created_at`) VALUES
+(2, 'ORD54113423', 2, 2, '2021-05-07 09:30:39'),
+(3, 'ORD54113423', 5, 2, '2021-05-07 09:32:00'),
+(4, 'ORD93571319', 2, 2, '2021-05-13 11:22:17'),
+(5, 'ORD47759552', 2, 2, '2021-05-13 11:35:48');
 
 -- --------------------------------------------------------
 
@@ -5963,13 +7426,24 @@ CREATE TABLE `delivery_boys` (
 CREATE TABLE `faqs` (
   `id` int(11) NOT NULL,
   `question` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `question_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `answer` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `answer_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `faqs`
+--
+
+INSERT INTO `faqs` (`id`, `question`, `question_ar`, `answer`, `answer_ar`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'How do i book my pickup?', NULL, 'We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability   We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability.', NULL, 1, '2021-05-03 12:59:32', '2021-05-03 12:59:32'),
+(2, 'How will I know that my laundry has been picked-up?', NULL, 'We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability', NULL, 1, '2021-05-03 13:00:01', '2021-05-03 13:00:01'),
+(3, 'My concierge doesn\'t accept laundry. What shall I do?', NULL, 'We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability\r\n                                We most certainly can sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability', NULL, 1, '2021-05-03 13:00:42', '2021-05-03 13:00:42'),
+(4, 'Do I need to count the items in my order?', NULL, 'items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded, but we chose the Dry Clean service as we were worried about shrinkage of the item, then its the customer responsibility, as we tried to sort the order to the best of our ability', NULL, 1, '2021-05-03 13:01:20', '2021-05-03 13:01:20'),
+(5, 'What happens to my laundry bag?', NULL, 'sort your items on your behalf for an extra charge of $20. Also, you would be agreeing that if we added any item to either service, its not our responsibility. For example, if you wanted your sweaters to be wash and folded,', NULL, 1, '2021-05-03 13:01:57', '2021-05-03 13:01:57');
 
 -- --------------------------------------------------------
 
@@ -5996,6 +7470,7 @@ CREATE TABLE `fare_managements` (
 
 CREATE TABLE `fcm_notification_messages` (
   `id` int(11) NOT NULL,
+  `status_image` mediumtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `customer_title` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `customer_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `delivery_title` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -6008,14 +7483,14 @@ CREATE TABLE `fcm_notification_messages` (
 -- Dumping data for table `fcm_notification_messages`
 --
 
-INSERT INTO `fcm_notification_messages` (`id`, `customer_title`, `customer_description`, `delivery_title`, `delivery_description`, `created_at`, `updated_at`) VALUES
-(1, 'Order placed', 'Your order has been placed successfully.', NULL, NULL, '2020-05-29 12:03:47', '2020-05-29 12:03:59'),
-(2, 'Order Assigned', 'Your order has been assigned to delivery boy', 'Order Assigned', 'You got new order', '2020-05-29 12:13:35', '2020-05-29 12:13:43'),
-(3, 'On the way to pickup', 'Delivery boy was on the way to pickup your clothes', NULL, NULL, '2020-05-29 12:13:49', '2020-05-29 12:13:57'),
-(4, 'Processing', 'Your order has been processing', NULL, NULL, '2020-05-29 12:15:55', '2020-05-29 12:16:04'),
-(5, 'Ready to Dispatch', 'Your cloths are ready to dispatch', 'Ready to Dispatch', 'Order processed, cloths are ready to collect', '2020-05-29 12:23:37', '2020-05-29 12:23:44'),
-(6, 'On the way to Deliver', 'Your cloths are on the way to deliver', NULL, NULL, '2020-05-29 12:23:49', '2020-05-29 12:23:53'),
-(7, 'Completed', 'Your order has been completed', NULL, NULL, '2020-05-29 12:23:58', '2020-05-29 12:24:01');
+INSERT INTO `fcm_notification_messages` (`id`, `status_image`, `customer_title`, `customer_description`, `delivery_title`, `delivery_description`, `created_at`, `updated_at`) VALUES
+(1, 'status_images/order_confirmed.png', 'Order placed', 'Your order has been placed successfully.', NULL, NULL, '2020-05-29 12:03:47', '2020-05-29 12:03:59'),
+(2, 'status_images/assigned.png', 'Order Assigned', 'Your order has been assigned to delivery boy', 'Order Assigned', 'You got new order', '2020-05-29 12:13:35', '2020-05-29 12:13:43'),
+(3, 'status_images/pickup.png', 'On the way to pickup', 'Delivery boy was on the way to pickup your clothes', NULL, NULL, '2020-05-29 12:13:49', '2020-05-29 12:13:57'),
+(4, 'status_images/processing.png', 'Processing', 'Your order has been processing', NULL, NULL, '2020-05-29 12:15:55', '2020-05-29 12:16:04'),
+(5, 'status_images/ready_to_dispatch.png', 'Ready to Dispatch', 'Your cloths are ready to dispatch', 'Ready to Dispatch', 'Order processed, cloths are ready to collect', '2020-05-29 12:23:37', '2020-05-29 12:23:44'),
+(6, 'status_images/on_way_to deliver.png', 'On the way to Deliver', 'Your cloths are on the way to deliver', NULL, NULL, '2020-05-29 12:23:49', '2020-05-29 12:23:53'),
+(7, 'status_images/delivered.png', 'Order Completed', 'Your order has been completed', NULL, NULL, '2020-05-29 12:23:58', '2020-05-29 12:24:01');
 
 -- --------------------------------------------------------
 
@@ -6026,6 +7501,7 @@ INSERT INTO `fcm_notification_messages` (`id`, `customer_title`, `customer_descr
 CREATE TABLE `labels` (
   `id` int(11) NOT NULL,
   `label_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `label_image` mediumtext DEFAULT NULL,
   `label_name_ar` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `label_for_delivery_boy` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -6039,14 +7515,65 @@ CREATE TABLE `labels` (
 -- Dumping data for table `labels`
 --
 
-INSERT INTO `labels` (`id`, `label_name`, `label_name_ar`, `label_for_delivery_boy`, `description`, `description_ar`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Order Placed', 'تم الطلب', 'Order Placed', 'Order Placed', 'تم الطلب', 1, '2019-07-23 09:33:18', '2020-06-09 01:47:46'),
-(2, 'Assigned', 'تعيين', 'Assigned', 'Assigned', 'تعيين', 1, '2019-07-23 09:33:18', '2020-06-09 01:48:10'),
-(3, 'On the way to pickup', 'في الطريق لاقط', 'Ready to pickup', 'On the way to pickup', 'في الطريق لاقط', 1, '2019-07-23 09:33:18', '2020-06-09 01:48:48'),
-(4, 'Processing', 'معالجة', 'Picked up', 'Processing', 'معالجة', 1, '2019-07-23 09:33:18', '2020-06-09 01:49:50'),
-(5, 'Ready to dispatch', 'جاهز للإرسال', 'Ready to dispatch', 'Ready to dispatch', 'جاهز للإرسال', 1, '2019-07-23 09:33:18', '2020-06-09 01:50:35'),
-(6, 'On the way to deliver', 'في الطريق الى التسليم', 'Ready to deiver', 'On the way to deliver', 'في الطريق الى التسليم', 1, '2019-07-23 09:33:18', '2020-06-09 01:51:06'),
-(7, 'Completed', 'منجز', 'Completed', 'Completed', 'منجز', 1, '2019-07-23 09:33:18', '2020-06-09 01:51:31');
+INSERT INTO `labels` (`id`, `label_name`, `label_image`, `label_name_ar`, `label_for_delivery_boy`, `description`, `description_ar`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Order Placed', 'status_images/order_confirmed.png', 'تم الطلب', 'Order Placed', 'Order Placed', 'تم الطلب', 1, '2019-07-23 09:33:18', '2020-06-09 01:47:46'),
+(2, 'Assigned', 'status_images/assigned.png', 'تعيين', 'Assigned', 'Assigned', 'تعيين', 1, '2019-07-23 09:33:18', '2020-06-09 01:48:10'),
+(3, 'On the way to pickup', 'status_images/pickup.png', 'في الطريق لاقط', 'Ready to pickup', 'On the way to pickup', 'في الطريق لاقط', 1, '2019-07-23 09:33:18', '2020-06-09 01:48:48'),
+(4, 'Processing', 'status_images/processing.png', 'معالجة', 'Picked up', 'Processing', 'معالجة', 1, '2019-07-23 09:33:18', '2020-06-09 01:49:50'),
+(5, 'Ready to dispatch', 'status_images/ready_to_dispatch.png', 'جاهز للإرسال', 'Ready to dispatch', 'Ready to dispatch', 'جاهز للإرسال', 1, '2019-07-23 09:33:18', '2020-06-09 01:50:35'),
+(6, 'On the way to deliver', '	\r\nstatus_images/on_way_to deliver.png', 'في الطريق الى التسليم', 'Ready to deiver', 'On the way to deliver', 'في الطريق الى التسليم', 1, '2019-07-23 09:33:18', '2020-06-09 01:51:06'),
+(7, 'Completed', 'status_images/delivered.png', 'منجز', 'Completed', 'Completed', 'منجز', 1, '2019-07-23 09:33:18', '2020-06-09 01:51:31');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `memberships`
+--
+
+CREATE TABLE `memberships` (
+  `id` int(11) NOT NULL,
+  `service_id` varchar(250) NOT NULL,
+  `title` varchar(250) NOT NULL,
+  `price` double NOT NULL,
+  `discount` double NOT NULL,
+  `duration` double NOT NULL,
+  `desc_1` text NOT NULL,
+  `desc_2` text DEFAULT NULL,
+  `desc_3` text DEFAULT NULL,
+  `status` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `memberships`
+--
+
+INSERT INTO `memberships` (`id`, `service_id`, `title`, `price`, `discount`, `duration`, `desc_1`, `desc_2`, `desc_3`, `status`, `created_at`, `updated_at`) VALUES
+(1, '1,2', 'Basic', 150, 10, 1, 'Basic Plans for stater user', '10% discount on wash and dry cleaning services', NULL, 1, '2021-05-10 06:22:08', '2021-05-10 11:19:46'),
+(2, '2,3', 'professional', 200, 20, 2, 'professional users are nice', 'Get a 20% discount on all wash, wash & Iron services', 'Starter pack', 1, '2021-05-10 06:27:56', '2021-05-10 10:18:35'),
+(3, '1,2,3', 'Pro pack', 400, 50, 2, 'These are our premium user', 'Get a big 50% discount on all services', NULL, 1, '2021-05-10 06:31:08', '2021-05-10 06:31:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `membership_duration`
+--
+
+CREATE TABLE `membership_duration` (
+  `id` int(11) NOT NULL,
+  `duration_name` varchar(225) NOT NULL,
+  `duration` varchar(225) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `membership_duration`
+--
+
+INSERT INTO `membership_duration` (`id`, `duration_name`, `duration`) VALUES
+(1, '1 Month', '30'),
+(2, '3 Months', '90'),
+(3, '1 Year', '365');
 
 -- --------------------------------------------------------
 
@@ -6080,9 +7607,14 @@ CREATE TABLE `orders` (
   `order_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `customer_id` int(11) NOT NULL,
   `address_id` int(11) NOT NULL,
+  `expected_pickup_date` datetime NOT NULL,
   `expected_delivery_date` datetime NOT NULL,
+  `pickup_time` varchar(225) NOT NULL,
+  `drop_time` varchar(225) NOT NULL,
   `total` float NOT NULL,
+  `delivery_changes` double(5,2) NOT NULL DEFAULT 0.00,
   `discount` float NOT NULL DEFAULT 0,
+  `mem_total_discount` double(5,2) NOT NULL DEFAULT 0.00,
   `sub_total` float NOT NULL,
   `promo_id` int(11) DEFAULT NULL,
   `delivered_by` int(11) DEFAULT NULL,
@@ -6092,6 +7624,20 @@ CREATE TABLE `orders` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `order_id`, `customer_id`, `address_id`, `expected_pickup_date`, `expected_delivery_date`, `pickup_time`, `drop_time`, `total`, `delivery_changes`, `discount`, `mem_total_discount`, `sub_total`, `promo_id`, `delivered_by`, `payment_mode`, `items`, `status`, `created_at`, `updated_at`) VALUES
+(2, 'ORD93571319', 13, 4, '2021-04-28 00:00:00', '2021-04-29 00:00:00', '11 am to 12 pm', '02 pm to 03 pm', 53, 0.00, 0, 0.00, 53, NULL, 2, 2, '3', 2, '2021-04-28 18:49:23', '2021-05-13 16:52:16'),
+(3, 'ORD18316715', 13, 4, '2021-04-29 00:00:00', '2021-04-30 00:00:00', '02 pm to 03 pm', '12 pm to 01 pm', 53, 0.00, 0, 0.00, 53, NULL, 2, 2, '3', 2, '2021-04-28 19:36:25', '2021-05-07 14:35:32'),
+(4, 'ORD30542021', 13, 4, '2021-04-29 00:00:00', '2021-04-30 00:00:00', '11 am to 12 pm', '11 am to 12 pm', 10, 0.00, 0, 0.00, 10, NULL, 2, 2, '1', 7, '2021-04-28 20:01:51', '2021-05-07 11:42:09'),
+(5, 'ORD57484288', 13, 12, '2021-04-30 00:00:00', '2021-05-01 00:00:00', '09 am to 10 am', '09 am to 10 am', 35, 0.00, 10, 0.00, 50, NULL, NULL, 2, '2', 1, '2021-04-30 14:45:24', '2021-04-30 14:45:24'),
+(6, 'ORD85519272', 13, 6, '2021-04-30 00:00:00', '2021-05-04 00:00:00', '09 am to 10 am', '11 am to 12 pm', 23.85, 0.00, 2.65, 0.00, 26.5, NULL, 2, 2, '3', 7, '2021-04-30 14:51:00', '2021-05-07 14:38:33'),
+(7, 'ORD54113423', 16, 4, '2021-05-04 00:00:00', '2021-05-05 00:00:00', '10 am to 11 am', '10 am to 11 am', 10, 0.00, 0, 0.00, 10, NULL, 2, 2, '2', 5, '2021-05-02 01:10:08', '2021-05-07 15:01:59'),
+(8, 'ORD99797856', 13, 12, '2021-05-11 00:00:00', '2021-05-12 00:00:00', '12 pm to 01 pm', '11 am to 12 pm', 20, 0.00, 2, 0.00, 20, NULL, NULL, 2, '1', 1, '2021-05-11 11:49:19', '2021-05-11 11:49:19'),
+(9, 'ORD47759552', 13, 21, '2021-05-13 00:00:00', '2021-05-14 00:00:00', '05 pm to 06 pm', '09 am to 10 am', 77.5, 50.00, 0, 27.50, 55, NULL, 2, 2, '2', 4, '2021-05-13 16:41:37', '2021-05-13 17:06:34');
 
 -- --------------------------------------------------------
 
@@ -6108,6 +7654,27 @@ CREATE TABLE `order_histories` (
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `order_histories`
+--
+
+INSERT INTO `order_histories` (`id`, `order_id`, `delivery_boy_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 7, '2021-04-28 15:53:16', '2021-04-28 15:53:16'),
+(2, 1, 1, 6, '2021-04-28 15:53:49', '2021-04-28 15:53:49'),
+(3, 1, 1, 5, '2021-04-28 16:07:34', '2021-04-28 16:07:34'),
+(4, 1, 1, 7, '2021-04-28 17:04:02', '2021-04-28 17:04:02'),
+(5, 2, 1, 2, '2021-04-30 11:07:20', '2021-04-30 11:07:20'),
+(6, 3, 1, 3, '2021-04-30 11:08:40', '2021-04-30 11:08:40'),
+(7, 4, 1, 4, '2021-04-30 11:08:53', '2021-04-30 11:08:53'),
+(8, 6, 1, 4, '2021-05-03 12:05:23', '2021-05-03 12:05:23'),
+(9, 2, 1, 3, '2021-05-04 17:18:05', '2021-05-04 17:18:05'),
+(10, 3, 1, 2, '2021-05-04 17:19:33', '2021-05-04 17:19:33'),
+(11, 3, 1, 3, '2021-05-04 17:22:41', '2021-05-04 17:22:41'),
+(12, 3, 1, 4, '2021-05-04 17:23:00', '2021-05-04 17:23:00'),
+(13, 3, 1, 6, '2021-05-04 17:23:10', '2021-05-04 17:23:10'),
+(14, 3, 1, 3, '2021-05-04 17:23:35', '2021-05-04 17:23:35'),
+(15, 3, 1, 4, '2021-05-04 17:23:52', '2021-05-04 17:23:52');
+
 -- --------------------------------------------------------
 
 --
@@ -6120,10 +7687,34 @@ CREATE TABLE `order_items` (
   `product_id` int(11) NOT NULL,
   `service_id` int(11) NOT NULL,
   `qty` int(11) NOT NULL,
+  `mem_dis` double(5,2) NOT NULL DEFAULT 0.00,
   `price` float NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `service_id`, `qty`, `mem_dis`, `price`, `created_at`, `updated_at`) VALUES
+(2, 2, 1, 1, 3, 0.00, 30, '2021-04-28 18:49:23', '2021-04-28 18:49:23'),
+(3, 2, 2, 1, 2, 0.00, 13, '2021-04-28 18:49:23', '2021-04-28 18:49:23'),
+(4, 2, 3, 1, 1, 0.00, 10, '2021-04-28 18:49:23', '2021-04-28 18:49:23'),
+(5, 3, 1, 1, 3, 0.00, 30, '2021-04-28 19:36:25', '2021-04-28 19:36:25'),
+(6, 3, 2, 1, 2, 0.00, 13, '2021-04-28 19:36:25', '2021-04-28 19:36:25'),
+(7, 3, 3, 1, 1, 0.00, 10, '2021-04-28 19:36:25', '2021-04-28 19:36:25'),
+(8, 4, 1, 1, 1, 0.00, 10, '2021-04-28 20:01:51', '2021-04-28 20:01:51'),
+(9, 5, 4, 2, 2, 0.00, 30, '2021-04-30 14:45:25', '2021-04-30 14:45:25'),
+(10, 5, 1, 1, 2, 0.00, 20, '2021-04-30 14:45:25', '2021-04-30 14:45:25'),
+(11, 6, 1, 1, 1, 0.00, 10, '2021-04-30 14:51:00', '2021-04-30 14:51:00'),
+(12, 6, 2, 1, 1, 0.00, 6.5, '2021-04-30 14:51:00', '2021-04-30 14:51:00'),
+(13, 6, 3, 1, 1, 0.00, 10, '2021-04-30 14:51:00', '2021-04-30 14:51:00'),
+(14, 7, 1, 1, 1, 0.00, 10, '2021-05-02 01:10:08', '2021-05-02 01:10:08'),
+(15, 7, 2, 1, 1, 0.00, 6.5, '2021-05-02 01:10:08', '2021-05-02 01:10:08'),
+(16, 8, 1, 1, 2, 0.00, 20, '2021-05-11 11:49:19', '2021-05-11 11:49:19'),
+(17, 9, 1, 1, 4, 20.00, 40, '2021-05-13 16:41:37', '2021-05-13 16:41:37'),
+(18, 9, 4, 2, 1, 7.50, 15, '2021-05-13 16:41:37', '2021-05-13 16:41:37');
 
 -- --------------------------------------------------------
 
@@ -6146,7 +7737,7 @@ CREATE TABLE `password_resets` (
 CREATE TABLE `payment_methods` (
   `id` int(11) NOT NULL,
   `payment_mode` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payment_mode_ar` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payment_mode_ar` varchar(250) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `icon` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
@@ -6158,7 +7749,7 @@ CREATE TABLE `payment_methods` (
 --
 
 INSERT INTO `payment_methods` (`id`, `payment_mode`, `payment_mode_ar`, `icon`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Cash', 'السيولة النقدية', 'images/3eceaee8cb6c946e8446a90e69fde340.png', 1, '2020-05-29 18:20:29', '2020-06-09 13:47:08'),
+(1, 'Cash', 'السيولة النقدية', 'images/8342ffc12c9bb743950331a337714210.png', 1, '2020-05-29 18:20:29', '2021-05-13 17:41:30'),
 (2, 'Online', 'بطاقة', 'images/6c3628647f4bbf8d28c2842df09d860f.png', 1, '2020-05-29 18:22:00', '2020-06-09 13:48:41');
 
 -- --------------------------------------------------------
@@ -6186,13 +7777,21 @@ CREATE TABLE `payment_responses` (
 CREATE TABLE `privacy_policies` (
   `id` int(11) NOT NULL,
   `title` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description_ar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description_ar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `privacy_policies`
+--
+
+INSERT INTO `privacy_policies` (`id`, `title`, `title_ar`, `description`, `description_ar`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Terms of use', NULL, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', NULL, 1, '2021-05-03 12:48:33', '2021-05-03 12:48:33'),
+(2, 'Privacy Policy', NULL, 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur', NULL, 1, '2021-05-03 12:49:26', '2021-05-03 12:49:26');
 
 -- --------------------------------------------------------
 
@@ -6203,13 +7802,27 @@ CREATE TABLE `privacy_policies` (
 CREATE TABLE `products` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
   `product_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `product_name_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_name_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double(5,2) NOT NULL DEFAULT 0.00,
+  `unit` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `category_id`, `service_id`, `product_name`, `product_name_ar`, `image`, `price`, `unit`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'Blazer', 'product1ar', 'images/ee663c735cb5f3c17794f25ae1a1944f.png', 10.00, 2, 1, '2021-04-21 23:11:53', '2021-04-21 19:14:07'),
+(2, 1, 1, 'Jeans', 'product2ar', 'images/60c92bb20f959e39dcb777ee815e7af7.png', 6.50, 1, 1, '2021-04-21 23:12:26', '2021-04-21 19:14:31'),
+(3, 1, 1, 'Mens Kurta', 'product3ar', 'images/b971645894f6bd5686a89b33d0603500.png', 10.00, 3, 1, '2021-04-21 23:13:01', '2021-04-21 19:15:13'),
+(4, 2, 2, 'Shirt', 'product4ar', 'images/5e51b54e3c4a1e7afcd4826236c46cac.png', 15.00, 2, 1, '2021-04-21 23:13:24', '2021-04-21 19:16:10'),
+(5, 2, 2, 'product5', 'product5ar', 'images/8ace039ebdd24e6d762205bd8e5a9c01.png', 7.00, 1, 1, '2021-04-21 23:15:09', '2021-04-22 01:12:42');
 
 -- --------------------------------------------------------
 
@@ -6220,16 +7833,24 @@ CREATE TABLE `products` (
 CREATE TABLE `promo_codes` (
   `id` int(11) NOT NULL,
   `promo_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `promo_name_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `promo_name_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `promo_code` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description_ar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description_ar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `promo_type` int(11) NOT NULL,
   `discount` float NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `promo_codes`
+--
+
+INSERT INTO `promo_codes` (`id`, `promo_name`, `promo_name_ar`, `promo_code`, `description`, `description_ar`, `promo_type`, `discount`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Get Rupee 10 Flat discount on order', NULL, 'NEWOFFER13', 'This offer is applicable for new user and Contrary to popular belief, Lorem Ipsum is not simply random text.', NULL, 1, 10, 1, '2021-04-30 10:00:10', '2021-04-30 12:54:14'),
+(2, 'Get 10 % discount on special offer', NULL, 'PEROFFER13', '\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', NULL, 2, 10, 1, '2021-04-30 10:02:20', '2021-04-30 12:54:27');
 
 -- --------------------------------------------------------
 
@@ -6261,14 +7882,48 @@ INSERT INTO `promo_types` (`id`, `type_name`, `created_at`, `updated_at`) VALUES
 CREATE TABLE `services` (
   `id` int(11) NOT NULL,
   `service_name` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `service_name_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `service_name_ar` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description_ar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `service_time` int(11) NOT NULL,
+  `description_ar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `services`
+--
+
+INSERT INTO `services` (`id`, `service_name`, `service_name_ar`, `description`, `service_time`, `description_ar`, `image`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Wash only', 'service Ar 2', '10 hours min', 10, 'second descriptions', 'images/ab7285a443c32138b1caedd3922d6959.jpg', 1, '2021-04-21 01:06:46', '2021-05-01 14:10:12'),
+(2, 'Dry Cleaning', 'service Ar', '18 hours min', 18, 'ar description', 'images/91bab58c7f0316890d6ef9db06d46ac9.jpg', 1, '2021-04-21 01:06:09', '2021-05-01 14:10:22'),
+(3, 'Wash & Iron', 'service Ar 3', '24 hours min', 24, 'second descriptions ', 'images/1809e221fe62e5e8a764aa90d172592e.jpg', 1, '2021-04-21 01:06:46', '2021-05-01 14:10:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `service_areas`
+--
+
+CREATE TABLE `service_areas` (
+  `id` int(11) NOT NULL,
+  `title` varchar(225) NOT NULL,
+  `pincode` varchar(225) NOT NULL,
+  `delivery_changes` double(5,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `service_areas`
+--
+
+INSERT INTO `service_areas` (`id`, `title`, `pincode`, `delivery_changes`, `created_at`, `updated_at`) VALUES
+(1, 'Uttam Nagar', '110059', 20.00, '2021-05-12 11:55:49', '2021-05-12 11:55:49'),
+(2, 'Janak Puri', '110060', 30.00, '2021-05-12 11:56:30', '2021-05-12 11:56:30'),
+(3, 'Dawaka', '110075', 50.00, '2021-05-12 11:58:10', '2021-05-12 11:58:10');
 
 -- --------------------------------------------------------
 
@@ -6294,6 +7949,56 @@ INSERT INTO `statuses` (`id`, `status_name`, `created_at`, `updated_at`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `time_slots`
+--
+
+CREATE TABLE `time_slots` (
+  `id` int(11) NOT NULL,
+  `time_from` varchar(225) NOT NULL,
+  `time_to` varchar(225) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `time_slots`
+--
+
+INSERT INTO `time_slots` (`id`, `time_from`, `time_to`, `created_at`, `updated_at`) VALUES
+(1, '09 am', '10 am', '2021-04-26 12:03:26', '2021-04-28 04:14:52'),
+(2, '10 am', '11 am', '2021-04-26 12:04:01', '2021-04-26 12:04:01'),
+(3, '11 am', '12 pm', '2021-04-26 12:15:22', '2021-04-26 12:15:22'),
+(4, '12 pm', '01 pm', '2021-04-26 12:15:22', '2021-04-26 12:15:22'),
+(5, '02 pm', '03 pm', '2021-04-26 12:03:26', '2021-04-26 12:03:26'),
+(6, '03 pm', '04 pm', '2021-04-26 12:04:01', '2021-04-26 12:04:01'),
+(7, '04 pm', '05 pm', '2021-04-26 12:15:22', '2021-04-26 12:15:22'),
+(8, '05 pm', '06 pm', '2021-04-26 12:15:22', '2021-04-26 12:15:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `units`
+--
+
+CREATE TABLE `units` (
+  `id` int(11) NOT NULL,
+  `unit_code` varchar(225) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `units`
+--
+
+INSERT INTO `units` (`id`, `unit_code`, `created_at`, `updated_at`) VALUES
+(1, 'piece', NULL, '2021-04-22 09:25:48'),
+(2, 'kg', NULL, NULL),
+(3, 'meter', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -6307,6 +8012,81 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_carts`
+--
+
+CREATE TABLE `user_carts` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `cart_status` varchar(225) NOT NULL,
+  `subtotal` double(10,2) NOT NULL,
+  `delivery_changes` double(5,2) NOT NULL DEFAULT 0.00,
+  `additional_charges` double(10,2) NOT NULL DEFAULT 0.00,
+  `discount` double(10,2) NOT NULL DEFAULT 0.00,
+  `mem_total_discount` double(5,2) NOT NULL DEFAULT 0.00,
+  `promocode_id` int(11) NOT NULL DEFAULT 0,
+  `total_amt` double(10,2) NOT NULL,
+  `pickup_date` varchar(225) DEFAULT NULL,
+  `pickup_time` varchar(225) DEFAULT NULL,
+  `drop_date` varchar(225) DEFAULT NULL,
+  `drop_time` varchar(225) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user_carts`
+--
+
+INSERT INTO `user_carts` (`id`, `user_id`, `cart_status`, `subtotal`, `delivery_changes`, `additional_charges`, `discount`, `mem_total_discount`, `promocode_id`, `total_amt`, `pickup_date`, `pickup_time`, `drop_date`, `drop_time`, `created_at`, `updated_at`) VALUES
+(11, 13, 'ordered', 55.00, 50.00, 0.00, 0.00, 27.50, 0, 77.50, '21-05-13', '05 pm to 06 pm', '21-05-14', '09 am to 10 am', '2021-05-11 11:13:35', '2021-05-13 11:11:17'),
+(12, 13, 'created', 10.00, 0.00, 0.00, 0.00, 5.00, 0, 5.00, NULL, NULL, NULL, NULL, '2021-05-13 12:13:03', '2021-05-13 12:13:59');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_notifications`
+--
+
+CREATE TABLE `user_notifications` (
+  `id` int(11) NOT NULL,
+  `order_id` varchar(225) NOT NULL,
+  `fcm_msg_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user_notifications`
+--
+
+INSERT INTO `user_notifications` (`id`, `order_id`, `fcm_msg_id`, `user_id`, `created_at`) VALUES
+(1, 'ORD18316715', 3, 13, '2021-05-04 12:13:10'),
+(2, 'ORD30542021', 2, 13, '2021-05-04 13:02:04'),
+(3, 'ORD85519272', 7, 13, '2021-05-04 13:02:48'),
+(4, 'ORD30542021', 3, 13, '2021-05-04 13:30:05'),
+(5, 'ORD30542021', 2, 13, '2021-05-04 13:30:27'),
+(6, 'ORD18316715', 4, 13, '2021-05-06 10:14:48'),
+(7, 'ORD18316715', 3, 13, '2021-05-07 06:16:48'),
+(8, 'ORD18316715', 4, 13, '2021-05-07 06:22:15'),
+(9, 'ORD18316715', 5, 13, '2021-05-07 09:01:04'),
+(10, 'ORD85519272', 5, 13, '2021-05-07 09:02:14'),
+(12, 'ORD85519272', 2, 13, '2021-05-07 09:03:51'),
+(13, 'ORD18316715', 2, 13, '2021-05-07 09:05:32'),
+(14, 'ORD85519272', 3, 13, '2021-05-07 09:06:50'),
+(15, 'ORD85519272', 4, 13, '2021-05-07 09:07:01'),
+(16, 'ORD85519272', 5, 13, '2021-05-07 09:07:25'),
+(17, 'ORD85519272', 7, 13, '2021-05-07 09:08:34'),
+(23, 'ORD54113423', 2, 16, '2021-05-07 09:30:39'),
+(24, 'ORD54113423', 5, 16, '2021-05-07 09:31:59'),
+(25, 'ORD93571319', 2, 13, '2021-05-13 11:22:17'),
+(26, 'ORD47759552', 2, 13, '2021-05-13 11:35:48'),
+(27, 'ORD47759552', 3, 13, '2021-05-13 11:36:17'),
+(28, 'ORD47759552', 4, 13, '2021-05-13 11:36:35');
 
 --
 -- Indexes for dumped tables
@@ -6391,6 +8171,12 @@ ALTER TABLE `banner_images`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `cart_products`
+--
+ALTER TABLE `cart_products`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -6406,6 +8192,12 @@ ALTER TABLE `customers`
 -- Indexes for table `delivery_boys`
 --
 ALTER TABLE `delivery_boys`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `driver_notifications`
+--
+ALTER TABLE `driver_notifications`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -6430,6 +8222,18 @@ ALTER TABLE `fcm_notification_messages`
 -- Indexes for table `labels`
 --
 ALTER TABLE `labels`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `memberships`
+--
+ALTER TABLE `memberships`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `membership_duration`
+--
+ALTER TABLE `membership_duration`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -6505,9 +8309,27 @@ ALTER TABLE `services`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `service_areas`
+--
+ALTER TABLE `service_areas`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `statuses`
 --
 ALTER TABLE `statuses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `time_slots`
+--
+ALTER TABLE `time_slots`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `units`
+--
+ALTER TABLE `units`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -6518,6 +8340,18 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
+-- Indexes for table `user_carts`
+--
+ALTER TABLE `user_carts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_notifications`
+--
+ALTER TABLE `user_notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -6525,19 +8359,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `admin_menu`
 --
 ALTER TABLE `admin_menu`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `admin_operation_log`
 --
 ALTER TABLE `admin_operation_log`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5553;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6908;
 
 --
 -- AUTO_INCREMENT for table `admin_permissions`
@@ -6570,28 +8404,40 @@ ALTER TABLE `banner_images`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `cart_products`
+--
+ALTER TABLE `cart_products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `delivery_boys`
 --
 ALTER TABLE `delivery_boys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `driver_notifications`
+--
+ALTER TABLE `driver_notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `faqs`
 --
 ALTER TABLE `faqs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `fare_managements`
@@ -6612,6 +8458,18 @@ ALTER TABLE `labels`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `memberships`
+--
+ALTER TABLE `memberships`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `membership_duration`
+--
+ALTER TABLE `membership_duration`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
@@ -6621,19 +8479,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `order_histories`
 --
 ALTER TABLE `order_histories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `payment_methods`
@@ -6651,19 +8509,19 @@ ALTER TABLE `payment_responses`
 -- AUTO_INCREMENT for table `privacy_policies`
 --
 ALTER TABLE `privacy_policies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `promo_codes`
 --
 ALTER TABLE `promo_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `promo_types`
@@ -6675,7 +8533,13 @@ ALTER TABLE `promo_types`
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `service_areas`
+--
+ALTER TABLE `service_areas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `statuses`
@@ -6684,10 +8548,34 @@ ALTER TABLE `statuses`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `time_slots`
+--
+ALTER TABLE `time_slots`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `units`
+--
+ALTER TABLE `units`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user_carts`
+--
+ALTER TABLE `user_carts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `user_notifications`
+--
+ALTER TABLE `user_notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
