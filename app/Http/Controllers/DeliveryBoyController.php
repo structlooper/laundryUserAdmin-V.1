@@ -464,8 +464,9 @@ class DeliveryBoyController extends Controller
     public function notifications(Request $request){
         $driver_id = $request->driver_id;
         $notifications_db = DB::table('driver_notifications')
-            ->select('driver_notifications.order_id','f_msg.status_image','f_msg.customer_title as title','f_msg.customer_description as desc','driver_notifications.created_at')
+            ->select('orders.id','driver_notifications.order_id','f_msg.status_image','f_msg.customer_title as title','f_msg.customer_description as desc','driver_notifications.created_at')
             ->join('fcm_notification_messages as f_msg','f_msg.id','=','driver_notifications.fcm_msg_id')
+            ->join('orders','orders.order_id','=','driver_notifications.order_id')
             ->where('driver_id',$driver_id)->get();
         if (sizeof($notifications_db) > 0){
             $notifications= [];

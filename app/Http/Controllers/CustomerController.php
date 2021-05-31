@@ -421,8 +421,9 @@ class CustomerController extends Controller
     public function notifications(Request $request){
        $user_id = $request->user_id;
        $notifications_db = DB::table('user_notifications')
-           ->select('user_notifications.order_id','f_msg.status_image','f_msg.customer_title as title','f_msg.customer_description as desc','user_notifications.created_at')
+           ->select('user_notifications.order_id','f_msg.status_image','f_msg.customer_title as title','f_msg.customer_description as desc','user_notifications.created_at','orders.id')
            ->join('fcm_notification_messages as f_msg','f_msg.id','=','user_notifications.fcm_msg_id')
+           ->join('orders','orders.order_id','=','user_notifications.order_id')
            ->where('user_id',$user_id)->get();
        if (sizeof($notifications_db) > 0){
            $notifications= [];
