@@ -34,8 +34,9 @@ class UserAddressController extends Controller
             'pincode' => $input['pincode'],
             'created_at' => date('Y-m-d H:i:s')
         ];
-        if(DB::table('addresses')->insert($data)){
-            return ['status' => 1 , 'message' => 'Address saved successfully'];
+        $address_id=DB::table('addresses')->insertGetId($data);
+        if($address_id !== 0){
+            return ['status' => 1 , 'message' => 'Address saved successfully' , 'address_id' => $address_id];
         }
         return ['status' => 0,'message' => 'Address not saved'];
 
