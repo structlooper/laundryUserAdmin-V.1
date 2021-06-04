@@ -9,17 +9,19 @@ use Illuminate\Support\Facades\DB;
 class TimeSlotController extends Controller
 {
     //
-    public function index(){
-        $times = DB::table('time_slots')->select('id','time_from','time_to')->get();
-        $final = [];
-        foreach ($times as $index => $time){
-            (($index % 2 == 0)?$apped=[]:'');
-            $apped[] = $time;
-            if ($index % 2 !== 0){
-                $final[] = $apped;
+    public function index($date = null){
+        $times = DB::table('time_slots')
+            ->select('id','time_from','time_to')->get();
+        if ($date === 'today'){
+            $final=[];
+            foreach ($times as $time){
+                if (strtotime($time->time_from) > strtotime(date('h a'))){
+                    $final[]=$time;
+                }
             }
+            $times=$final;
         }
-        return $final;
+        return $times;
     }
     public function date(){
 
@@ -33,19 +35,19 @@ class TimeSlotController extends Controller
     }
     public function date_drop($id){
         if ($id == 'drop'){
-            $date['today'] = 'Tomorrow '.Carbon::now()->addDay()->format('d,M');
-            $date['day1'] = Carbon::now()->addDay()->format('y-m-d');
-            $date['next_day'] = 'Next '.Carbon::now()->addDays(2)->format('d,M');
+            $date['today'] = Carbon::now()->addDay()->format('d, M Y').  ' (Tomorrow)';
+            $date['day1'] = Carbon::now()->addDay()->format('y-m-d H:i:s');
+            $date['next_day'] = Carbon::now()->addDays(2)->format('d, M Y'). ' (Next)';
             $date['day2'] = Carbon::now()->addDays(2)->format('y-m-d');
-            $date['day_after_next'] = 'Other '.Carbon::now()->addDays(3)->format('d,M');
+            $date['day_after_next'] = Carbon::now()->addDays(3)->format('d, M Y');
             $date['day3'] = Carbon::now()->addDays(3)->format('y-m-d');
             return $date;
         }else{
-            $date['today'] = 'Today '.Carbon::now()->format('d,M');
-            $date['day1'] = Carbon::now()->format('y-m-d');
-            $date['next_day'] = 'Tomorrow '.Carbon::now()->addDay()->format('d,M');
+            $date['today'] = Carbon::now()->format('d, M Y').' (Today)';
+            $date['day1'] = Carbon::now()->format('Y-m-d H:i:s');
+            $date['next_day'] =Carbon::now()->addDay()->format('d, M Y').  ' (Tomorrow)';
             $date['day2'] = Carbon::now()->addDay()->format('y-m-d');
-            $date['day_after_next'] = 'Other '.Carbon::now()->addDays(2)->format('d,M');
+            $date['day_after_next'] = Carbon::now()->addDays(2)->format('d, M Y');
             $date['day3'] = Carbon::now()->addDays(2)->format('y-m-d');
             return $date;
         }

@@ -47,7 +47,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('address/update','UserAddressController@update_address');
     Route::get('address_id/{id}','UserAddressController@get_address_id');
     Route::post('address/delete','UserAddressController@delete');
-    Route::get('time_slots','TimeSlotController@index');
+    Route::get('time_slots/{id?}','TimeSlotController@index');
     Route::get('date_slots','TimeSlotController@date');
     Route::get('date_slots/{id}','TimeSlotController@date_drop');
     Route::post('save_date_time','TimeSlotController@save_date_time');
