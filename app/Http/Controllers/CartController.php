@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
+use App\Customer;
 use App\ServiceArea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -225,5 +226,22 @@ class CartController extends Controller
         }
         return ['status' => 0,'message' => 'Order not placed internal error'];
 
+    }
+    public function create(Request $request): array
+    {
+        $inputs = $request->all();
+        if (array_key_exists("order_id",$inputs)){
+            if (DB::table('orders')->update($inputs)) {
+                return ['status' => 1, 'message' => 'order updated successfully', 'order_id' => $inputs['order_id']];
+            }
+        }else {
+            $inputs['address_id'] = Customer::where('id', $inputs['customer_id'])->value('default_address');
+            $inputs['order_id'] = 'ORD' . mt_rand(10000000, 99999999);
+            $inputs['updated_at'] = date('y-m-d H:i:s');
+            if (DB::table('orders')->insert($inputs)) {
+                return ['status' => 1, 'message' => 'order placed successfully', 'order_id' => $inputs['order_id']];
+            }
+        }
+        return ['status' => 0, 'message' => 'something went wrong' ];
     }
 }
