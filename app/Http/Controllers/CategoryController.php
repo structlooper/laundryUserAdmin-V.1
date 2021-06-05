@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Service;
 use Illuminate\Http\Request;
 use DB;
 
@@ -91,5 +92,8 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function name(Request $request){
+        return Service::where('id',$request->service_id)->value('service_name');
     }
 }

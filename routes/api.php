@@ -36,12 +36,14 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('logged/customer', 'CustomerController@getAuthenticatedUser');
     Route::get('servicesBanners', 'ServiceController@banners');
     Route::resource('category','CategoryController');
+    Route::post('category/name','CategoryController@name');
 //    Route::resource('product', 'ProductController');
     Route::get('product/{id}/{if}', 'ProductController@show');
     Route::get('product/{id}', 'ProductController@show1');
     Route::get('cart/{id}','CartController@index');
     Route::post('cart','CartController@cart');
     Route::post('cart/checkout','CartController@checkout');
+    Route::post('cart/order_create','CartController@create');
     Route::get('address/{id}', 'AddressController@get_address');
     Route::post('address/add', 'UserAddressController@add_address');
     Route::post('address/update','UserAddressController@update_address');
