@@ -59,6 +59,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('select/address','UserAddressController@select_address');
     Route::post('promo', 'PromoCodeController@index');
     Route::post('promo/select','PromoCodeController@select');
+    Route::post('promo/check','PromoCodeController@check');
     Route::post('notifications','CustomerController@notifications');
     Route::get('membership','MembershipController@index');
     Route::post('membership/save','MembershipController@save');

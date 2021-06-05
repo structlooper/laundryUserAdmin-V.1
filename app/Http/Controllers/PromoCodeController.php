@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\PromoCode;
 use DB;
@@ -11,9 +12,9 @@ class PromoCodeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $input = $request->all();
         if($input['lang'] == 'en'){
@@ -32,7 +33,8 @@ class PromoCodeController extends Controller
             "status" => 1
         ]);
     }
-    public function select(Request $req){
+    public function select(Request $req): array
+    {
         $promo_id = $req->promo_id;
         $cart_id = $req->cart_id;
         $cart = DB::table('user_carts')->where('id',$cart_id)->first();
@@ -53,6 +55,13 @@ class PromoCodeController extends Controller
         if (DB::table('user_carts')->where('id',$cart_id)->update($update)){
             return ['status' => 1,'message' => 'promo applied!'];
         }return ['status' => 0 , 'message' => 'some internal issue'];
+    }
+    public function check(Request $request){
+        $Valid_promo = PromoCode::where('promo_code',$request->promo_code)->first();
+        if ($Valid_promo){
+            return ['status' => 1,'message' => 'Promo code applied successfully','data' => $Valid_promo];
+        }
+        return ['status' => 0, 'message' => 'Entered promo-code is not valid!'];
     }
 
     /**
