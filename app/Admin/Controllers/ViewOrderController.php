@@ -12,6 +12,7 @@ use App\OrderItem;
 use App\PaymentMethod;
 use App\Http\Controllers\Controller;
 use App\PaymentStatus;
+use App\Service;
 use Encore\Admin\Controllers\Dashboard;
 use Encore\Admin\Layout\Column;
 use Encore\Admin\Layout\Content;
@@ -32,7 +33,17 @@ class ViewOrderController extends Controller
             $data['customer_name'] = Customer::where('id',$order_details->customer_id)->value('customer_name');
             $data['address'] = Address::where('id',$order_details->address_id)->value('address');
             $data['door_no'] = Address::where('id',$order_details->address_id)->value('door_no');
-            $data['expected_delivery_date'] = date('d M-Y',strtotime($order_details->expected_delivery_date));
+            $service_names=[];
+            foreach (explode(',',$order_details->selected_service_ids) as $service_id ){
+                $service_names[] = Service::where('id',$service_id)->value('service_name');
+            }
+            $data['selected_services'] = implode(', ',$service_names);
+            $data['expected_delivery_date'] = date('d M, Y',strtotime($order_details->expected_delivery_date));
+            $data['pickup_time'] = $order_details->pickup_time;
+            $data['estimated_cloths'] = $order_details->estimated_cloths;
+            $data['additional_item_ids'] = $order_details->additional_item_ids;
+            $data['drop_time'] = $order_details->drop_time;
+            $data['expected_pickup_date'] = date('d M, Y',strtotime($order_details->expected_pickup_date));
             $data['collected_by'] = (DeliveryBoy::where('id',$order_details->collected_by)->value('delivery_boy_name') != '' ) ? DeliveryBoy::where('id',$order_details->collected_by)->value('delivery_boy_name') : "---" ;
             $data['delivered_by'] = (DeliveryBoy::where('id',$order_details->delivered_by)->value('delivery_boy_name') != '' ) ? DeliveryBoy::where('id',$order_details->delivered_by)->value('delivery_boy_name') : "---" ;
             $data['payment_mode'] = PaymentMethod::where('id',$order_details->payment_mode)->value('payment_mode');

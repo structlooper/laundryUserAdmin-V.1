@@ -15,6 +15,18 @@
                 <td>{{$customer_name}}</td>
               </tr>
               <tr>
+                <th>Services</th>
+                <td>{{$selected_services}}</td>
+              </tr>
+              <tr>
+                <th>Estimated cloths</th>
+                <td>{{$estimated_cloths}}</td>
+              </tr>
+              <tr>
+                <th>Additional items</th>
+                <td>{{($additional_item_ids !== null)?str_replace(',',', ',$additional_item_ids):'No additional item'}}</td>
+              </tr>
+              <tr>
                 <th>Door number/Landmark</th>
                 <td>{{$door_no}}</td>
               </tr>
@@ -23,8 +35,12 @@
                 <td>{{$address}}</td>
               </tr>
               <tr>
-                <th>Expected Delivery Date</th>
-                <td>{{$expected_delivery_date}}</td>
+                <th>Pickup Date</th>
+                <td>{{$expected_pickup_date}}  ({{ $pickup_time }})</td>
+              </tr>
+              <tr>
+                  <th>Delivery Date</th>
+                  <td>{{$expected_delivery_date}} ({{ $drop_time }})</td>
               </tr>
             </tbody>
           </table>
