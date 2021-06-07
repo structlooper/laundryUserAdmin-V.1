@@ -32,6 +32,8 @@ class MembershipController extends AdminController
 
         $grid->column('id', __('Id'));
         $grid->column('title', __('Title'));
+        $grid->column('banner_image', __('Banner(1200 X 300)'))->image();
+
         $grid->column('price', __('Price'));
         $grid->column('discount', __('Discount(%)'));
         $grid->column('desc_1', __('Desc 1'));
@@ -96,6 +98,7 @@ class MembershipController extends AdminController
         $form->multipleSelect('service_id', __('Services'))->options(Service::all()->pluck('service_name', 'id'))->rules(function ($form) {
             return 'required';
         });
+        $form->image('banner_image', __('Banner(1200 X 300)'))->rules('required|mimes:jpeg,png,jpg,gif,svg|dimensions:width=1200,height=300')->uniqueName();
         $form->text('title', __('Title'))->rules(function ($form) {
             return 'required';
         });

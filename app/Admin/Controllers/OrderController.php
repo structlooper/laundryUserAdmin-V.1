@@ -88,12 +88,16 @@ class OrderController extends AdminController
             //Get All status
             $labels = Label::pluck('label_name', 'id');
             $customers = Customer::pluck('customer_name', 'id');
+            $phone_number = Customer::pluck('phone_number', 'id');
             $delivery_boys = DeliveryBoy::pluck('delivery_boy_name', 'id');
             $filter->equal('customer_id', 'Customer')->select($customers);
 //            $filter->equal('collected_by', 'Collected By')->select($delivery_boys);
             $filter->equal('delivered_by', 'Delivered By')->select($delivery_boys);
+            $filter->equal('order_id', 'Order Id');
+            $filter->equal('customer_id', 'Phone Number')->select($phone_number);
             $filter->equal('status', 'Status')->select($labels);
-            $filter->date('expected_delivery_date', 'Expected Delivery Date');
+            $filter->date('expected_pickup_date', 'Pickup Date');
+            $filter->date('expected_delivery_date', 'Delivery Date');
         });
         return $grid;
     }

@@ -231,13 +231,14 @@ class CartController extends Controller
     {
         $inputs = $request->all();
         if (array_key_exists("order_id",$inputs)){
+            $inputs['updated_at'] = date('y-m-d H:i:s');
             if (DB::table('orders')->update($inputs)) {
                 return ['status' => 1, 'message' => 'order updated successfully', 'order_id' => $inputs['order_id']];
             }
         }else {
             $inputs['address_id'] = Customer::where('id', $inputs['customer_id'])->value('default_address');
             $inputs['order_id'] = 'ORD' . mt_rand(10000000, 99999999);
-            $inputs['updated_at'] = date('y-m-d H:i:s');
+            $inputs['created_at'] = date('y-m-d H:i:s');
             if (DB::table('orders')->insert($inputs)) {
                 return ['status' => 1, 'message' => 'order placed successfully', 'order_id' => $inputs['order_id']];
             }
