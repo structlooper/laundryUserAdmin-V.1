@@ -18,9 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::resource('customer', 'CustomerController');
 
-/*
+/**
  * Modified apis
- * by #structlooper
+ * by @structlooper
  * at 31/03/21
  * */
 Route::post('customer/login', 'CustomerController@login');
@@ -30,6 +30,8 @@ Route::get('app_setting', 'AppSettingController@index');
 Route::post('privacy_policy', 'PrivacyPolicyController@index');
 Route::post('faq', 'FaqController@index');
 Route::resource('service', 'ServiceController');
+Route::post('search_product','ProductController@search_products');
+
 //secured apis using customer token
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('customer/update', 'CustomerController@update_profile');
@@ -67,6 +69,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::resource('service-area','ServiceAreaController');
     Route::get('checkAddress/{id}','UserAddressController@checkAddress');
     Route::post('payment', 'PaymentMethodController@payment');
+
 
 });
 

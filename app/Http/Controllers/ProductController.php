@@ -89,17 +89,19 @@ class ProductController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Support\Collection
      */
-    public function show($id,$service_id)
+    public function show($id,$service_id): \Illuminate\Support\Collection
     {
         //
         return DB::table('products')
-            ->select('products.*','units.unit_code as unit')
+            ->select('products.id','product_name','price','units.unit_code as unit','categories.category_name','services.service_name')
+            ->join('categories','categories.id','=','products.category_id')
+            ->join('services','services.id','=','products.service_id')
             ->join('units','units.id','=','products.unit')
             ->where('products.category_id',$id)
             ->where('products.service_id',$service_id)
-            ->where('status',1)->get();
+            ->where('products.status',1)->get();
     }
     public function show1($id)
     {
@@ -143,5 +145,19 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function search_products(Request $request){
+        $key = $request->key;
+        if (strlen($key)>1){
+            return Product::select('products.id','product_name','price','units.unit_code as unit','categories.category_name','services.service_name')
+                ->join('categories','categories.id','=','products.category_id')
+                ->join('services','services.id','=','products.service_id')
+                ->join('units','units.id','=','products.unit')
+                ->where('products.product_name','LIKE',$key)
+                ->orWhere('products.product_name','LIKE','%'.$key.'%')->get();
+        }else{
+            return [];
+        }
+
     }
 }
