@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Customer;
 use App\Helper\NotiHelper;
+use App\Service;
 use Illuminate\Http\Request;
 use App\DeliveryBoy;
 use App\Order;
@@ -376,7 +377,7 @@ class DeliveryBoyController extends Controller
     public function details(Request $req){
         $driver_id = $req->driver_id;
         $orders =  DB::table('orders')
-            ->select('orders.id','orders.customer_id','orders.address_id','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
+            ->select('orders.id','orders.customer_id','orders.address_id','orders.estimated_cloths','orders.payment_status','orders.payment_mode','orders.selected_service_ids as selected_services','orders.additional_item_ids','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
             ,'orders.drop_time','orders.discount','orders.sub_total','orders.total','orders.status','labels.label_for_delivery_boy','labels.label_image'
             )
 
@@ -385,6 +386,12 @@ class DeliveryBoyController extends Controller
             ->where('orders.id',$req->order_id)
             ->first();
         if (is_object($orders)) {
+            $orders->selected_services = explode(',',$orders->selected_services);
+            $selected_services=[];
+            foreach ($orders->selected_services as $selected_service){
+                $selected_services[]=Service::where('id',$selected_service)->value('service_name');
+            }
+            $orders->selected_services = implode(', ',$selected_services);
             $orders->customer_id = DB::table('customers')
                 ->select('customer_name', 'phone_number')
                 ->where('id', $orders->customer_id)->first();
