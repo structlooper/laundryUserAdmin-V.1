@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use App\Customer;
 use App\Helper\NotiHelper;
 use App\Service;
+use App\ServiceArea;
 use Illuminate\Http\Request;
 use App\DeliveryBoy;
 use App\Order;
@@ -353,7 +355,7 @@ class DeliveryBoyController extends Controller
     public function orders(Request $req){
         $driver_id = $req->driver_id;
     $orders =  DB::table('orders')
-        ->select('orders.id','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
+        ->select('orders.id','orders.order_id','orders.expected_pickup_date','orders.estimated_cloths','orders.payment_status','orders.payment_mode','orders.expected_delivery_date','orders.pickup_time'
         ,'orders.drop_time','orders.total','orders.status','addresses.door_no','labels.label_for_delivery_boy','labels.label_image'
         )
         ->join('addresses','addresses.id','=','orders.address_id')
@@ -365,7 +367,7 @@ class DeliveryBoyController extends Controller
      public function completed(Request $req){
             $driver_id = $req->driver_id;
         $orders =  DB::table('orders')
-            ->select('orders.id','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
+            ->select('orders.id','orders.order_id','orders.expected_pickup_date','orders.estimated_cloths','orders.payment_status','orders.payment_mode','orders.expected_delivery_date','orders.pickup_time'
             ,'orders.drop_time','orders.total','orders.status','addresses.door_no','labels.label_for_delivery_boy','labels.label_image'
             )
             ->join('addresses','addresses.id','=','orders.address_id')
@@ -377,7 +379,7 @@ class DeliveryBoyController extends Controller
     public function details(Request $req){
         $driver_id = $req->driver_id;
         $orders =  DB::table('orders')
-            ->select('orders.id','orders.customer_id','orders.address_id','orders.estimated_cloths','orders.payment_status','orders.payment_mode','orders.selected_service_ids as selected_services','orders.additional_item_ids','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
+            ->select('orders.id','orders.customer_id','orders.address_id','orders.estimated_cloths','orders.delivery_changes','orders.mem_total_discount','orders.payment_status','orders.payment_mode','orders.selected_service_ids as selected_services','orders.additional_item_ids','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
             ,'orders.drop_time','orders.discount','orders.sub_total','orders.total','orders.status','labels.label_for_delivery_boy','labels.label_image'
             )
 
@@ -399,7 +401,7 @@ class DeliveryBoyController extends Controller
                 ->select('address', 'door_no', 'latitude', 'longitude')
                 ->where('id', $orders->address_id)->first();
             $orders->products = DB::table('order_items')
-                ->select('products.product_name','services.service_name','order_items.qty','order_items.price')
+                ->select('products.id as product_id','products.product_name','services.service_name','order_items.qty','order_items.price')
                 ->join('products','products.id','=','order_items.product_id')
                 ->join('services','services.id','=','order_items.service_id')
                 ->where('order_items.order_id',$orders->id)
@@ -515,5 +517,116 @@ class DeliveryBoyController extends Controller
     }
     public function earnings(Request $request){
         return DB::table('earning_status')->where('driver_id',$request->driver_id)->get();
+    }
+    public function order(Request $request){
+        $product_id = $request->product_id;
+        $qty = $request->qty;
+        $order_id = $request->order_id;
+        $order_details = Order::where('id',$order_id)->first();
+        $user_details = Customer::where('id',$order_details->customer_id)->first();
+        $pin_code = Address::where('id',$user_details->default_address)->value('pincode');
+        $delivery_charge = ServiceArea::where('pincode',$pin_code)->value('delivery_changes') ?? 0;
+        $membership = DB::table('memberships')->where('id',$user_details->membership)->first();
+        $productDetails = DB::table('products')->join('units','units.id','=' , 'products.unit')->where('products.id',$product_id)->first();
+        $checkProduct = DB::table('order_items')->where('order_id',$order_id)->where('product_id',$product_id)->first();
+        if ($checkProduct) {
+            if ($qty == 0 or ($checkProduct->qty == 1 and $qty == -1)) {
+                DB::table('order_items')
+                    ->where('order_id', $order_id)
+                    ->where('product_id', $product_id)->delete();
+                $subtotal = (float)$order_details->sub_total - (float)$checkProduct->price;
+                $mem_total_discount = (float)$order_details->mem_total_discount - (float)$checkProduct->mem_dis;
+
+                DB::table('orders')->update([
+                    'sub_total' => $subtotal,
+                    'total' => $subtotal+$order_details->delivery_changes,
+                    'mem_total_discount' => $mem_total_discount,
+                    'updated_at' => date('Y-m-d H:i:s')]);
+                return ['status' => 1, 'message' => 'product removed'];
+            }else{
+                if ($qty == -1) {
+                    $new_qty = (int)$checkProduct->qty - 1;
+                } else {
+                    $new_qty = (int)$checkProduct->qty + 1;
+                }
+                $mem_dis = 0;
+                if ($membership){
+                    $mem_service_array = explode(',',$membership->service_id);
+                    if(in_array($productDetails->service_id,$mem_service_array)) {
+                        $mem_dis = ((float)$productDetails->price * $membership->discount) / 100;
+                    }
+                }
+                $cal_price = (float)$productDetails->price - $mem_dis;
+                DB::table('order_items')
+                    ->where('order_id', $order_id)
+                    ->where('product_id', $product_id)
+                    ->update(['qty' => $new_qty,
+                        'u_price' => (float)$productDetails->price * $new_qty,
+                        'price' => $cal_price * $new_qty ,
+                        'mem_dis' => $mem_dis * $new_qty
+                    ]);
+                $allProducts = DB::table('order_items')->where('order_id', $order_id)->get();
+                $subtotal = 0.0;
+                $total = $delivery_charge;
+                $mem_total_discount = 0;
+                foreach ($allProducts as $allProduct) {
+                    $subtotal += (float)$allProduct->u_price;
+                    $total += (float)$allProduct->price;
+                    $mem_total_discount += (float)$allProduct->mem_dis;
+                }
+                DB::table('orders')
+                    ->where('id',$order_id)
+                    ->update([
+                        'sub_total' => $subtotal,
+                        'total' => $total,
+                        'delivery_changes' => $delivery_charge,
+                        'mem_total_discount' => $mem_total_discount,
+                        'updated_at' => date('Y-m-d H:i:s')]);
+                return ['status' => 1, 'message' => 'count updated'];
+            }
+        }else{
+            // insert product
+            if ($qty == 0 or $qty < 0){
+                return ['status' => 0 , 'message' => 'product not present'];
+            }
+            $mem_dis = 0;
+            if ($membership){
+                $mem_service_array = explode(',',$membership->service_id);
+                if(in_array($productDetails->service_id,$mem_service_array)) {
+                    $mem_dis = ((float)$productDetails->price * $membership->discount) / 100;
+                }
+            }
+            $cal_price = (float)$productDetails->price - $mem_dis;
+            $data =[
+                'order_id'=>$order_id,
+                'product_id' => $product_id ,
+                'mem_dis' => $mem_dis ,
+                'qty' => $qty,
+                'u_price' => $productDetails->price,
+                'service_id' => $productDetails->service_id,
+                'price' => $cal_price * $qty,
+                'updated_at' => date('y-m-d H:i:s'),
+                'created_at' => date('y-m-d H:i:s'),
+            ];
+            DB::table('order_items')->insert($data);
+            $allProducts = DB::table('order_items')->where('order_id', $order_id)->get();
+            $subtotal = 0.0;
+            $total = $delivery_charge;
+            $mem_total_discount = 0;
+            foreach ($allProducts as $allProduct) {
+                $subtotal += (float)$allProduct->u_price;
+                $total += (float)$allProduct->price;
+                $mem_total_discount += (float)$allProduct->mem_dis;
+            }
+            DB::table('orders')
+                ->where('id',$order_id)
+                ->update([
+                    'sub_total' => $subtotal,
+                    'total' => $total,
+                    'delivery_changes' => $delivery_charge,
+                    'mem_total_discount' => $mem_total_discount,
+                    'updated_at' => date('Y-m-d H:i:s')]);
+            return ['status' => 1 , 'message' => 'product added'];
+        }
     }
 }
