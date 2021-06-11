@@ -31,20 +31,21 @@ Route::post('privacy_policy', 'PrivacyPolicyController@index');
 Route::post('faq', 'FaqController@index');
 Route::resource('service', 'ServiceController');
 Route::post('search_product','ProductController@search_products');
+Route::resource('category','CategoryController');
+Route::get('product/{id}/{if}', 'ProductController@show');
 
 //secured apis using customer token
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('customer/update', 'CustomerController@update_profile');
     Route::get('logged/customer', 'CustomerController@getAuthenticatedUser');
     Route::get('servicesBanners', 'ServiceController@banners');
-    Route::resource('category','CategoryController');
     Route::post('category/name','CategoryController@name');
 //    Route::resource('product', 'ProductController');
-    Route::get('product/{id}/{if}', 'ProductController@show');
     Route::get('product/{id}', 'ProductController@show1');
     Route::get('cart/{id}','CartController@index');
     Route::post('cart','CartController@cart');
     Route::post('cart/checkout','CartController@checkout');
+    //new//
     Route::post('cart/order_create','CartController@create');
     Route::get('address/{id}', 'AddressController@get_address');
     Route::post('address/add', 'UserAddressController@add_address');
@@ -90,6 +91,7 @@ Route::group(['prefix' => 'delivery_partner'],function (){
     Route::post('update', 'DeliveryBoyController@update_profile');
     Route::post('refresh_details', 'DeliveryBoyController@refresh_details');
     Route::post('earnings','DeliveryBoyController@earnings');
+    Route::post('order','DeliveryBoyController@order');
 });
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/forgot_password', 'DeliveryBoyController@forgot_password');
