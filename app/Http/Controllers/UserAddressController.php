@@ -123,13 +123,14 @@ class UserAddressController extends Controller
         }return ['status' => 0,'message' => 'address not saved'];
 
     }
-    public function checkAddress($user_id){
+    public function checkAddress($user_id): array
+    {
         $default_address = Customer::where('id',$user_id)->value('default_address');
         $address_pin = Address::where('id',$default_address)->value('pincode');
         $getPinCodes = ServiceArea::pluck('pincode')->toArray();
         if (in_array((string)$address_pin,$getPinCodes)){
             return ['status' => 1,'message' => 'Matched'];
         }
-        return ['status' => 0,'message' => 'Sorry our service is not available in selected address pincode'];
+        return ['status' => 0,'message' => 'Sorry our service is not available in selected address & pin-code'];
     }
 }

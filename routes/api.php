@@ -70,6 +70,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::resource('service-area','ServiceAreaController');
     Route::get('checkAddress/{id}','UserAddressController@checkAddress');
     Route::post('payment', 'PaymentMethodController@payment');
+    Route::get('additional-items', 'AdditionalItemController@index');
 
 
 });
