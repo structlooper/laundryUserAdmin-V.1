@@ -32,5 +32,6 @@ Route::group([
     $router->resource('time-slots', TimeSlotController::class);
     $router->resource('memberships', MembershipController::class);
     $router->resource('service-areas', ServiceAreaController::class);
-
+    $router->resource('additional-items', AdditionalItemController::class);
+    $router->resource('feedback', FeedbackController::class);
 });
