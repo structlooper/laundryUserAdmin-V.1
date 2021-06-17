@@ -376,7 +376,8 @@ class DeliveryBoyController extends Controller
             ->where('orders.status',7)->get()->toArray();
         return array_reverse($orders);
         }
-    public function details(Request $req){
+    public function details(Request $req): array
+    {
         $driver_id = $req->driver_id;
         $orders =  DB::table('orders')
             ->select('orders.id','orders.customer_id','orders.address_id','orders.estimated_cloths','orders.delivery_changes','orders.mem_total_discount','orders.payment_status','orders.payment_mode','orders.selected_service_ids as selected_services','orders.additional_item_ids','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
@@ -401,7 +402,7 @@ class DeliveryBoyController extends Controller
                 ->select('address', 'door_no', 'latitude', 'longitude')
                 ->where('id', $orders->address_id)->first();
             $orders->products = DB::table('order_items')
-                ->select('products.id as product_id','products.product_name','services.service_name','order_items.qty','order_items.price')
+                ->select('products.id as product_id','products.product_name','order_items.item_count','order_items.unit','order_items.item_count','services.service_name','order_items.qty','order_items.price')
                 ->join('products','products.id','=','order_items.product_id')
                 ->join('services','services.id','=','order_items.service_id')
                 ->where('order_items.order_id',$orders->id)
@@ -530,11 +531,11 @@ class DeliveryBoyController extends Controller
         $productDetails = DB::table('products')->join('units','units.id','=' , 'products.unit')->where('products.id',$product_id)->first();
         $checkProduct = DB::table('order_items')->where('order_id',$order_id)->where('product_id',$product_id)->first();
         if ($checkProduct) {
-            if ($qty == 0 or ($checkProduct->qty == 1 and $qty == -1)) {
+            if (($qty == 0 or ($checkProduct->qty < 2 and $qty == -1)) and $qty != '++1') {
                 DB::table('order_items')
                     ->where('order_id', $order_id)
                     ->where('product_id', $product_id)->delete();
-                $subtotal = (float)$order_details->sub_total - (float)$checkProduct->price;
+                $subtotal = (float)$order_details->sub_total - (float)$checkProduct->u_price;
                 $mem_total_discount = (float)$order_details->mem_total_discount - (float)$checkProduct->mem_dis;
 
                 DB::table('orders')->update([
@@ -545,9 +546,11 @@ class DeliveryBoyController extends Controller
                 return ['status' => 1, 'message' => 'product removed'];
             }else{
                 if ($qty == -1) {
-                    $new_qty = (int)$checkProduct->qty - 1;
-                } else {
-                    $new_qty = (int)$checkProduct->qty + 1;
+                    $new_qty = (float)$checkProduct->qty - 1;
+                } else if ($qty == '++1') {
+                    $new_qty = (float)$checkProduct->qty + 1;
+                }else{
+                    $new_qty = (float)$qty;
                 }
                 $mem_dis = 0;
                 if ($membership){
@@ -586,8 +589,10 @@ class DeliveryBoyController extends Controller
             }
         }else{
             // insert product
-            if ($qty == 0 or $qty < 0){
+            if (($qty == 0 or $qty < 0) and $qty != '++1'){
                 return ['status' => 0 , 'message' => 'product not present'];
+            }else if ($qty == '++1'){
+                $qty = 1;
             }
             $mem_dis = 0;
             if ($membership){
@@ -600,11 +605,12 @@ class DeliveryBoyController extends Controller
             $data =[
                 'order_id'=>$order_id,
                 'product_id' => $product_id ,
-                'mem_dis' => $mem_dis ,
+                'mem_dis' => $mem_dis * $qty,
                 'qty' => $qty,
-                'u_price' => $productDetails->price,
+                'u_price' => (float)$productDetails->price * $qty,
                 'service_id' => $productDetails->service_id,
                 'price' => $cal_price * $qty,
+                'unit'=>$productDetails->unit_code,
                 'updated_at' => date('y-m-d H:i:s'),
                 'created_at' => date('y-m-d H:i:s'),
             ];
@@ -628,5 +634,15 @@ class DeliveryBoyController extends Controller
                     'updated_at' => date('Y-m-d H:i:s')]);
             return ['status' => 1 , 'message' => 'product added'];
         }
+    }
+    public function update_count(Request $request): array
+    {
+        $order_id = $request->order_id;
+        $product_id = $request->product_id;
+        $count = $request->item_count;
+        if (DB::table('order_items')->where('order_id',$order_id)
+            ->where('product_id',$product_id)->update(['item_count'=>$count])){
+            return ['status' => 1, 'message' => 'saved'];
+        }return ['status' => 0, 'message' => 'not saved'];
     }
 }

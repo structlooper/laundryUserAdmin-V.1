@@ -93,6 +93,7 @@ Route::group(['prefix' => 'delivery_partner'],function (){
     Route::post('refresh_details', 'DeliveryBoyController@refresh_details');
     Route::post('earnings','DeliveryBoyController@earnings');
     Route::post('order','DeliveryBoyController@order');
+    Route::post('order/update_count','DeliveryBoyController@update_count');
 });
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/forgot_password', 'DeliveryBoyController@forgot_password');

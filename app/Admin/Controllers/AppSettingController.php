@@ -131,6 +131,9 @@ class AppSettingController extends AdminController
         $form->text('currency_short_code', __('Currency Short Code'))->rules(function ($form) {
             return 'required';
         });
+        $form->decimal('refer_earn_amt', __('Refer Amount(₹)'))->rules(function ($form) {
+            return 'required';
+        });
         $form->textarea('about_us', __('About us'))->rules(function ($form) {
             return 'required';
         });

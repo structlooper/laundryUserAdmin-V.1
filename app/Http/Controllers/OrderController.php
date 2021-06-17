@@ -148,7 +148,7 @@ class OrderController extends Controller
         $order->address_details = DB::table('addresses')->select('address','door_no')->where('id',$order->address_id)->first();
         unset($order->address_id);
         $order->order_products = DB::table('order_items')
-            ->select('order_items.qty','order_items.price','products.product_name','services.service_name')
+            ->select('order_items.qty','order_items.price','order_items.unit','order_items.item_count','products.product_name','services.service_name')
             ->join('products','products.id','=','order_items.product_id')
 
             ->join('services','services.id','=','order_items.service_id')
