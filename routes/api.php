@@ -33,7 +33,8 @@ Route::resource('service', 'ServiceController');
 Route::post('search_product','ProductController@search_products');
 Route::resource('category','CategoryController');
 Route::get('product/{id}/{if}', 'ProductController@show');
-
+Route::post('payment', 'PaymentMethodController@payment');
+Route::post('payment/status','PaymentMethodController@status');
 //secured apis using customer token
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('customer/update', 'CustomerController@update_profile');
@@ -69,7 +70,6 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('membership/save','MembershipController@save');
     Route::resource('service-area','ServiceAreaController');
     Route::get('checkAddress/{id}','UserAddressController@checkAddress');
-    Route::post('payment', 'PaymentMethodController@payment');
     Route::get('additional-items', 'AdditionalItemController@index');
     Route::post('feedback/send','FeedbackController@send_query');
 
