@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
+use App\BarCode;
 use App\Customer;
 use App\Helper\NotiHelper;
 use App\Service;
@@ -644,5 +645,17 @@ class DeliveryBoyController extends Controller
             ->where('product_id',$product_id)->update(['item_count'=>$count])){
             return ['status' => 1, 'message' => 'saved'];
         }return ['status' => 0, 'message' => 'not saved'];
+    }
+    public function barCode(Request $request): array
+    {
+        $driver_id = $request->driver_id;
+        $barcodes = DeliveryBoy::where('id',$driver_id)->value('bar_codes');
+        $barcodes_result = [];
+        if (sizeof($barcodes) > 0){
+            foreach ($barcodes as $barcode){
+                $barcodes_result[] = BarCode::where('id',$barcode)->select('id','title','description','barcode_image')->first();
+            }
+        }
+        return $barcodes_result;
     }
 }

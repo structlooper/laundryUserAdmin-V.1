@@ -72,7 +72,6 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('checkAddress/{id}','UserAddressController@checkAddress');
     Route::get('additional-items', 'AdditionalItemController@index');
     Route::post('feedback/send','FeedbackController@send_query');
-
 });
 
 
@@ -94,6 +93,8 @@ Route::group(['prefix' => 'delivery_partner'],function (){
     Route::post('earnings','DeliveryBoyController@earnings');
     Route::post('order','DeliveryBoyController@order');
     Route::post('order/update_count','DeliveryBoyController@update_count');
+    Route::post('bar-codes','DeliveryBoyController@barCode');
+
 });
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/forgot_password', 'DeliveryBoyController@forgot_password');

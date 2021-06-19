@@ -34,4 +34,6 @@ Route::group([
     $router->resource('service-areas', ServiceAreaController::class);
     $router->resource('additional-items', AdditionalItemController::class);
     $router->resource('feedback', FeedbackController::class);
+    $router->resource('bar-codes', BarCodeController::class);
+
 });

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\BarCode;
 use App\DeliveryBoy;
 use App\DeliveryBoyType;
 use App\Status;
@@ -127,6 +128,10 @@ class DeliveryBoyController extends AdminController
            $form->decimal('salary','Salary(M)')->rules(function ($form) {
                return 'required';
            });
+        });
+        $form->multipleSelect('bar_codes', __('Barcodes'))->options(BarCode::all()->pluck('title', 'id'))
+            ->rules(function ($form) {
+            return 'required';
         });
         $form->image('profile_picture', __('Profile picture'))->uniqueName()->rules('required');
         $form->select('status', __('Status'))->options($statuses)->default(1)->rules(function ($form) {
