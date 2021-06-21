@@ -47,7 +47,7 @@ class OrderController extends AdminController
         $instance = new Order;
 
         $grid = new Grid($instance);
-        $grid->column('id', __('Id'));
+        $grid->id('ID')->sortable();
         $grid->column('order_id', __('Order id'));
         $grid->column('customer_id', __('Customer id'))->display(function($customer_id){
             return Customer::where('id',$customer_id)->value('customer_name');
@@ -77,7 +77,7 @@ class OrderController extends AdminController
             }
         });
         $grid->column('View Orders')->display(function () {
-            return "<a href='/admin/view_orders/".$this->id."'><span class='label label-info'>View Orders</span></a>";
+            return "<a href='".url('/admin/view_orders/').'/'.$this->id."'><span class='label label-info'>View Orders</span></a>";
         });
         $grid->disableExport();
         $grid->disableCreateButton();
@@ -98,7 +98,9 @@ class OrderController extends AdminController
             $filter->equal('status', 'Status')->select($labels);
             $filter->date('expected_pickup_date', 'Pickup Date');
             $filter->date('expected_delivery_date', 'Delivery Date');
+
         });
+
         return $grid;
     }
 

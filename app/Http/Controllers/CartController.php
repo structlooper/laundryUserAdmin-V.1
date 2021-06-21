@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Address;
 use App\Customer;
+use App\Helper\NotiHelper;
 use App\ServiceArea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -240,6 +241,7 @@ class CartController extends Controller
             $inputs['order_id'] = 'ORD' . mt_rand(10000000, 99999999);
             $inputs['created_at'] = date('y-m-d H:i:s');
             if (DB::table('orders')->insert($inputs)) {
+                NotiHelper::sendNotiAdmin();
                 return ['status' => 1, 'message' => 'order placed successfully', 'order_id' => $inputs['order_id']];
             }
         }

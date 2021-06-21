@@ -9,7 +9,7 @@ class NotiHelper
     public static function notiSingleUSer($to,$title,$body){
         $app_setting = DB::table('app_settings')->select('fcm_server_key')->first();
         $url = 'https://fcm.googleapis.com/fcm/send';
-        $notification = array('title' =>$title, 'body' => $body);
+        $notification = array('title' =>$title, 'body' => $body, "sound" => "default");
         $arrayToSend = array('registration_ids' => array($to), 'notification' => $notification, 'priority'=>'high');
         $tempArr = $arrayToSend;
         $fields = json_encode($arrayToSend);
@@ -39,5 +39,37 @@ class NotiHelper
         $result = curl_exec($ch);
         curl_close ($ch);
         return $result;
+    }
+    public static function sendNotiAdmin(){
+            $content = array(
+                "en" => 'New Order arrived!!'
+            );
+            $fields = array(
+                'app_id' => env('ONESIGNAL_APPID'),
+                'included_segments' => array('All'),
+                'data' => array("foo" => "bar"),
+                'contents' => $content,
+                'web_buttons' => [array(
+                    "id" => "view-order",
+                    "text" => "View",
+                    "icon" => "https://image.flaticon.com/icons/png/128/4887/4887274.png",
+                    "url" => url('/admin/orders')
+                )]
+            );
+            $fields = json_encode($fields);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+                'Authorization: Basic '.env('REST_API_KEY')));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            return $response;
     }
 }
