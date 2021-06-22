@@ -84,6 +84,10 @@ class OrderController extends AdminController
         $grid->actions(function ($actions) {
             $actions->disableView();
         });
+//        $grid->quickSearch(function ($model, $query) {
+//            $model->where('order_id', $query)
+//                ->orWhere('order_id', 'like', "%{$query}%");
+//        });
         $grid->filter(function ($filter) {
             //Get All status
             $labels = Label::pluck('label_name', 'id');
@@ -91,7 +95,6 @@ class OrderController extends AdminController
             $phone_number = Customer::pluck('phone_number', 'id');
             $delivery_boys = DeliveryBoy::pluck('delivery_boy_name', 'id');
             $filter->equal('customer_id', 'Customer')->select($customers);
-//            $filter->equal('collected_by', 'Collected By')->select($delivery_boys);
             $filter->equal('delivered_by', 'Delivered By')->select($delivery_boys);
             $filter->equal('order_id', 'Order Id');
             $filter->equal('customer_id', 'Phone Number')->select($phone_number);

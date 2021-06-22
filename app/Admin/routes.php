@@ -12,7 +12,7 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('admin.home');
     $router->get('get_products', 'GeneralController@GetProducts');
-//    $router->get('get_tree', 'MenuController@tree');
+    $router->get('leads', 'GeneralController@GetLeads');
     $router->get('view_orders/{id}', 'ViewOrderController@index');
     $router->resource('labels', LabelController::class);
     $router->resource('services', ServiceController::class);
