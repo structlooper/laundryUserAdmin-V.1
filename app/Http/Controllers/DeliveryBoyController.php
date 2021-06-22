@@ -411,7 +411,8 @@ class DeliveryBoyController extends Controller
         }
         return (array)$orders;
     }
-    public function status(Request $request){
+    public function status(Request $request): array
+    {
         $input = $request->all();
 
         $validator = Validator::make($input, [

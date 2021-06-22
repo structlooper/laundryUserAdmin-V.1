@@ -74,7 +74,8 @@ class PaymentMethodController extends Controller
         }
     }
 
-    public function status(Request $request){
+    public function status(Request $request): array
+    {
         $inputs = $request->all();
         $validator = Validator::make($inputs, [
             'order_id' => 'required|numeric',
@@ -128,6 +129,11 @@ class PaymentMethodController extends Controller
 //                    break;
             }
         if (Order::where('id',$inputs['order_id'])->update(['payment_status' => $inputs['payment_status']])){
+            NotiHelper::SyncEarning([
+                'order_id' => $orderDetails->order_id,
+                'amount' => $orderDetails->total,
+                'statement' => 'Rs '.$orderDetails->total.' for order '.$orderDetails->order_id,
+            ]);
             return ['status' => 1, 'message' => 'Order status changed successfully'];
         }return ['status' => 0, 'message' => 'Something went wrong try after some times'];
         }
