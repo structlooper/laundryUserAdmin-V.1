@@ -18,4 +18,9 @@
  *
  */
 
+use Encore\Admin\Facades\Admin;
+
 Encore\Admin\Form::forget(['map', 'editor']);
+
+Admin::js('https://cdn.onesignal.com/sdks/OneSignalSDK.js');
+Admin::js(url('/public/js/notification.js'  ));

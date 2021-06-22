@@ -96,6 +96,9 @@ Route::group(['prefix' => 'delivery_partner'],function (){
     Route::post('bar-codes','DeliveryBoyController@barCode');
 
 });
+
+Route::post('admin_noti','UserAddressController@admin_noti');
+
 Route::post('delivery_partner/profile_picture', 'DeliveryBoyController@profile_picture');
 Route::post('delivery_partner/forgot_password', 'DeliveryBoyController@forgot_password');
 Route::post('delivery_partner/reset_password', 'DeliveryBoyController@reset_password');

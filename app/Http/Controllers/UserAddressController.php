@@ -133,4 +133,51 @@ class UserAddressController extends Controller
         }
         return ['status' => 0,'message' => 'Sorry our service is not available in selected address & pin-code'];
     }
+    public function admin_noti(Request $request){
+        function sendMessage(){
+            $content = array(
+                "en" => 'New Order arrived!!'
+            );
+
+            $fields = array(
+                'app_id' => env('ONESIGNAL_APPID'),
+                'included_segments' => array('All'),
+                'data' => array("foo" => "bar"),
+//                'large_icon' =>"ic_launcher_round.png",
+                'contents' => $content,
+                'web_buttons' => [array(
+                    "id" => "view-order",
+                    "text" => "View",
+                    "icon" => "https://image.flaticon.com/icons/png/128/4887/4887274.png",
+                    "url" => url('/admin/orders')
+                )]
+            );
+
+            $fields = json_encode($fields);
+            print_r("\nJSON sent:\n");
+            print_r($fields);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+                'Authorization: Basic '.env('REST_API_KEY')));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            return $response;
+        }
+
+        $response = sendMessage();
+        $return["allresponses"] = $response;
+        $return = json_encode( $return);
+        print_r("\n\nJSON received:\n");
+        print_r($return);
+        print_r("\n");
+    }
 }

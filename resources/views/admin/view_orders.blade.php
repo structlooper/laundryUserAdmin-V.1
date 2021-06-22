@@ -1,6 +1,6 @@
 <div class="container">
      <div class="col-md-2 col-md-offset-10">
-        <a href='/admin/orders' class='btn btn-info pull-right' style='margin-right:20px;'>Back</a>
+        <a href='{{ url('/admin/orders') }}' class='btn btn-info pull-right' style='margin-right:20px;'>Back</a>
     </div>
     <div class="col-lg-6">
         <div class="table-responsive">

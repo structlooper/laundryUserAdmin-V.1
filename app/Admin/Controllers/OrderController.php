@@ -47,7 +47,7 @@ class OrderController extends AdminController
         $instance = new Order;
 
         $grid = new Grid($instance);
-        $grid->column('id', __('Id'));
+        $grid->id('ID')->sortable();
         $grid->column('order_id', __('Order id'));
         $grid->column('customer_id', __('Customer id'))->display(function($customer_id){
             return Customer::where('id',$customer_id)->value('customer_name');
@@ -77,13 +77,17 @@ class OrderController extends AdminController
             }
         });
         $grid->column('View Orders')->display(function () {
-            return "<a href='/admin/view_orders/".$this->id."'><span class='label label-info'>View Orders</span></a>";
+            return "<a href='".url('/admin/view_orders/').'/'.$this->id."'><span class='label label-info'>View Orders</span></a>";
         });
         $grid->disableExport();
         $grid->disableCreateButton();
         $grid->actions(function ($actions) {
             $actions->disableView();
         });
+//        $grid->quickSearch(function ($model, $query) {
+//            $model->where('order_id', $query)
+//                ->orWhere('order_id', 'like', "%{$query}%");
+//        });
         $grid->filter(function ($filter) {
             //Get All status
             $labels = Label::pluck('label_name', 'id');
@@ -91,14 +95,15 @@ class OrderController extends AdminController
             $phone_number = Customer::pluck('phone_number', 'id');
             $delivery_boys = DeliveryBoy::pluck('delivery_boy_name', 'id');
             $filter->equal('customer_id', 'Customer')->select($customers);
-//            $filter->equal('collected_by', 'Collected By')->select($delivery_boys);
             $filter->equal('delivered_by', 'Delivered By')->select($delivery_boys);
             $filter->equal('order_id', 'Order Id');
             $filter->equal('customer_id', 'Phone Number')->select($phone_number);
             $filter->equal('status', 'Status')->select($labels);
             $filter->date('expected_pickup_date', 'Pickup Date');
             $filter->date('expected_delivery_date', 'Delivery Date');
+
         });
+
         return $grid;
     }
 
