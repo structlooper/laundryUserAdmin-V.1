@@ -2,9 +2,12 @@
 
 namespace App\Admin\Controllers;
 
+use App\Address;
 use App\Customer;
 use App\Order;
 use App\DeliveryBoy;
+use App\PaymentHistory;
+use App\ServiceArea;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\Dashboard;
@@ -27,9 +30,23 @@ class HomeController extends Controller
             $current_year = date("Y");
             $data['customers'] = Customer::where('status','!=',0)->count();
             $data['total_orders'] = Order::count();
-            $data['completed_orders'] = Order::where('status','=',5)->count();
+            $data['completed_orders'] = Order::where('status','=',7)->count();
             $data['delivery_boys'] = DeliveryBoy::where('status','!=',0)->count();
+            $pay = PaymentHistory::all();
+            $earnings=0;
+            if ($pay){foreach ($pay as $item){$earnings += $item->amount;}}
+            $data['earnings'] = $earnings;
 
+            $leads=0;
+            $allCustomers = Customer::select('default_address')->get();
+            $pinCodes = ServiceArea::pluck('pincode')->toArray();
+            foreach ($allCustomers as $customer){
+                $address = Address::where('id',$customer->default_address)->value('pincode');
+                if (!in_array($address,$pinCodes)){
+                    $leads += 1;
+                }
+            }
+            $data['leads'] = $leads;
             $customers = Customer::select('id', 'created_at')
                 ->get()
                 ->groupBy(function ($val) {

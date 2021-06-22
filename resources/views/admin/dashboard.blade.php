@@ -1,16 +1,20 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
 
-<div class="row">
+<div class="row " style="margin-left: 11px;margin-right: 11px;">
   <div class="col-lg-3 col-xs-6">
     <!-- small box -->
-    <div class="small-box bg-navy">
-      <div class="inner">
+    <div class="small-box bg-gray">
+        <a class="btn bg-primary" href="{{ url('admin/orders') }}">
+
+        <div class="inner">
         <h3>{{$customers}}</h3>
 
         <p>Total Customers</p>
       </div>
-      <div class="icon">
+        </a>
+
+        <div class="icon">
         <i class="fa fa-user"></i>
       </div>
     </div>
@@ -19,6 +23,7 @@
   <div class="col-lg-3 col-xs-6">
     <!-- small box -->
     <div class="small-box bg-olive">
+        <a class="btn bg-primary" href="{{ url('admin/orders?_sort%5Bcolumn%5D=id&_sort%5Btype%5D=desc') }}">
       <div class="inner">
         <h3>{{$total_orders}}
         <!--<sup style="font-size: 20px">%</sup> !-->
@@ -26,6 +31,7 @@
 
         <p>Total Orders</p>
       </div>
+        </a>
       <div class="icon">
         <i class="fa fa-bar-chart"></i>
       </div>
@@ -35,27 +41,62 @@
   <div class="col-lg-3 col-xs-6">
     <!-- small box -->
     <div class="small-box bg-maroon">
+        <a class="btn bg-primary" href="{{ url('admin/orders?_sort%5Bcolumn%5D=id&_sort%5Btype%5D=desc&id=&customer_id=&delivered_by=&order_id=&customer_id=&status=7&expected_pickup_date=&expected_delivery_date=') }}">
       <div class="inner">
         <h3>{{$completed_orders}}</h3>
 
         <p>Completed Orders</p>
       </div>
+        </a>
       <div class="icon">
         <i class="fa fa-bookmark"></i>
       </div>
+    </div>
+  </div>
+    <div class="col-lg-3 col-xs-6">
+    <!-- small box -->
+    <div class="small-box bg-primary">
+        <a class="btn btn-primary" href="{{ url('admin/payment-histories?_sort%5Bcolumn%5D=id&_sort%5Btype%5D=desc') }}">
+            <div class="inner">
+                <h3>{{$earnings}} Inr</h3>
+
+                <p>Total Earnings</p>
+            </div>
+        </a>
+
+        <div class="icon">
+                <i class="fa fa-money"></i>
+            </div>
     </div>
   </div>
   <!-- ./col -->
   <div class="col-lg-3 col-xs-6">
     <!-- small box -->
     <div class="small-box bg-purple">
+        <a class="btn btn-primary" href="{{ url('admin/delivery_boys') }}">
       <div class="inner">
         <h3>{{$delivery_boys}}</h3>
 
         <p>Total Delivery Boys</p>
       </div>
+        </a>
       <div class="icon">
         <i class="fa fa-motorcycle"></i>
+      </div>
+    </div>
+  </div>
+    <div class="col-lg-3 col-xs-6">
+    <!-- small box -->
+    <div class="small-box bg-yellow-gradient">
+        <a class="btn btn-primary" href="{{ url('admin/leads') }}">
+      <div class="inner">
+        <h3>{{$leads}}</h3>
+
+        <p>Total Leads</p>
+      </div>
+        </a>
+      <div class="icon">
+        <i class="fa fa-user-plus"></i>
       </div>
     </div>
   </div>

@@ -35,5 +35,6 @@ Route::group([
     $router->resource('additional-items', AdditionalItemController::class);
     $router->resource('feedback', FeedbackController::class);
     $router->resource('bar-codes', BarCodeController::class);
+    $router->resource('payment-histories', PaymentHistoryController::class);
 
 });
