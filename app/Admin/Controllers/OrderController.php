@@ -173,9 +173,11 @@ class OrderController extends AdminController
         });
         $form->saved(function (Form $form) {
 //            $this->update_history($form->model()->id);
+
             $message = DB::table('fcm_notification_messages')->where('id',$form->model()->status)->first();
             $order_id = $form->model()->order_id;
             $customer_token = Customer::where('id',$form->model()->customer_id)->value('fcm_token');
+
             $this->send_fcm($message->customer_title.'('.$order_id.')', $message->customer_description, $customer_token);
             $noti_details = ['order_id' => $order_id,'fcm_msg_id' => $message->id,'user_id' =>$form->model()->customer_id,'created_at' => date('y-m-d H:i:s') ];
 
@@ -196,6 +198,11 @@ class OrderController extends AdminController
                 }
                 DB::table('driver_notifications')->insert($noti_details);
             }
+            NotiHelper::SyncEarning([
+                'order_id' => $order_id,
+                'amount' =>  $form->model()->total,
+                'statement' => 'Rs '. $form->model()->total.' for order '.$order_id,
+            ]);
 
         });
         $form->tools(function (Form\Tools $tools) {

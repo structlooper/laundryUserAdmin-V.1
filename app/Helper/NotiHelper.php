@@ -3,6 +3,8 @@
 
 namespace App\Helper;
 
+use App\Order;
+use App\PaymentHistory;
 use DB;
 class NotiHelper
 {
@@ -71,5 +73,21 @@ class NotiHelper
             curl_close($ch);
 
             return $response;
+    }
+    public static function SyncEarning($data): bool
+    {
+        $orderDetails = Order::where('order_id',$data['order_id'])->first();
+        if ($orderDetails->payment_status == 2){
+            if (PaymentHistory::where('order_id',$data['order_id'])->first()){
+                PaymentHistory::where('order_id',$data['order_id'])->update($data);
+            }else{
+                PaymentHistory::insert($data);
+            }
+        }else{
+            if (PaymentHistory::where('order_id',$data['order_id'])->first()){
+                PaymentHistory::where('order_id',$data['order_id'])->delete();
+            }
+        }
+        return true;
     }
 }
