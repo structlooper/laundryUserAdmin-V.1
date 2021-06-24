@@ -79,7 +79,7 @@ class PaymentMethodController extends Controller
         $inputs = $request->all();
         $validator = Validator::make($inputs, [
             'order_id' => 'required|numeric',
-            'payment_status' => 'required|numeric|in:3,4',
+            'payment_status' => 'required|numeric|in:2,3,4',
         ]);
         if ($validator->fails()) {
             return ['status' => 0,'message' => $validator->errors()->first()];
@@ -89,53 +89,74 @@ class PaymentMethodController extends Controller
 
             switch ($inputs['payment_status']) {
                 case ('4'):
-                    $user_token = Customer::where('id',$orderDetails->customer_id)->value('fcm_token');
-                    $message = DB::table('fcm_notification_messages')->where('id',8)->first();
-                    $past_user_noti = DB::table('user_notifications')->where('order_id',$orderDetails->order_id)
-                        ->where('fcm_msg_id',$message->id)->where('user_id',$orderDetails->customer_id)->get();
-                    if (sizeof($past_user_noti) > 0){
-                        DB::table('user_notifications')->where('order_id',$orderDetails->order_id)
-                            ->where('fcm_msg_id',$message->id)->where('user_id',$orderDetails->customer_id)->delete();
+                    $user_token = Customer::where('id', $orderDetails->customer_id)->value('fcm_token');
+                    $message = DB::table('fcm_notification_messages')->where('id', 8)->first();
+                    $past_user_noti = DB::table('user_notifications')->where('order_id', $orderDetails->order_id)
+                        ->where('fcm_msg_id', $message->id)->where('user_id', $orderDetails->customer_id)->get();
+                    if (sizeof($past_user_noti) > 0) {
+                        DB::table('user_notifications')->where('order_id', $orderDetails->order_id)
+                            ->where('fcm_msg_id', $message->id)->where('user_id', $orderDetails->customer_id)->delete();
                     }
                     $noti_details = ['order_id' => $orderDetails->order_id,
                         'fcm_msg_id' => $message->id,
-                        'user_id' =>$orderDetails->customer_id,'created_at' => date('y-m-d H:i:s') ];
-                    if(DB::table('user_notifications')->insert($noti_details)){
-                        NotiHelper::notiSingleUSer($user_token,$message->customer_title,$message->customer_description);
+                        'user_id' => $orderDetails->customer_id, 'created_at' => date('y-m-d H:i:s')];
+                    if (DB::table('user_notifications')->insert($noti_details)) {
+                        NotiHelper::notiSingleUSer($user_token, $message->customer_title, $message->customer_description);
                     }
                     break;
                 case ('3'):
-                    if (Order::where('id',$inputs['order_id'])->update(['payment_mode' => $inputs['payment_methods']])){
-                        $driver_token = DeliveryBoy::where('id',$orderDetails->delivered_by)->value('fcm_token');
-                        $message = DB::table('fcm_notification_messages')->where('id',9)->first();
-                        $past_driver_noti = DB::table('driver_notifications')->where('order_id',$orderDetails->order_id)
-                            ->where('fcm_msg_id',$message->id)->where('driver_id',$orderDetails->delivered_by)->get();
-                        if (sizeof($past_driver_noti) > 0){
-                            DB::table('driver_notifications')->where('order_id',$orderDetails->order_id)
-                                ->where('fcm_msg_id',$message->id)->where('driver_id',$orderDetails->delivered_by)->delete();
+                    if (Order::where('id', $inputs['order_id'])->update(['payment_mode' => $inputs['payment_methods']])) {
+                        $driver_token = DeliveryBoy::where('id', $orderDetails->delivered_by)->value('fcm_token');
+                        $message = DB::table('fcm_notification_messages')->where('id', 9)->first();
+                        $past_driver_noti = DB::table('driver_notifications')->where('order_id', $orderDetails->order_id)
+                            ->where('fcm_msg_id', $message->id)->where('driver_id', $orderDetails->delivered_by)->get();
+                        if (sizeof($past_driver_noti) > 0) {
+                            DB::table('driver_notifications')->where('order_id', $orderDetails->order_id)
+                                ->where('fcm_msg_id', $message->id)->where('driver_id', $orderDetails->delivered_by)->delete();
                         }
                         $noti_details = ['order_id' => $orderDetails->order_id,
                             'fcm_msg_id' => $message->id,
-                            'driver_id' =>$orderDetails->delivered_by,'created_at' => date('y-m-d H:i:s') ];
-                        if(DB::table('user_notifications')->insert($noti_details)){
-                            NotiHelper::notiSingleUSer($driver_token,$message->delivery_title,$message->delivery_description);
+                            'driver_id' => $orderDetails->delivered_by, 'created_at' => date('y-m-d H:i:s')];
+                        if (DB::table('driver_notifications')->insert($noti_details)) {
+                            NotiHelper::notiSingleUSer($driver_token, $message->delivery_title, $message->delivery_description);
                         }
-                    }else{
-                        return ['status' => 0 , 'message' => 'Something went wrong try after some times'];
+                    } else {
+                        return ['status' => 0, 'message' => 'Something went wrong try after some times'];
+                    }
+                    break;
+                case ('2'):
+                    if (Order::where('id', $inputs['order_id'])->update(['payment_mode' => $inputs['payment_methods']])) {
+                        $driver_token = DeliveryBoy::where('id', $orderDetails->delivered_by)->value('fcm_token');
+                        $message = DB::table('fcm_notification_messages')->where('id', 9)->first();
+                        $past_driver_noti = DB::table('driver_notifications')->where('order_id', $orderDetails->order_id)
+                            ->where('fcm_msg_id', $message->id)->where('driver_id', $orderDetails->delivered_by)->get();
+                        if (sizeof($past_driver_noti) > 0) {
+                            DB::table('driver_notifications')->where('order_id', $orderDetails->order_id)
+                                ->where('fcm_msg_id', $message->id)->where('driver_id', $orderDetails->delivered_by)->delete();
+                        }
+                        $noti_details = ['order_id' => $orderDetails->order_id,
+                            'fcm_msg_id' => $message->id,
+                            'driver_id' => $orderDetails->delivered_by, 'created_at' => date('y-m-d H:i:s')];
+                        if (DB::table('driver_notifications')->insert($noti_details)) {
+                            NotiHelper::notiSingleUSer($driver_token, $message->delivery_title, 'Payment done by customer');
+                        }
+                    } else {
+                        return ['status' => 0, 'message' => 'Something went wrong try after some times'];
                     }
                     break;
 //                case ('5'):
 //                    print_r('5');
 //                    break;
             }
-        if (Order::where('id',$inputs['order_id'])->update(['payment_status' => $inputs['payment_status']])){
-            NotiHelper::SyncEarning([
-                'order_id' => $orderDetails->order_id,
-                'amount' => $orderDetails->total,
-                'statement' => 'Rs '.$orderDetails->total.' for order '.$orderDetails->order_id,
-            ]);
-            return ['status' => 1, 'message' => 'Order status changed successfully'];
-        }return ['status' => 0, 'message' => 'Something went wrong try after some times'];
+            if (Order::where('id', $inputs['order_id'])->update(['payment_status' => $inputs['payment_status']])) {
+                NotiHelper::SyncEarning([
+                    'order_id' => $orderDetails->order_id,
+                    'amount' => $orderDetails->total,
+                    'statement' => 'Rs ' . $orderDetails->total . ' for order ' . $orderDetails->order_id,
+                ]);
+                return ['status' => 1, 'message' => 'Order status changed successfully'];
+            }
+            return ['status' => 0, 'message' => 'Something went wrong try after some times'];
         }
         return ['status' => 0 , 'message' => 'not a valid order'];
     }

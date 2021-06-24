@@ -72,6 +72,9 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::get('checkAddress/{id}','UserAddressController@checkAddress');
     Route::get('additional-items', 'AdditionalItemController@index');
     Route::post('feedback/send','FeedbackController@send_query');
+    Route::post('wallet/statement', 'WalletController@statement');
+    Route::post('wallet/add_money', 'WalletController@add_money');
+    Route::post('wallet/remove_money', 'WalletController@remove_money');
 });
 
 
