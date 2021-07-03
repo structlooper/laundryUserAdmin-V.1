@@ -134,6 +134,12 @@ class AppSettingController extends AdminController
         $form->decimal('refer_earn_amt', __('Refer Amount(₹)'))->rules(function ($form) {
             return 'required';
         });
+        $form->number('delivery_hours', __('Delivery Hours(H)'))->rules(function ($form) {
+            return 'required';
+        });
+        $form->decimal('minimum_order_amt', __('Minimum Order(₹)'))->rules(function ($form) {
+            return 'required';
+        });
         $form->textarea('about_us', __('About us'))->rules(function ($form) {
             return 'required';
         });

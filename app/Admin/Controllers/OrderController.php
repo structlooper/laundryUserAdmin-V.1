@@ -12,6 +12,7 @@ use App\PaymentStatus;
 use App\Promo;
 use App\Label;
 use App\OrderHistory;
+use App\TimeSlot;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -150,6 +151,12 @@ class OrderController extends AdminController
         $form = new Form(new Order);
         $statuses = Label::pluck('label_name', 'id');
         $payment_status = PaymentStatus::pluck('title', 'id');
+//        print_r($payment_status);
+        $time_slot = [];
+        foreach (TimeSlot::all() as $time){
+            $time_slot[$time->time_from .' to '. $time->time_to] =$time->time_from .' to '. $time->time_to;
+        }
+
         $delivery_boys = DeliveryBoy::where('status',1)->pluck('delivery_boy_name', 'id');
         $form->text('order_id', __('Order id'))->readonly();
         $form->select('delivered_by', __('Delivered by'))->options($delivery_boys)->rules(function ($form) {
@@ -159,6 +166,12 @@ class OrderController extends AdminController
             return 'required';
         });
         $form->select('payment_status', __('Payment Status'))->options($payment_status)->rules(function ($form) {
+            return 'required';
+        });
+        $form->date('expected_delivery_date', __('Delivery date'))->rules(function ($form) {
+            return 'required';
+        });
+        $form->select('drop_time', __('Delivery slot'))->options($time_slot)->rules(function ($form) {
             return 'required';
         });
         $form->saving(function (Form $form) {

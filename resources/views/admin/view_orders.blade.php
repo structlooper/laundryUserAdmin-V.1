@@ -1,6 +1,6 @@
 <div class="container">
      <div class="col-md-2 col-md-offset-10">
-        <a href='{{ url('/admin/orders') }}' class='btn btn-info pull-right' style='margin-right:20px;'>Back</a>
+        <a href='{{ url('/admin/orders?&_sort%5Bcolumn%5D=id&_sort%5Btype%5D=desc') }}' class='btn btn-info pull-right' style='margin-right:20px;'>Back</a>
     </div>
     <div class="col-lg-6">
         <div class="table-responsive">
@@ -39,7 +39,7 @@
                 <td>{{$expected_pickup_date}}  ({{ $pickup_time }})</td>
               </tr>
               <tr>
-                  <th>Delivery Date</th>
+                  <th>Expected Delivery Date</th>
                   <td>{{$expected_delivery_date}} ({{ $drop_time }})</td>
               </tr>
             </tbody>
@@ -79,6 +79,10 @@
                 <td>{{$delivery_changes}}</td>
               </tr>
               <tr>
+                <th>Delivery discount</th>
+                <td>{{$delivery_changes_discount}}</td>
+              </tr>
+              <tr>
                 <th>Total</th>
                 <td>{{$total}}</td>
               </tr>
@@ -86,6 +90,12 @@
                 <th>Status</th>
                 <td>{{$status}}</td>
               </tr>
+              @if($status === 'Canceled')
+              <tr>
+                <th>Cancel reason</th>
+                <td>{{$cance_reason}}</td>
+              </tr>
+              @endif
             </tbody>
           </table>
         </div>

@@ -51,7 +51,9 @@ class ViewOrderController extends Controller
             $data['sub_total'] = $app_setting->default_currency.$order_details->sub_total;
             $data['discount'] =  $app_setting->default_currency.$order_details->discount;
             $data['mem_discount'] =  $app_setting->default_currency.$order_details->mem_total_discount;
+            $data['cance_reason'] =  $order_details->cance_reason;
             $data['delivery_changes'] =  $app_setting->default_currency.$order_details->delivery_changes;
+            $data['delivery_changes_discount'] =  $app_setting->default_currency.'-'.$order_details->delivery_changes_discount;
             $data['total'] =  $app_setting->default_currency.$order_details->total;
             $data['status'] =  Label::where('id',$order_details->status)->value('label_name');
             $order_items = DB::table('order_items')

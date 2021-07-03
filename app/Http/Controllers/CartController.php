@@ -240,9 +240,9 @@ class CartController extends Controller
             $inputs['address_id'] = Customer::where('id', $inputs['customer_id'])->value('default_address');
             $inputs['order_id'] = 'ORD' . mt_rand(10000000, 99999999);
             $inputs['created_at'] = date('y-m-d H:i:s');
-            if (DB::table('orders')->insert($inputs)) {
+            if ($id =DB::table('orders')->insertGetId($inputs)) {
                 NotiHelper::sendNotiAdmin();
-                return ['status' => 1, 'message' => 'order placed successfully', 'order_id' => $inputs['order_id']];
+                return ['status' => 1, 'message' => 'order placed successfully', 'order_id' => $inputs['order_id'] , 'id' =>$id ];
             }
         }
         return ['status' => 0, 'message' => 'something went wrong' ];
