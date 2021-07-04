@@ -35,6 +35,7 @@ Route::resource('category','CategoryController');
 Route::get('product/{id}/{if}', 'ProductController@show');
 Route::post('payment', 'PaymentMethodController@payment');
 Route::post('payment/status','PaymentMethodController@status');
+
 //secured apis using customer token
 Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('customer/update', 'CustomerController@update_profile');
@@ -53,13 +54,18 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     Route::post('address/update','UserAddressController@update_address');
     Route::get('address_id/{id}','UserAddressController@get_address_id');
     Route::post('address/delete','UserAddressController@delete');
+
     Route::get('time_slots/{id?}','TimeSlotController@index');
     Route::get('date_slots','TimeSlotController@date');
     Route::get('date_slots/{id}','TimeSlotController@date_drop');
     Route::post('save_date_time','TimeSlotController@save_date_time');
     Route::post('slots/clear','TimeSlotController@slots_clear');
+    Route::post('getExpectedDropSlot','TimeSlotController@getExpectedDropSlot');
+
     Route::post('get_orders', 'OrderController@getOrders');
     Route::post('order', 'OrderController@getOrder');
+    Route::post('order/cancel','DeliveryBoyController@cancel');
+
     Route::post('select/address','UserAddressController@select_address');
     Route::post('promo', 'PromoCodeController@index');
     Route::post('promo/select','PromoCodeController@select');

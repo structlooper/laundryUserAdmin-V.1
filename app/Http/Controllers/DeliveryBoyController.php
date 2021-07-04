@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
+use App\AppSetting;
 use App\BarCode;
 use App\Customer;
 use App\Helper\NotiHelper;
@@ -381,7 +382,7 @@ class DeliveryBoyController extends Controller
     {
         $driver_id = $req->driver_id;
         $orders =  DB::table('orders')
-            ->select('orders.id','orders.customer_id','orders.address_id','orders.estimated_cloths','orders.delivery_changes','orders.mem_total_discount','orders.payment_status','orders.payment_mode','orders.selected_service_ids as selected_services','orders.additional_item_ids','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
+            ->select('orders.id','orders.customer_id','orders.address_id','orders.estimated_cloths','orders.delivery_changes_discount','orders.delivery_changes','orders.mem_total_discount','orders.payment_status','orders.payment_mode','orders.selected_service_ids as selected_services','orders.additional_item_ids','orders.order_id','orders.expected_pickup_date','orders.expected_delivery_date','orders.pickup_time'
             ,'orders.drop_time','orders.discount','orders.sub_total','orders.total','orders.status','labels.label_for_delivery_boy','labels.label_image'
             )
 
@@ -522,6 +523,7 @@ class DeliveryBoyController extends Controller
         return DB::table('earning_status')->where('driver_id',$request->driver_id)->get();
     }
     public function order(Request $request){
+
         $product_id = $request->product_id;
         $qty = $request->qty;
         $order_id = $request->order_id;
@@ -532,19 +534,16 @@ class DeliveryBoyController extends Controller
         $membership = DB::table('memberships')->where('id',$user_details->membership)->first();
         $productDetails = DB::table('products')->join('units','units.id','=' , 'products.unit')->where('products.id',$product_id)->first();
         $checkProduct = DB::table('order_items')->where('order_id',$order_id)->where('product_id',$product_id)->first();
+        $min_order = AppSetting::where('id',1)->value('minimum_order_amt');
         if ($checkProduct) {
+
             if (($qty == 0 or ($checkProduct->qty < 2 and $qty == -1)) and $qty != '++1') {
                 DB::table('order_items')
                     ->where('order_id', $order_id)
                     ->where('product_id', $product_id)->delete();
-                $subtotal = (float)$order_details->sub_total - (float)$checkProduct->u_price;
-                $mem_total_discount = (float)$order_details->mem_total_discount - (float)$checkProduct->mem_dis;
 
-                DB::table('orders')->update([
-                    'sub_total' => $subtotal,
-                    'total' => $subtotal+$order_details->delivery_changes,
-                    'mem_total_discount' => $mem_total_discount,
-                    'updated_at' => date('Y-m-d H:i:s')]);
+                $this->sync_order($delivery_charge,$order_id,$min_order);
+
                 return ['status' => 1, 'message' => 'product removed'];
             }else{
                 if ($qty == -1) {
@@ -570,23 +569,9 @@ class DeliveryBoyController extends Controller
                         'price' => $cal_price * $new_qty ,
                         'mem_dis' => $mem_dis * $new_qty
                     ]);
-                $allProducts = DB::table('order_items')->where('order_id', $order_id)->get();
-                $subtotal = 0.0;
-                $total = $delivery_charge;
-                $mem_total_discount = 0;
-                foreach ($allProducts as $allProduct) {
-                    $subtotal += (float)$allProduct->u_price;
-                    $total += (float)$allProduct->price;
-                    $mem_total_discount += (float)$allProduct->mem_dis;
-                }
-                DB::table('orders')
-                    ->where('id',$order_id)
-                    ->update([
-                        'sub_total' => $subtotal,
-                        'total' => $total,
-                        'delivery_changes' => $delivery_charge,
-                        'mem_total_discount' => $mem_total_discount,
-                        'updated_at' => date('Y-m-d H:i:s')]);
+
+                $this->sync_order($delivery_charge,$order_id,$min_order);
+
                 return ['status' => 1, 'message' => 'count updated'];
             }
         }else{
@@ -617,26 +602,37 @@ class DeliveryBoyController extends Controller
                 'created_at' => date('y-m-d H:i:s'),
             ];
             DB::table('order_items')->insert($data);
-            $allProducts = DB::table('order_items')->where('order_id', $order_id)->get();
-            $subtotal = 0.0;
-            $total = $delivery_charge;
-            $mem_total_discount = 0;
-            foreach ($allProducts as $allProduct) {
-                $subtotal += (float)$allProduct->u_price;
-                $total += (float)$allProduct->price;
-                $mem_total_discount += (float)$allProduct->mem_dis;
-            }
-            DB::table('orders')
-                ->where('id',$order_id)
-                ->update([
-                    'sub_total' => $subtotal,
-                    'total' => $total,
-                    'delivery_changes' => $delivery_charge,
-                    'mem_total_discount' => $mem_total_discount,
-                    'updated_at' => date('Y-m-d H:i:s')]);
+
+            $this->sync_order($delivery_charge,$order_id,$min_order);
+
             return ['status' => 1 , 'message' => 'product added'];
         }
     }
+    function sync_order($delivery_charge,$order_id,$min_order){
+        $subtotal = 0.0;
+        $total = $delivery_charge;
+        $delivery_charge_discount = 0.00;
+        $mem_total_discount = 0.00;
+        $allProducts = DB::table('order_items')->where('order_id', $order_id)->get();
+        foreach ($allProducts as $allProduct) {
+            $subtotal += (float)$allProduct->u_price;
+            $total += (float)$allProduct->price;
+            $mem_total_discount += (float)$allProduct->mem_dis;
+        }
+        if ($subtotal > $min_order){
+            $total = $total-$delivery_charge;
+            $delivery_charge_discount = $delivery_charge;
+        }
+        DB::table('orders')->where('id',$order_id)->update([
+            'sub_total' => $subtotal,
+            'total' => $total,
+            'delivery_changes' => $delivery_charge,
+            'delivery_changes_discount' => $delivery_charge_discount,
+            'mem_total_discount' => $mem_total_discount,
+            'updated_at' => date('Y-m-d H:i:s')]);
+
+    }
+
     public function update_count(Request $request): array
     {
         $order_id = $request->order_id;
@@ -658,5 +654,14 @@ class DeliveryBoyController extends Controller
             }
         }
         return $barcodes_result;
+    }
+
+    public function cancel(Request $request): array
+    {
+        $input = $request->all();
+
+        if (Order::where('id',$input['order_id'])->update(['status' => $input['status'] , 'cance_reason' => $input['cance_reason']])){
+            return ['status' => 1,'message' => 'order cancelled'];
+        }return ['status' => 0 , 'message' => 'something went wrong' ];
     }
 }

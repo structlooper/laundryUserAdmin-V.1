@@ -78,7 +78,11 @@ class ServiceAreaController extends AdminController
             return 'required';
         });
         $form->number('pincode', __('Pincode'))->rules(function ($form) {
-            return 'required|numeric';
+            if (!$id = $form->model()->id) {
+                return  'required|numeric|unique:service_areas,pincode';
+            } else {
+                return  'required|numeric|unique:service_areas,pincode,'.$form->model()->id;
+            }
         });
         $form->decimal('delivery_changes', __('Delivery changes'))->rules(function ($form) {
             return 'required|numeric';

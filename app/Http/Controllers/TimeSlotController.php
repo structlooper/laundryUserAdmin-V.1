@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\AppSetting;
+use App\TimeSlot;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -107,5 +109,26 @@ class TimeSlotController extends Controller
         $inputs = $request->all();
         DB::table('user_carts')->where('id', $inputs['cart_id'])->update([$inputs['type'] . '_date' => null,$inputs['type'] . '_time' => null, 'updated_at' => date('Y-m-d H:i:s')]);
         return ["status" => 1,'message' => $inputs['type'].' slots clear'];
+    }
+    public function getExpectedDropSlot(Request $request){
+        $pickup_date = $request->pickup_date;
+        $pickup_time = explode(' ',$request->pickup_time);
+        $getAddHours = AppSetting::where('id',1)->value('delivery_hours');
+        $date_selected = date('Y-m-d',strtotime($pickup_date)).' '.$pickup_time[0].date(':i:s') . $pickup_time[1];
+        $new_date_time = Carbon::parse($date_selected)->addHours($getAddHours);
+
+        $new_date = $new_date_time->format('y-m-d');
+        $time_slots = TimeSlot::all();
+        $new_time = $new_date_time->format('h a'). ' to '. ($new_date_time->addHour())->format('h a');
+//        return $new_date_time->format('h a');
+        if (sizeof($time_slots) > 0){
+            foreach($time_slots as $time){
+                if (strtotime($time->time_from )> strtotime($new_date_time->format('h a'))){
+                   $new_time = $time->time_from.' to '.$time->time_to;
+                   break;
+                }
+            }
+        }
+        return ['new_date' => $new_date , 'new_time' => $new_time , 'formatted_date' =>  $new_date_time->format('d, M Y')];
     }
 }
