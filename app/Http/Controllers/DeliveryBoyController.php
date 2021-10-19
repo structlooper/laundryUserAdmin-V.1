@@ -557,7 +557,10 @@ class DeliveryBoyController extends Controller
                 if ($membership){
                     $mem_service_array = explode(',',$membership->service_id);
                     if(in_array($productDetails->service_id,$mem_service_array)) {
-                        $mem_dis = ((float)$productDetails->price * $membership->discount) / 100;
+                        $service_index = array_search($productDetails->service_id, $mem_service_array);
+                        $mem_dis_percent_array =   explode(',',$membership->discount);
+                        $dis_per =  $mem_dis_percent_array[$service_index] ?? 0;
+                        $mem_dis = ((float)$productDetails->price *$dis_per) / 100;
                     }
                 }
                 $cal_price = (float)$productDetails->price - $mem_dis;
@@ -582,10 +585,19 @@ class DeliveryBoyController extends Controller
                 $qty = 1;
             }
             $mem_dis = 0;
+//            if ($membership){
+//                $mem_service_array = explode(',',$membership->service_id);
+//                if(in_array($productDetails->service_id,$mem_service_array)) {
+//                    $mem_dis = ((float)$productDetails->price * $membership->discount) / 100;
+//                }
+//            }
             if ($membership){
                 $mem_service_array = explode(',',$membership->service_id);
                 if(in_array($productDetails->service_id,$mem_service_array)) {
-                    $mem_dis = ((float)$productDetails->price * $membership->discount) / 100;
+                    $service_index = array_search($productDetails->service_id, $mem_service_array);
+                    $mem_dis_percent_array =   explode(',',$membership->discount);
+                    $dis_per =  $mem_dis_percent_array[$service_index] ?? 0;
+                    $mem_dis = ((float)$productDetails->price *$dis_per) / 100;
                 }
             }
             $cal_price = (float)$productDetails->price - $mem_dis;

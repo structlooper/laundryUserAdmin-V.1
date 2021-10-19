@@ -27,10 +27,11 @@ class NotiHelper
         curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
         $result = curl_exec ( $ch );
         // var_dump($result);
-        curl_close ( $ch );
+        curl_close ($ch);
         return $result;
 
     }
+
     public static function sendOtpFunction($number,$otp){
 
         $ch = curl_init();
