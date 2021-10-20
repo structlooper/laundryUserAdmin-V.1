@@ -105,8 +105,11 @@ class MembershipController extends AdminController
         $form->decimal('price', __('Price').' ₹')->rules(function ($form) {
             return 'required|numeric';
         });
-        $form->decimal('discount', __('Discount').' %')->rules(function ($form) {
-            return 'required|numeric';
+        $form->text('discount_type', __('Discount type( 1 - percent , 2 - amount )'))->rules(function ($form) {
+            return 'required';
+        });
+        $form->text('discount', __('Discount'))->rules(function ($form) {
+            return 'required';
         });
 //        print_r($duration);exit;
         $form->select('duration', __('Duration'))->options($duration)->rules(function ($form) {
@@ -124,7 +127,7 @@ class MembershipController extends AdminController
             $tools->disableDelete();
             $tools->disableView();
         });
-        $form->footer(function ($footer) {
+         $form->footer(function ($footer) {
             $footer->disableViewCheck();
             $footer->disableEditingCheck();
             $footer->disableCreatingCheck();

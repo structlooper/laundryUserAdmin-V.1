@@ -170,7 +170,7 @@ class Field implements Renderable
     /**
      * Parent form.
      *
-     * @var Form
+     * @var Form|WidgetForm
      */
     protected $form = null;
 
@@ -245,6 +245,13 @@ class Field implements Renderable
      * @var \Closure
      */
     protected $callback;
+
+    /**
+     * column is snake-casing attributes.
+     *
+     * @var bool
+     */
+    protected $snakeAttributes = false;
 
     /**
      * @var bool
@@ -380,6 +387,42 @@ class Field implements Renderable
     }
 
     /**
+     * Set snake attributes to the field.
+     *
+     * @param bool $snakeAttributes
+     *
+     * @return $this
+     */
+    public function setSnakeAttributes($snakeAttributes)
+    {
+        $this->snakeAttributes = $snakeAttributes;
+
+        return $this;
+    }
+
+    /**
+     * Get snake attributes of the field.
+     *
+     * @return bool
+     */
+    public function getSnakeAttributes()
+    {
+        return $this->snakeAttributes;
+    }
+
+    /**
+     * Determine if a column needs to be snaked.
+     *
+     * @param string|array $column
+     *
+     * @return string|array
+     */
+    protected function columnShouldSnaked($column)
+    {
+        return $this->getSnakeAttributes() ? Str::snake($column) : $column;
+    }
+
+    /**
      * Fill data to the field.
      *
      * @param array $data
@@ -392,13 +435,13 @@ class Field implements Renderable
 
         if (is_array($this->column)) {
             foreach ($this->column as $key => $column) {
-                $this->value[$key] = Arr::get($data, $column);
+                $this->value[$key] = Arr::get($data, $this->columnShouldSnaked($column));
             }
 
             return;
         }
 
-        $this->value = Arr::get($data, $this->column);
+        $this->value = Arr::get($data, $this->columnShouldSnaked($this->column));
 
         $this->formatValue();
     }
@@ -1211,7 +1254,7 @@ class Field implements Renderable
      *
      * @return mixed
      */
-    protected function getElementClassString()
+    public function getElementClassString()
     {
         $elementClass = $this->getElementClass();
 
@@ -1233,7 +1276,7 @@ class Field implements Renderable
      *
      * @return string|array
      */
-    protected function getElementClassSelector()
+    public function getElementClassSelector()
     {
         $elementClass = $this->getElementClass();
 
@@ -1344,7 +1387,7 @@ class Field implements Renderable
      *
      * @return $this
      */
-    protected function addVariables(array $variables = []): self
+    public function addVariables(array $variables = []): self
     {
         $this->variables = array_merge($this->variables, $variables);
 
@@ -1361,12 +1404,13 @@ class Field implements Renderable
 
     /**
      * @param array $labelClass
+     * @param bool  $replace
      *
      * @return self
      */
-    public function setLabelClass(array $labelClass): self
+    public function setLabelClass(array $labelClass, $replace = false): self
     {
-        $this->labelClass = $labelClass;
+        $this->labelClass = $replace ? $labelClass : array_merge($this->labelClass, $labelClass);
 
         return $this;
     }
@@ -1506,11 +1550,18 @@ class Field implements Renderable
 
         Admin::script($this->script);
 
-        return view($this->getView(), $this->variables());
+        return Admin::component($this->getView(), $this->variables());
     }
 
-    protected function fieldRender()
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|string
+     */
+    protected function fieldRender(array $variables = [])
     {
+        if (!empty($variables)) {
+            $this->addVariables($variables);
+        }
+
         return self::render();
     }
 

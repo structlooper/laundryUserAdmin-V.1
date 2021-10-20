@@ -32,6 +32,11 @@ class CsvExporter extends AbstractExporter
     protected $columnCallbacks;
 
     /**
+     * @var []\Closure
+     */
+    protected $titleCallbacks;
+
+    /**
      * @var array
      */
     protected $visibleColumns;
@@ -113,6 +118,19 @@ class CsvExporter extends AbstractExporter
     }
 
     /**
+     * @param string   $name
+     * @param \Closure $callback
+     *
+     * @return $this
+     */
+    public function title(string $name, \Closure $callback): self
+    {
+        $this->titleCallbacks[$name] = $callback;
+
+        return $this;
+    }
+
+    /**
      * Get download response headers.
      *
      * @return array
@@ -152,7 +170,7 @@ class CsvExporter extends AbstractExporter
                     $current = $column->fill($current);
                     $this->grid->columnNames[] = $column->getName();
                 });
-
+                fwrite($handle, chr(0xEF).chr(0xBB).chr(0xBF)); //导出的CSV文件是无BOM编码UTF-8，而我们通常使用UTF-8编码格式都是有BOM的。所以添加BOM于CSV中
                 // Write title
                 if (empty($titles)) {
                     fputcsv($handle, $titles = $this->getVisiableTitles());
@@ -178,7 +196,13 @@ class CsvExporter extends AbstractExporter
     {
         $titles = $this->grid->visibleColumns()
             ->mapWithKeys(function (Column $column) {
-                return [$column->getName() => $column->getLabel()];
+                $columnName = $column->getName();
+                $columnTitle = $column->getLabel();
+                if (isset($this->titleCallbacks[$columnName])) {
+                    $columnTitle = $this->titleCallbacks[$columnName]($columnTitle);
+                }
+
+                return [$columnName => $columnTitle];
             });
 
         if ($this->onlyColumns) {
